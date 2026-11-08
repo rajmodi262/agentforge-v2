@@ -61,7 +61,13 @@ functions Sheets supports), or import `data/projects.csv` and try:
 
 (Column letters follow `projects.csv`: B name, D country, I capacity_mw, K reality_score, L reality_mw, P stage_name, R power_partner.)
 
-## Power BI (≈15 minutes)
+## Power BI
+
+**Fastest (1 minute):** `python analytics/powerbi/build_pbip.py <folder>` generates a ready-made **Power BI Project**
+(`PhantomHunter.pbip`: 5 tables, 4 relationships, 17 measures and a one-page report). Open it in Power BI Desktop →
+*Refresh* → *File → Save as* → `.pbix`. (A .pbix is a binary only Power BI Desktop can write; .pbip is its text form.)
+
+**By hand (≈15 minutes):**
 
 1. **Get data → Text/CSV** for each file in `analytics/data` (projects, who_to_call, evidence, anomalies, score_terms) → Load.
 2. **Model view** — relationships (all *many → one*, single direction) from `who_to_call[project_id]`, `evidence[project_id]`,
