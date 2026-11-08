@@ -39,7 +39,7 @@ mcp[cli]>=1.13,<2  # <1.13 crashes on import with pydantic>=2.14
 
 # Pydantic
 pydantic>=2.11,<3  # mcp>=1.13 requires pydantic>=2.11
-pydantic-settings==2.7.1
+pydantic-settings==2.16.2
 
 # HTTP Client (for Brave Search)
 httpx==0.28.1
