@@ -64,8 +64,12 @@ functions Sheets supports), or import `data/projects.csv` and try:
 ## Power BI
 
 **Fastest (1 minute):** `python analytics/powerbi/build_pbip.py <folder>` generates a ready-made **Power BI Project**
-(`PhantomHunter.pbip`: 5 tables, 4 relationships, 17 measures and a one-page report). Open it in Power BI Desktop →
+(`PhantomHunter.pbip`: 5 tables, 4 relationships, 17 measures, a dark theme and a two-page report). Open it in Power BI Desktop →
 *Refresh* → *File → Save as* → `.pbix`. (A .pbix is a binary only Power BI Desktop can write; .pbip is its text form.)
+
+![Power BI report](powerbi/powerbi_report.png)
+
+Page 2 (*Project explorer*) adds likely / phantom-risk counts, single-source share, open power MW, a size-vs-reality scatter, stage-by-country columns and a projects table with each one's weakest assumption.
 
 **By hand (≈15 minutes):**
 
