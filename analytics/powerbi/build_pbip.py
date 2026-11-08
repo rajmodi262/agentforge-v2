@@ -221,7 +221,7 @@ def textbox(x, y, w, h, runs) -> dict:
 def kpi(x, y, w, h, measure: str, title: str, accent: str) -> dict:
     """Card with a coloured value and a matching accent border."""
     return visual("card", x, y, w, h, {"Values": [("Measure", HOME, measure)]}, title,
-                  objects={"labels": [{"properties": {"color": color(accent), "fontSize": lit(30)}}],
+                  objects={"labels": [{"properties": {"color": color(accent), "fontSize": lit(30), "labelDisplayUnits": lit(1)}}],  # 37,053 not 37K
                            "categoryLabels": [{"properties": {"show": lit(False)}}]},
                   vc={"border": [{"properties": {"show": lit(True), "color": color(accent), "radius": lit(14)}}],
                       "title": [{"properties": {"fontColor": color("#CBD5E1")}}]})
@@ -231,10 +231,20 @@ def series_colors(*pairs) -> list:
     return [{"properties": {"fill": color(c)}, "selector": {"metadata": f"{HOME}.{m}"}} for m, c in pairs]
 
 
-def country_colors(pairs) -> list:
+def value_colors(column: str, pairs) -> list:
+    """Colour each category value of projects[column] explicitly."""
     return [{"properties": {"fill": color(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
-        "ComparisonKind": 0, "Left": {"Column": {"Expression": {"SourceRef": {"Entity": "projects"}}, "Property": "country"}},
+        "ComparisonKind": 0, "Left": {"Column": {"Expression": {"SourceRef": {"Entity": "projects"}}, "Property": column}},
         "Right": {"Literal": {"Value": f"'{v}'"}}}}}]}} for v, c in pairs]
+
+
+def country_colors(pairs) -> list:
+    return value_colors("country", pairs)
+
+
+# evidence ladder: cool → warm → green as a project gets more real
+STAGE_COLORS = (("ANNOUNCED", "#A78BFA"), ("SITE", "#818CF8"), ("APPROVED", "#22D3EE"),
+                ("POWER", "#FBBF24"), ("BUILDING", "#F97316"), ("LIVE", "#34D399"))
 
 
 def col_widths(table: str, widths) -> list:
@@ -266,8 +276,9 @@ def page_pipeline() -> dict:
                "📍 Announced vs likely MW by state", order_by=M("Announced MW"),
                objects={"dataPoint": series_colors(("Announced MW", "#7C3AED"), ("Reality MW", GREEN)), "legend": TOP_LEGEND}),
         visual("funnel", 655, 188, 300, 316, {"Category": [C("projects", "stage_name")], "Y": [M("Projects")]}, "🪜 Evidence ladder",
-               objects={"dataPoint": [{"properties": {"showAllDataPoints": lit(True)}}],
-                        "labels": [{"properties": {"color": color(INK), "fontSize": lit(10)}}]}),
+               objects={"dataPoint": [{"properties": {"showAllDataPoints": lit(True)}}] + value_colors("stage_name", STAGE_COLORS),
+                        "labels": [{"properties": {"color": color("#FFFFFF"), "fontSize": lit(10), "labelPosition": lit("OutsideEnd")}}],
+                        "categoryLabels": [{"properties": {"color": color("#E2E8F0"), "fontSize": lit(8)}}]}),
         visual("slicer", 970, 188, 290, 150, {"Values": [C("projects", "country")]}, "🌏 Country"),
         visual("slicer", 970, 352, 290, 152, {"Values": [C("projects", "score_band")]}, "🎚 Reality band"),
         visual("tableEx", 20, 516, 1240, 194, {"Values": [C("who_to_call", "project"), C("who_to_call", "segment"),
