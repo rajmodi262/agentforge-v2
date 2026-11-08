@@ -1,0 +1,20 @@
+{
+  "name": "Phantom Hunter",
+  "dataColors": ["#7C3AED", "#06B6D4", "#10B981", "#F59E0B", "#EF4444", "#A78BFA", "#22D3EE", "#64748B"],
+  "good": "#10B981",
+  "neutral": "#F59E0B",
+  "bad": "#EF4444",
+  "maximum": "#10B981",
+  "center": "#F59E0B",
+  "minimum": "#EF4444",
+  "background": "#FFFFFF",
+  "foreground": "#1E1B4B",
+  "tableAccent": "#7C3AED",
+  "visualStyles": {
+    "*": {
+      "*": {
+        "title": [{ "fontFamily": "Segoe UI Semibold", "fontSize": 12, "fontColor": { "solid": { "color": "#1E1B4B" } } }]
+      }
+    }
+  }
+}

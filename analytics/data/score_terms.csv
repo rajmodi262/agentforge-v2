@@ -1,0 +1,536 @@
+﻿project_id,term,logit,why
+4c7def69-6a3b-553d-a004-7b95c51694e1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+4c7def69-6a3b-553d-a004-7b95c51694e1,Single source,,only one article reports this project
+4c7def69-6a3b-553d-a004-7b95c51694e1,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+4c7def69-6a3b-553d-a004-7b95c51694e1,Gone quiet,,no news for 100 months
+703a8ecf-360d-56e0-8510-7f1f9182328b,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+703a8ecf-360d-56e0-8510-7f1f9182328b,Single source,,only one article reports this project
+703a8ecf-360d-56e0-8510-7f1f9182328b,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+703a8ecf-360d-56e0-8510-7f1f9182328b,Gone quiet,,no news for 73 months
+2c40f1e3-cf72-5eb5-b7e7-6c3ee6a167be,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+2c40f1e3-cf72-5eb5-b7e7-6c3ee6a167be,3 independent sources,,corroborated by three or more articles
+2c40f1e3-cf72-5eb5-b7e7-6c3ee6a167be,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+2c40f1e3-cf72-5eb5-b7e7-6c3ee6a167be,Gone quiet,,no news for 21 months
+fb3eea2e-9915-577b-bab0-74c065c4114c,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fb3eea2e-9915-577b-bab0-74c065c4114c,3 independent sources,,corroborated by three or more articles
+3f888ee8-28c4-5f95-bc05-e0e429a60f73,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+3f888ee8-28c4-5f95-bc05-e0e429a60f73,Single source,,only one article reports this project
+3f888ee8-28c4-5f95-bc05-e0e429a60f73,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+3f888ee8-28c4-5f95-bc05-e0e429a60f73,Gone quiet,,no news for 60 months
+351e24cc-771a-599b-918e-c0a0506bef88,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+351e24cc-771a-599b-918e-c0a0506bef88,Single source,,only one article reports this project
+351e24cc-771a-599b-918e-c0a0506bef88,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+351e24cc-771a-599b-918e-c0a0506bef88,Gone quiet,,no news for 59 months
+79e2e370-b1b7-59c4-bd6b-824a01252a25,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+46becd6e-44cb-53fb-a70e-74492eda402a,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+46becd6e-44cb-53fb-a70e-74492eda402a,Single source,,only one article reports this project
+46becd6e-44cb-53fb-a70e-74492eda402a,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+46becd6e-44cb-53fb-a70e-74492eda402a,Gone quiet,,no news for 57 months
+2f6b5007-1c2c-5fb3-a526-7593947864d6,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+2f6b5007-1c2c-5fb3-a526-7593947864d6,4 independent sources,,corroborated by three or more articles
+2f6b5007-1c2c-5fb3-a526-7593947864d6,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+2f6b5007-1c2c-5fb3-a526-7593947864d6,Gone quiet,,no news for 21 months
+cff1ea2d-9e3f-5288-a59c-2bdd57eda77f,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+cff1ea2d-9e3f-5288-a59c-2bdd57eda77f,6 independent sources,,corroborated by three or more articles
+126a17d7-1c6c-50f2-a221-db238dde76cb,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+126a17d7-1c6c-50f2-a221-db238dde76cb,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+4ab358cc-1db2-56e7-8390-3995b86be06b,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+4ab358cc-1db2-56e7-8390-3995b86be06b,Single source,,only one article reports this project
+4ab358cc-1db2-56e7-8390-3995b86be06b,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+4ab358cc-1db2-56e7-8390-3995b86be06b,Gone quiet,,no news for 53 months
+54f7c1f3-da96-56ae-9290-b23ae714ad1e,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+54f7c1f3-da96-56ae-9290-b23ae714ad1e,Single source,,only one article reports this project
+54f7c1f3-da96-56ae-9290-b23ae714ad1e,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+54f7c1f3-da96-56ae-9290-b23ae714ad1e,Gone quiet,,no news for 52 months
+faf75883-dfd5-5a1a-8e12-ed1f5f7416e6,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+faf75883-dfd5-5a1a-8e12-ed1f5f7416e6,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+e2a69577-aadd-5ad7-8266-0f0b7fd9e14f,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+e2a69577-aadd-5ad7-8266-0f0b7fd9e14f,Single source,,only one article reports this project
+e2a69577-aadd-5ad7-8266-0f0b7fd9e14f,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+b5f63aa9-f843-5dc9-b72f-ea56b8fa2183,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+b5f63aa9-f843-5dc9-b72f-ea56b8fa2183,Single source,,only one article reports this project
+3c941d49-dbf3-5e84-95d8-8300ae30f2b5,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+3c941d49-dbf3-5e84-95d8-8300ae30f2b5,5 independent sources,,corroborated by three or more articles
+ed45dd73-96b2-5d32-99f6-c2ab5707fb24,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+ed45dd73-96b2-5d32-99f6-c2ab5707fb24,Single source,,only one article reports this project
+ed45dd73-96b2-5d32-99f6-c2ab5707fb24,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+ed45dd73-96b2-5d32-99f6-c2ab5707fb24,Gone quiet,,no news for 42 months
+92d5cd6d-5030-526f-8b13-f51fe2f4cb4b,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+92d5cd6d-5030-526f-8b13-f51fe2f4cb4b,6 independent sources,,corroborated by three or more articles
+92d5cd6d-5030-526f-8b13-f51fe2f4cb4b,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+d70d8c74-cac1-5df3-a0d5-000480049b1e,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+d70d8c74-cac1-5df3-a0d5-000480049b1e,3 independent sources,,corroborated by three or more articles
+d70d8c74-cac1-5df3-a0d5-000480049b1e,Gone quiet,,no news for 19 months
+df231e4f-209c-5739-8f54-8f1169f8acc1,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+df231e4f-209c-5739-8f54-8f1169f8acc1,Single source,,only one article reports this project
+df231e4f-209c-5739-8f54-8f1169f8acc1,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+df231e4f-209c-5739-8f54-8f1169f8acc1,Gone quiet,,no news for 42 months
+204ea273-9f86-5438-9aa6-4c54593e6c32,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+204ea273-9f86-5438-9aa6-4c54593e6c32,Single source,,only one article reports this project
+204ea273-9f86-5438-9aa6-4c54593e6c32,Gone quiet,,no news for 42 months
+db1d8cda-dd3a-5387-90ef-066d8def7652,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+db1d8cda-dd3a-5387-90ef-066d8def7652,4 independent sources,,corroborated by three or more articles
+e361ad3c-cd65-58f3-b67c-a9e1eb1dd38f,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e361ad3c-cd65-58f3-b67c-a9e1eb1dd38f,Single source,,only one article reports this project
+e361ad3c-cd65-58f3-b67c-a9e1eb1dd38f,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+e361ad3c-cd65-58f3-b67c-a9e1eb1dd38f,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+e361ad3c-cd65-58f3-b67c-a9e1eb1dd38f,Gone quiet,,no news for 41 months
+0274115a-a8bb-54ac-8de4-86fb14838e99,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+0274115a-a8bb-54ac-8de4-86fb14838e99,Single source,,only one article reports this project
+0274115a-a8bb-54ac-8de4-86fb14838e99,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+d2cf0cf6-43e6-5a16-a7ec-83c143dbd69b,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d2cf0cf6-43e6-5a16-a7ec-83c143dbd69b,Single source,,only one article reports this project
+d2cf0cf6-43e6-5a16-a7ec-83c143dbd69b,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+d2cf0cf6-43e6-5a16-a7ec-83c143dbd69b,Gone quiet,,no news for 37 months
+558f55cc-2eec-55eb-b0c3-bae6a0e1915c,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+558f55cc-2eec-55eb-b0c3-bae6a0e1915c,9 independent sources,,corroborated by three or more articles
+01bf582c-e244-5232-b0ea-b6b5ad3147c9,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+01bf582c-e244-5232-b0ea-b6b5ad3147c9,3 independent sources,,corroborated by three or more articles
+dd2b7014-c114-566d-86c7-8fcdcca5c51b,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+6485eadf-1213-53bb-9448-6a4183b3a9d7,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+6485eadf-1213-53bb-9448-6a4183b3a9d7,Single source,,only one article reports this project
+6485eadf-1213-53bb-9448-6a4183b3a9d7,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+f543e263-22f5-5f26-b540-bf875c516670,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+f543e263-22f5-5f26-b540-bf875c516670,Single source,,only one article reports this project
+f543e263-22f5-5f26-b540-bf875c516670,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+f543e263-22f5-5f26-b540-bf875c516670,Gone quiet,,no news for 34 months
+e0fa4bcb-6713-55c4-ad25-e4185be6de94,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+805fe303-bfcb-5da3-ae18-2b7d957e66d7,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+805fe303-bfcb-5da3-ae18-2b7d957e66d7,Single source,,only one article reports this project
+805fe303-bfcb-5da3-ae18-2b7d957e66d7,Gone quiet,,no news for 32 months
+74940a39-ff82-5239-8517-5e2a9a660be4,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+74940a39-ff82-5239-8517-5e2a9a660be4,Single source,,only one article reports this project
+74940a39-ff82-5239-8517-5e2a9a660be4,Gone quiet,,no news for 31 months
+8ff2d271-79f5-5e62-afa6-35d8046f3752,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+8ff2d271-79f5-5e62-afa6-35d8046f3752,Single source,,only one article reports this project
+8ff2d271-79f5-5e62-afa6-35d8046f3752,Gone quiet,,no news for 31 months
+2f9c810b-5fab-50f9-9446-9f424ada7231,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+2f9c810b-5fab-50f9-9446-9f424ada7231,Single source,,only one article reports this project
+2f9c810b-5fab-50f9-9446-9f424ada7231,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+2f9c810b-5fab-50f9-9446-9f424ada7231,Gone quiet,,no news for 31 months
+fb15e6e9-1db8-5b09-a425-99c33ed73f21,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fb15e6e9-1db8-5b09-a425-99c33ed73f21,3 independent sources,,corroborated by three or more articles
+d2ecccc2-205a-5952-82a0-441049043a53,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d2ecccc2-205a-5952-82a0-441049043a53,Single source,,only one article reports this project
+d2ecccc2-205a-5952-82a0-441049043a53,Gone quiet,,no news for 29 months
+3ae25d9d-8339-5145-a2d1-09f96bccdfd3,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+3ae25d9d-8339-5145-a2d1-09f96bccdfd3,Single source,,only one article reports this project
+3ae25d9d-8339-5145-a2d1-09f96bccdfd3,Gone quiet,,no news for 29 months
+1de541c6-0527-587d-a4c5-17dee8126973,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+1de541c6-0527-587d-a4c5-17dee8126973,Single source,,only one article reports this project
+1de541c6-0527-587d-a4c5-17dee8126973,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+1de541c6-0527-587d-a4c5-17dee8126973,Gone quiet,,no news for 28 months
+4fe9272d-f7a9-5a45-a6dd-1fc1a5b038a4,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+4fe9272d-f7a9-5a45-a6dd-1fc1a5b038a4,Single source,,only one article reports this project
+a5b733df-6eeb-5d73-bab0-3661a70a9770,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+a5b733df-6eeb-5d73-bab0-3661a70a9770,Single source,,only one article reports this project
+a5b733df-6eeb-5d73-bab0-3661a70a9770,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+a5b733df-6eeb-5d73-bab0-3661a70a9770,Gone quiet,,no news for 27 months
+c1b98c3b-0d7f-59f0-a2b3-71bcaae6180d,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+c1b98c3b-0d7f-59f0-a2b3-71bcaae6180d,Single source,,only one article reports this project
+c1b98c3b-0d7f-59f0-a2b3-71bcaae6180d,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+97128dc7-8312-52ae-a99d-b3be1d3cad86,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+a3f878eb-f557-5bc5-b558-9a42a41decca,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+a3f878eb-f557-5bc5-b558-9a42a41decca,Single source,,only one article reports this project
+a3f878eb-f557-5bc5-b558-9a42a41decca,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+a3f878eb-f557-5bc5-b558-9a42a41decca,Gone quiet,,no news for 27 months
+8cbd9bde-f778-5399-a506-174868697e5a,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+8cbd9bde-f778-5399-a506-174868697e5a,3 independent sources,,corroborated by three or more articles
+686e7b0c-7531-50ac-afa5-7b7cd4dbef2e,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+686e7b0c-7531-50ac-afa5-7b7cd4dbef2e,Single source,,only one article reports this project
+686e7b0c-7531-50ac-afa5-7b7cd4dbef2e,Gone quiet,,no news for 26 months
+f3ab2343-f8cb-50ff-8401-4c5f2dc049f3,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+f3ab2343-f8cb-50ff-8401-4c5f2dc049f3,Single source,,only one article reports this project
+f3ab2343-f8cb-50ff-8401-4c5f2dc049f3,Gone quiet,,no news for 26 months
+23556f75-9e02-5c5e-a936-aea243262129,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+23556f75-9e02-5c5e-a936-aea243262129,Single source,,only one article reports this project
+23556f75-9e02-5c5e-a936-aea243262129,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+23556f75-9e02-5c5e-a936-aea243262129,Gone quiet,,no news for 26 months
+fdd00b81-a128-5234-9777-2aac9ea0f2c2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fdd00b81-a128-5234-9777-2aac9ea0f2c2,Single source,,only one article reports this project
+fdd00b81-a128-5234-9777-2aac9ea0f2c2,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+fdd00b81-a128-5234-9777-2aac9ea0f2c2,Gone quiet,,no news for 25 months
+4d9a3389-a754-57b0-8fca-9d7791481c50,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+4d9a3389-a754-57b0-8fca-9d7791481c50,Single source,,only one article reports this project
+4d9a3389-a754-57b0-8fca-9d7791481c50,Gone quiet,,no news for 25 months
+2e2502e4-a626-53af-9e19-ef760595caee,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+2e2502e4-a626-53af-9e19-ef760595caee,Single source,,only one article reports this project
+2e2502e4-a626-53af-9e19-ef760595caee,Gone quiet,,no news for 24 months
+80e7d320-f2e9-56ca-b6e9-8fad9b277a1f,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+80e7d320-f2e9-56ca-b6e9-8fad9b277a1f,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+80e7d320-f2e9-56ca-b6e9-8fad9b277a1f,Gone quiet,,no news for 24 months
+850821fd-4ffe-59a8-99f7-eacdd1932a62,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+4554ef12-1c2e-5a00-8eb9-1c7c08a775d8,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+4554ef12-1c2e-5a00-8eb9-1c7c08a775d8,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+4554ef12-1c2e-5a00-8eb9-1c7c08a775d8,Gone quiet,,no news for 23 months
+d85ddf77-10dc-54b2-b235-77f011348758,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d85ddf77-10dc-54b2-b235-77f011348758,Single source,,only one article reports this project
+d85ddf77-10dc-54b2-b235-77f011348758,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+d85ddf77-10dc-54b2-b235-77f011348758,Gone quiet,,no news for 23 months
+4add9e17-2677-563d-9d03-46dffa95663e,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+4add9e17-2677-563d-9d03-46dffa95663e,Single source,,only one article reports this project
+4add9e17-2677-563d-9d03-46dffa95663e,Gone quiet,,no news for 23 months
+635e021c-d686-5b0a-81fb-1ee2ef0d9413,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+635e021c-d686-5b0a-81fb-1ee2ef0d9413,3 independent sources,,corroborated by three or more articles
+ae7bbccb-d499-508a-93b0-9f64b3b9e878,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+ae7bbccb-d499-508a-93b0-9f64b3b9e878,Single source,,only one article reports this project
+ae7bbccb-d499-508a-93b0-9f64b3b9e878,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+ae7bbccb-d499-508a-93b0-9f64b3b9e878,Gone quiet,,no news for 23 months
+fdd1df46-6ccd-5544-8768-ecb2d95a12e7,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+fdd1df46-6ccd-5544-8768-ecb2d95a12e7,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+fdd1df46-6ccd-5544-8768-ecb2d95a12e7,Gone quiet,,no news for 22 months
+f2411acb-b57f-578a-ae9c-71068dd2fe5a,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+f2411acb-b57f-578a-ae9c-71068dd2fe5a,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+f2411acb-b57f-578a-ae9c-71068dd2fe5a,Gone quiet,,no news for 21 months
+273e1e7d-3fb8-5a36-979f-90693bc5fbeb,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+273e1e7d-3fb8-5a36-979f-90693bc5fbeb,3 independent sources,,corroborated by three or more articles
+273e1e7d-3fb8-5a36-979f-90693bc5fbeb,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+db6c3f71-9147-507c-8465-1d3d43391d9d,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+db6c3f71-9147-507c-8465-1d3d43391d9d,Single source,,only one article reports this project
+db6c3f71-9147-507c-8465-1d3d43391d9d,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+db6c3f71-9147-507c-8465-1d3d43391d9d,Gone quiet,,no news for 21 months
+3b1a0dd8-eecb-5fc6-b5da-5ebafb408dc4,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+3b1a0dd8-eecb-5fc6-b5da-5ebafb408dc4,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+ad328a4b-b3cc-5d66-8b4b-8571e1ab963f,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+ad328a4b-b3cc-5d66-8b4b-8571e1ab963f,Single source,,only one article reports this project
+4680412b-bad2-597c-9b7a-4c0de6fa46b8,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+4680412b-bad2-597c-9b7a-4c0de6fa46b8,Single source,,only one article reports this project
+4680412b-bad2-597c-9b7a-4c0de6fa46b8,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+4680412b-bad2-597c-9b7a-4c0de6fa46b8,Gone quiet,,no news for 20 months
+a0bb2eed-6a55-593e-bf69-64803230af35,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+a0bb2eed-6a55-593e-bf69-64803230af35,Single source,,only one article reports this project
+a0bb2eed-6a55-593e-bf69-64803230af35,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+a0bb2eed-6a55-593e-bf69-64803230af35,Gone quiet,,no news for 20 months
+21a1306f-9178-5d1a-ba27-d23cdff944d0,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+21a1306f-9178-5d1a-ba27-d23cdff944d0,Single source,,only one article reports this project
+21a1306f-9178-5d1a-ba27-d23cdff944d0,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+21a1306f-9178-5d1a-ba27-d23cdff944d0,Gone quiet,,no news for 20 months
+304c08f0-eb2c-564f-b635-0cd063565034,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+304c08f0-eb2c-564f-b635-0cd063565034,Single source,,only one article reports this project
+68238788-9734-5e9a-a7cf-08f62a7d3f93,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+68238788-9734-5e9a-a7cf-08f62a7d3f93,Single source,,only one article reports this project
+68238788-9734-5e9a-a7cf-08f62a7d3f93,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+68238788-9734-5e9a-a7cf-08f62a7d3f93,Gone quiet,,no news for 19 months
+1a6eb738-8a82-5819-9e0d-8ea04cf52fa2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+1a6eb738-8a82-5819-9e0d-8ea04cf52fa2,3 independent sources,,corroborated by three or more articles
+1a6eb738-8a82-5819-9e0d-8ea04cf52fa2,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+1a6eb738-8a82-5819-9e0d-8ea04cf52fa2,Gone quiet,,no news for 19 months
+c010905b-f3c9-5b3f-b0c0-3eee7eef467f,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+c010905b-f3c9-5b3f-b0c0-3eee7eef467f,4 independent sources,,corroborated by three or more articles
+341695ae-883d-53fd-8d2c-77f9ee7d9867,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+341695ae-883d-53fd-8d2c-77f9ee7d9867,Single source,,only one article reports this project
+341695ae-883d-53fd-8d2c-77f9ee7d9867,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+fce4848a-8cdd-53e9-8b45-94a0b8029bc7,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+fce4848a-8cdd-53e9-8b45-94a0b8029bc7,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+870f9718-554a-5cff-8d73-e6729c858064,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+8cada320-908d-5a72-b5d7-95b111b17e2a,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+8cada320-908d-5a72-b5d7-95b111b17e2a,Single source,,only one article reports this project
+8cada320-908d-5a72-b5d7-95b111b17e2a,Gone quiet,,no news for 18 months
+3852c173-e6b9-5eab-b374-d2b3e2350690,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+3852c173-e6b9-5eab-b374-d2b3e2350690,Single source,,only one article reports this project
+3852c173-e6b9-5eab-b374-d2b3e2350690,Gone quiet,,no news for 18 months
+049edaa6-4a89-57e2-9dae-3a398974b2ed,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+049edaa6-4a89-57e2-9dae-3a398974b2ed,Single source,,only one article reports this project
+049edaa6-4a89-57e2-9dae-3a398974b2ed,Gone quiet,,no news for 18 months
+312f2241-2664-557a-b379-0c2ccbbf6e52,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+312f2241-2664-557a-b379-0c2ccbbf6e52,Single source,,only one article reports this project
+312f2241-2664-557a-b379-0c2ccbbf6e52,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+a38e4846-edd8-5d82-8191-993e595bbf71,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+a38e4846-edd8-5d82-8191-993e595bbf71,4 independent sources,,corroborated by three or more articles
+a38e4846-edd8-5d82-8191-993e595bbf71,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+c625e112-8452-5a15-b5a8-f2aa600599e4,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+c625e112-8452-5a15-b5a8-f2aa600599e4,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+ed4dfa39-2d0e-569f-9086-e0baa34a4680,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+ed4dfa39-2d0e-569f-9086-e0baa34a4680,Single source,,only one article reports this project
+ed4dfa39-2d0e-569f-9086-e0baa34a4680,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+16cd05f8-fd25-5cfd-b05c-46447f819dd4,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+16cd05f8-fd25-5cfd-b05c-46447f819dd4,Single source,,only one article reports this project
+37e2b902-bb0a-5118-aef2-70954fab9c15,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+37e2b902-bb0a-5118-aef2-70954fab9c15,Single source,,only one article reports this project
+37e2b902-bb0a-5118-aef2-70954fab9c15,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+d6f17a2b-4716-52b1-b7b0-98ffc407040d,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d6f17a2b-4716-52b1-b7b0-98ffc407040d,Single source,,only one article reports this project
+4c256303-ad9d-5000-81c4-da52128afdd2,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+4c256303-ad9d-5000-81c4-da52128afdd2,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+805490a2-9f39-5d70-b371-c2efa760bfa1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+805490a2-9f39-5d70-b371-c2efa760bfa1,Single source,,only one article reports this project
+805490a2-9f39-5d70-b371-c2efa760bfa1,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+6eb1ae2c-918b-5972-be30-26b03993519a,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+6eb1ae2c-918b-5972-be30-26b03993519a,Single source,,only one article reports this project
+81579b52-08b4-524a-a8cf-714bce8e65de,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+81579b52-08b4-524a-a8cf-714bce8e65de,Single source,,only one article reports this project
+cdb867ca-2716-51cd-9c2b-3ed7ea691d3b,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+cdb867ca-2716-51cd-9c2b-3ed7ea691d3b,Single source,,only one article reports this project
+5ce3139a-3cc8-5b32-a0d4-b24e74930472,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+5ce3139a-3cc8-5b32-a0d4-b24e74930472,Single source,,only one article reports this project
+5ce3139a-3cc8-5b32-a0d4-b24e74930472,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+16adde52-7a86-50a2-b036-8bd9ee2f8a34,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+16adde52-7a86-50a2-b036-8bd9ee2f8a34,Single source,,only one article reports this project
+16adde52-7a86-50a2-b036-8bd9ee2f8a34,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+ff25dbbf-2e7f-51fc-bf1a-b81e9c9a586d,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+ff25dbbf-2e7f-51fc-bf1a-b81e9c9a586d,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+ef693002-f1d2-5030-9867-792c5c1eab1f,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+ef693002-f1d2-5030-9867-792c5c1eab1f,8 independent sources,,corroborated by three or more articles
+e90c99d3-5121-5052-a0a8-1dc406c3547e,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e90c99d3-5121-5052-a0a8-1dc406c3547e,Single source,,only one article reports this project
+dbf26b6d-af88-5d70-a2e3-c4f776ed93b5,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+dbf26b6d-af88-5d70-a2e3-c4f776ed93b5,3 independent sources,,corroborated by three or more articles
+4cd8f9bd-f94a-5f22-ae75-16a0a033cea0,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+4cd8f9bd-f94a-5f22-ae75-16a0a033cea0,5 independent sources,,corroborated by three or more articles
+4cd8f9bd-f94a-5f22-ae75-16a0a033cea0,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+7d2f5be8-3f8d-59ac-955f-1c7f742e1f63,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+7d2f5be8-3f8d-59ac-955f-1c7f742e1f63,Single source,,only one article reports this project
+7d2f5be8-3f8d-59ac-955f-1c7f742e1f63,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+58bf57df-ace5-58a8-85bf-1c313002f47a,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+58bf57df-ace5-58a8-85bf-1c313002f47a,9 independent sources,,corroborated by three or more articles
+b7dd3684-bfb6-5afd-99b8-3684f370daca,Evidence layer: APPROVED,,prior for a project whose highest verified evidence is APPROVED
+b7dd3684-bfb6-5afd-99b8-3684f370daca,4 independent sources,,corroborated by three or more articles
+fd01049d-fe32-57bf-82dd-788525d78ac1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fd01049d-fe32-57bf-82dd-788525d78ac1,Single source,,only one article reports this project
+08a542f2-c970-508c-a7b0-646bae75cb46,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+08a542f2-c970-508c-a7b0-646bae75cb46,3 independent sources,,corroborated by three or more articles
+2557c52d-5a1c-501e-bffd-9e3251c2cd31,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e697d0f0-d8ea-5d9d-89d7-e423a97285e7,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+e697d0f0-d8ea-5d9d-89d7-e423a97285e7,Single source,,only one article reports this project
+093f601b-03f7-5a1e-85ae-3ffd301d0022,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+db085640-5215-566c-b384-bd8e20f55ab8,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+64bb9e88-3b84-5c22-8e69-100600f8809c,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+64bb9e88-3b84-5c22-8e69-100600f8809c,Single source,,only one article reports this project
+64bb9e88-3b84-5c22-8e69-100600f8809c,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+ab8791bb-7cc5-5a46-8688-2da2c3b82d34,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+ab8791bb-7cc5-5a46-8688-2da2c3b82d34,Single source,,only one article reports this project
+ab8791bb-7cc5-5a46-8688-2da2c3b82d34,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+bb2e2679-42a0-564d-8431-1fb126b960f1,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+bb2e2679-42a0-564d-8431-1fb126b960f1,4 independent sources,,corroborated by three or more articles
+bb2e2679-42a0-564d-8431-1fb126b960f1,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+265e15b2-e354-5b1f-a2ce-f4a0dea56bd9,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+265e15b2-e354-5b1f-a2ce-f4a0dea56bd9,Single source,,only one article reports this project
+265e15b2-e354-5b1f-a2ce-f4a0dea56bd9,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+319f33bd-516b-5101-99d3-66ac125ce7b8,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+319f33bd-516b-5101-99d3-66ac125ce7b8,Single source,,only one article reports this project
+eef0330d-30fa-54fa-b330-950621e5dc3e,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+eef0330d-30fa-54fa-b330-950621e5dc3e,Single source,,only one article reports this project
+8ac69836-bc2a-5efd-b63a-202213f8a2b7,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+8ac69836-bc2a-5efd-b63a-202213f8a2b7,Single source,,only one article reports this project
+8ac69836-bc2a-5efd-b63a-202213f8a2b7,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+172df5bf-1d2b-5e85-8830-f92f34547274,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+172df5bf-1d2b-5e85-8830-f92f34547274,7 independent sources,,corroborated by three or more articles
+172df5bf-1d2b-5e85-8830-f92f34547274,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+88678397-eb1c-5250-a885-3154e9618627,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+88678397-eb1c-5250-a885-3154e9618627,Single source,,only one article reports this project
+06c2b84d-81ec-5443-bc4e-22bda0e3388d,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+06c2b84d-81ec-5443-bc4e-22bda0e3388d,Single source,,only one article reports this project
+5c93ca9e-85ff-5f2b-ad85-fbdb5c8ff9e5,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+5c93ca9e-85ff-5f2b-ad85-fbdb5c8ff9e5,Single source,,only one article reports this project
+164fabdc-8ec4-5132-ac8c-5526e7fa60b5,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+164fabdc-8ec4-5132-ac8c-5526e7fa60b5,Single source,,only one article reports this project
+e10f978a-1eab-5d40-b5d1-5216c5d63b07,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e10f978a-1eab-5d40-b5d1-5216c5d63b07,Single source,,only one article reports this project
+fe2b7319-c840-5c5f-8994-d86b2838ecb1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fe2b7319-c840-5c5f-8994-d86b2838ecb1,Single source,,only one article reports this project
+96c3efd9-76b4-5786-b2dd-4d67b5cf0249,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+96c3efd9-76b4-5786-b2dd-4d67b5cf0249,Single source,,only one article reports this project
+7750d219-702b-5dc1-82a4-5f6e2b6dfced,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+7750d219-702b-5dc1-82a4-5f6e2b6dfced,Single source,,only one article reports this project
+5fe21fed-7eb2-5ff6-b43c-0a71c7655533,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+5fe21fed-7eb2-5ff6-b43c-0a71c7655533,Single source,,only one article reports this project
+5fe21fed-7eb2-5ff6-b43c-0a71c7655533,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+b6ed30fe-1eef-56fc-b1f6-08d65c6311b9,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+b6ed30fe-1eef-56fc-b1f6-08d65c6311b9,Single source,,only one article reports this project
+b6ed30fe-1eef-56fc-b1f6-08d65c6311b9,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+d0299d9a-0e83-5ec1-be88-493ac759caa4,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d0299d9a-0e83-5ec1-be88-493ac759caa4,Single source,,only one article reports this project
+d0299d9a-0e83-5ec1-be88-493ac759caa4,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+5f78d5c2-3bf6-54af-be7c-f74bc498cbb9,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+5f78d5c2-3bf6-54af-be7c-f74bc498cbb9,Single source,,only one article reports this project
+5f78d5c2-3bf6-54af-be7c-f74bc498cbb9,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+0a837a89-5941-5900-904b-1f17bc85e014,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+0a837a89-5941-5900-904b-1f17bc85e014,Single source,,only one article reports this project
+d740a2ff-eda9-5ca6-a3cb-a87e3adcc9ee,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d740a2ff-eda9-5ca6-a3cb-a87e3adcc9ee,Single source,,only one article reports this project
+d740a2ff-eda9-5ca6-a3cb-a87e3adcc9ee,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+7611eeb4-2423-5dd3-9965-4d239939ca56,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+7611eeb4-2423-5dd3-9965-4d239939ca56,Single source,,only one article reports this project
+7611eeb4-2423-5dd3-9965-4d239939ca56,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+e701389c-eb12-5c1d-a6d9-526cf5fe4085,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e701389c-eb12-5c1d-a6d9-526cf5fe4085,Single source,,only one article reports this project
+e701389c-eb12-5c1d-a6d9-526cf5fe4085,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+7077b333-6dc2-52ff-b063-af5f51af02aa,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+cd0e56c0-e505-5e2e-87b5-6b8499a3c3b9,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+cd0e56c0-e505-5e2e-87b5-6b8499a3c3b9,Single source,,only one article reports this project
+4f730e71-6c15-5407-8580-0e470502b1cf,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+4f730e71-6c15-5407-8580-0e470502b1cf,Single source,,only one article reports this project
+e212cf11-c00c-54f9-8f76-2a7fb6550bf2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e212cf11-c00c-54f9-8f76-2a7fb6550bf2,Single source,,only one article reports this project
+e36efeda-42e3-553e-8fdf-129f3e332b8c,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e36efeda-42e3-553e-8fdf-129f3e332b8c,3 independent sources,,corroborated by three or more articles
+e7cb845b-78c8-50f4-a478-c40634a88ed2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+e7cb845b-78c8-50f4-a478-c40634a88ed2,Single source,,only one article reports this project
+1c987b40-288f-5b3d-997e-b1a6ebf1d38b,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+1c987b40-288f-5b3d-997e-b1a6ebf1d38b,Single source,,only one article reports this project
+1c987b40-288f-5b3d-997e-b1a6ebf1d38b,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+994511c1-d32e-5025-ad4c-e3d24261950c,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+994511c1-d32e-5025-ad4c-e3d24261950c,Single source,,only one article reports this project
+994511c1-d32e-5025-ad4c-e3d24261950c,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+21c8f4c6-7f6b-546e-98d6-9abfc5b6997a,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+21c8f4c6-7f6b-546e-98d6-9abfc5b6997a,Single source,,only one article reports this project
+21c8f4c6-7f6b-546e-98d6-9abfc5b6997a,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+48f18225-9741-587f-a60e-bcc99ab3052f,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+48f18225-9741-587f-a60e-bcc99ab3052f,Single source,,only one article reports this project
+4e511b04-276d-5199-9932-68af28437dc5,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+4e511b04-276d-5199-9932-68af28437dc5,Single source,,only one article reports this project
+4e511b04-276d-5199-9932-68af28437dc5,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+58c0391d-f047-501b-90a2-510beef2ca76,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+58c0391d-f047-501b-90a2-510beef2ca76,Single source,,only one article reports this project
+695d759f-b83e-5fd5-b22a-80dabbe43130,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+695d759f-b83e-5fd5-b22a-80dabbe43130,Single source,,only one article reports this project
+8faf8d31-2704-52be-9f01-b46ab209d19d,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+8faf8d31-2704-52be-9f01-b46ab209d19d,Single source,,only one article reports this project
+8faf8d31-2704-52be-9f01-b46ab209d19d,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+1014e3a9-dfa6-558c-8fc1-3201be583f7f,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+1014e3a9-dfa6-558c-8fc1-3201be583f7f,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+46477243-1577-556a-a500-553806ca8e72,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+46477243-1577-556a-a500-553806ca8e72,Single source,,only one article reports this project
+6d7877fb-cf7a-568f-878a-6e4efe5637fd,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+6d7877fb-cf7a-568f-878a-6e4efe5637fd,Single source,,only one article reports this project
+a2f08757-e2f4-51fa-994e-148a3761fed5,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+a2f08757-e2f4-51fa-994e-148a3761fed5,Single source,,only one article reports this project
+a2f08757-e2f4-51fa-994e-148a3761fed5,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+70fa43f8-9421-5f61-8747-28beb0ce409d,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+70fa43f8-9421-5f61-8747-28beb0ce409d,4 independent sources,,corroborated by three or more articles
+3921c9ec-f82b-5466-b3f3-f98747207e65,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+3921c9ec-f82b-5466-b3f3-f98747207e65,Single source,,only one article reports this project
+26ec440f-ee7e-58d1-959a-fda065a933bd,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+26ec440f-ee7e-58d1-959a-fda065a933bd,Single source,,only one article reports this project
+26ec440f-ee7e-58d1-959a-fda065a933bd,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+947e82e2-db68-588b-ba1c-bd9cd80cbb60,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+947e82e2-db68-588b-ba1c-bd9cd80cbb60,Single source,,only one article reports this project
+2dc75ed1-84aa-5f1f-ba17-20e11fe953e4,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+2dc75ed1-84aa-5f1f-ba17-20e11fe953e4,Single source,,only one article reports this project
+67c9b75c-50d3-5eac-b948-91d7116b309b,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+67c9b75c-50d3-5eac-b948-91d7116b309b,Single source,,only one article reports this project
+67c9b75c-50d3-5eac-b948-91d7116b309b,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+2a338b22-d5c7-5e13-8714-31f56ff54d74,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+2a338b22-d5c7-5e13-8714-31f56ff54d74,Single source,,only one article reports this project
+2a338b22-d5c7-5e13-8714-31f56ff54d74,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+cefc5ce3-1589-54da-99fb-a44079353c00,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+cefc5ce3-1589-54da-99fb-a44079353c00,Single source,,only one article reports this project
+cefc5ce3-1589-54da-99fb-a44079353c00,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+a20f56fa-f339-5ec0-879e-413931415a0d,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+56ca18e7-5a63-5e10-b580-7278abdf16db,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+56ca18e7-5a63-5e10-b580-7278abdf16db,Single source,,only one article reports this project
+56ca18e7-5a63-5e10-b580-7278abdf16db,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+b22f4f99-f1ac-557a-acc8-8ca6073cab27,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+b22f4f99-f1ac-557a-acc8-8ca6073cab27,Single source,,only one article reports this project
+992a9155-3370-55d4-84e5-863830489b63,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+992a9155-3370-55d4-84e5-863830489b63,Single source,,only one article reports this project
+b338040f-e8ab-57f6-84f3-159ebbcd7f28,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+b338040f-e8ab-57f6-84f3-159ebbcd7f28,Single source,,only one article reports this project
+778452ff-c9c1-51c5-a08b-ae63a9957fd2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+778452ff-c9c1-51c5-a08b-ae63a9957fd2,Single source,,only one article reports this project
+778452ff-c9c1-51c5-a08b-ae63a9957fd2,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+5c95e04f-8a30-588f-8c2b-562dc9afe743,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+5c95e04f-8a30-588f-8c2b-562dc9afe743,Single source,,only one article reports this project
+0576f49f-7644-5808-9a1a-0233c70ec5d2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+0576f49f-7644-5808-9a1a-0233c70ec5d2,Single source,,only one article reports this project
+16bccb8a-9154-51d8-be24-6619537a9e59,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+16bccb8a-9154-51d8-be24-6619537a9e59,Single source,,only one article reports this project
+ac7b353b-69ae-54c8-8fdb-27e4c04e37c8,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+ac7b353b-69ae-54c8-8fdb-27e4c04e37c8,8 independent sources,,corroborated by three or more articles
+227c0b6a-e2a0-50f2-b495-12de3ce76938,Evidence layer: APPROVED,,prior for a project whose highest verified evidence is APPROVED
+227c0b6a-e2a0-50f2-b495-12de3ce76938,Single source,,only one article reports this project
+cf9c374a-cb39-5110-a16e-9d5f65accb10,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+cf9c374a-cb39-5110-a16e-9d5f65accb10,Single source,,only one article reports this project
+87539952-0778-566e-91d9-6357ae5b6197,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+87539952-0778-566e-91d9-6357ae5b6197,Single source,,only one article reports this project
+5a081b64-4558-516a-aba4-a2cdd9f71def,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+5a081b64-4558-516a-aba4-a2cdd9f71def,Single source,,only one article reports this project
+f063fdef-6b7b-57b8-b0fa-4cdde443c96d,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+f063fdef-6b7b-57b8-b0fa-4cdde443c96d,Single source,,only one article reports this project
+f063fdef-6b7b-57b8-b0fa-4cdde443c96d,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+e9d99410-3f11-57a1-bb16-ff0a7f8ac453,Evidence layer: POWER,,prior for a project whose highest verified evidence is POWER
+e9d99410-3f11-57a1-bb16-ff0a7f8ac453,Single source,,only one article reports this project
+d28097c4-b7b1-5746-874d-0060c32feaa1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d28097c4-b7b1-5746-874d-0060c32feaa1,Single source,,only one article reports this project
+d28097c4-b7b1-5746-874d-0060c32feaa1,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+00f0751f-2309-56f4-b824-27bbc930eb2a,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+00f0751f-2309-56f4-b824-27bbc930eb2a,5 independent sources,,corroborated by three or more articles
+741b55d6-13c6-5fd3-a7a3-06ec8f77ae09,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+741b55d6-13c6-5fd3-a7a3-06ec8f77ae09,Single source,,only one article reports this project
+a229d00a-4054-52f3-87a3-cc5e375c6942,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+a229d00a-4054-52f3-87a3-cc5e375c6942,Single source,,only one article reports this project
+f19cdfc1-e34d-5254-aee9-f1c576a8d92c,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+f19cdfc1-e34d-5254-aee9-f1c576a8d92c,Single source,,only one article reports this project
+14a772a2-44ed-59a9-a236-a7f3c8e2ca39,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+14a772a2-44ed-59a9-a236-a7f3c8e2ca39,Single source,,only one article reports this project
+c675ed76-703f-578e-bfd1-9fa4463aa070,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+c675ed76-703f-578e-bfd1-9fa4463aa070,8 independent sources,,corroborated by three or more articles
+c675ed76-703f-578e-bfd1-9fa4463aa070,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+b5c40c53-8acb-55ab-a5e2-2f6ac5a11a64,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+b5c40c53-8acb-55ab-a5e2-2f6ac5a11a64,3 independent sources,,corroborated by three or more articles
+0b3a1967-8b68-5eaa-a26c-a217e7686555,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+0b3a1967-8b68-5eaa-a26c-a217e7686555,Single source,,only one article reports this project
+fd8f2161-cb13-515a-984f-2ca45324fdd2,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fd8f2161-cb13-515a-984f-2ca45324fdd2,Single source,,only one article reports this project
+fd8f2161-cb13-515a-984f-2ca45324fdd2,Opposition,,a verified source reports opposition
+fe1c5129-6358-53b4-bd61-c575c80c3b93,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+fe1c5129-6358-53b4-bd61-c575c80c3b93,Single source,,only one article reports this project
+2dbeaa04-5e29-52df-89b1-da95a23a78f5,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+2dbeaa04-5e29-52df-89b1-da95a23a78f5,4 independent sources,,corroborated by three or more articles
+19063897-0d8a-5daf-a33a-21c4b82c177f,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+19063897-0d8a-5daf-a33a-21c4b82c177f,Single source,,only one article reports this project
+19063897-0d8a-5daf-a33a-21c4b82c177f,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+37ea9f5d-9adb-5f36-9287-4ca7c9fbb092,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+37ea9f5d-9adb-5f36-9287-4ca7c9fbb092,Single source,,only one article reports this project
+2db6fc8e-50dc-5d7c-97fe-a15039354284,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+2db6fc8e-50dc-5d7c-97fe-a15039354284,Single source,,only one article reports this project
+2db6fc8e-50dc-5d7c-97fe-a15039354284,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+2db6fc8e-50dc-5d7c-97fe-a15039354284,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+0a805c60-c8b2-528f-8b9a-82472655ff71,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+0a805c60-c8b2-528f-8b9a-82472655ff71,Single source,,only one article reports this project
+0a805c60-c8b2-528f-8b9a-82472655ff71,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+3e7eeeb1-851e-5ae5-bc66-c57eb17d5c35,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+3e7eeeb1-851e-5ae5-bc66-c57eb17d5c35,Single source,,only one article reports this project
+3e7eeeb1-851e-5ae5-bc66-c57eb17d5c35,Financing secured,,a verified source reports a loan / debt facility / capital raise for the project
+262aa83e-f308-5dc3-9cde-1be62fb67d95,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+262aa83e-f308-5dc3-9cde-1be62fb67d95,4 independent sources,,corroborated by three or more articles
+0cb1f8ff-5c3d-5d38-b315-e3039769e95e,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+0cb1f8ff-5c3d-5d38-b315-e3039769e95e,6 independent sources,,corroborated by three or more articles
+cd75e275-c911-5bb3-b073-c13977ec49d1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+cd75e275-c911-5bb3-b073-c13977ec49d1,Single source,,only one article reports this project
+b2f10fc1-13a5-5cab-a742-7177de17a380,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+b2f10fc1-13a5-5cab-a742-7177de17a380,Single source,,only one article reports this project
+b2f10fc1-13a5-5cab-a742-7177de17a380,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+b742d37f-2885-5438-8196-a81765919146,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+b742d37f-2885-5438-8196-a81765919146,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+d392c1ff-5afa-5329-a04a-67346aca9dfb,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+d392c1ff-5afa-5329-a04a-67346aca9dfb,Single source,,only one article reports this project
+4d06bee0-3551-53e7-9d1d-aed6182b936f,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+4d06bee0-3551-53e7-9d1d-aed6182b936f,Single source,,only one article reports this project
+cb4e2880-97aa-5f4f-aaf8-a970b7ed3df3,Evidence layer: BUILDING,,prior for a project whose highest verified evidence is BUILDING
+cb4e2880-97aa-5f4f-aaf8-a970b7ed3df3,Single source,,only one article reports this project
+cb43eb30-015c-5da5-9ce8-167b970fab2e,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+cb43eb30-015c-5da5-9ce8-167b970fab2e,Single source,,only one article reports this project
+0a939d71-6332-5ef2-a6c9-d05d476e341e,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+0a939d71-6332-5ef2-a6c9-d05d476e341e,Single source,,only one article reports this project
+0911df0f-56b7-56fb-8c67-973247d51ed7,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+0911df0f-56b7-56fb-8c67-973247d51ed7,Single source,,only one article reports this project
+ebc4f63c-ff4a-5ca1-9622-eb7f42cd9dc1,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+ebc4f63c-ff4a-5ca1-9622-eb7f42cd9dc1,Single source,,only one article reports this project
+ebc4f63c-ff4a-5ca1-9622-eb7f42cd9dc1,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+aeeb4d92-1eb2-5a71-8f45-48059f3a7cd0,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+aeeb4d92-1eb2-5a71-8f45-48059f3a7cd0,Single source,,only one article reports this project
+c3ee404c-5bff-5ff1-90ce-04e5a2d456aa,Evidence layer: LIVE,,prior for a project whose highest verified evidence is LIVE
+c3ee404c-5bff-5ff1-90ce-04e5a2d456aa,4 independent sources,,corroborated by three or more articles
+a3056d45-fa44-5ead-a17f-3cae9253fbca,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+a3056d45-fa44-5ead-a17f-3cae9253fbca,Single source,,only one article reports this project
+a3056d45-fa44-5ead-a17f-3cae9253fbca,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries
+15fc9640-4a72-5014-b27d-ea6826895293,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+15fc9640-4a72-5014-b27d-ea6826895293,3 independent sources,,corroborated by three or more articles
+ed04d60c-ee5a-52fd-b529-8bf6dd5806d0,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+ed04d60c-ee5a-52fd-b529-8bf6dd5806d0,Single source,,only one article reports this project
+6d3984ba-040d-5b54-971d-0cce607b969e,Evidence layer: ANNOUNCED,,prior for a project whose highest verified evidence is ANNOUNCED
+6d3984ba-040d-5b54-971d-0cce607b969e,Single source,,only one article reports this project
+fa1a50e1-70c9-5a07-992c-35189de30d64,Evidence layer: SITE,,prior for a project whose highest verified evidence is SITE
+fa1a50e1-70c9-5a07-992c-35189de30d64,Single source,,only one article reports this project
+fa1a50e1-70c9-5a07-992c-35189de30d64,Headline-only evidence,,publishers blocked full text; evidence comes from headlines and summaries

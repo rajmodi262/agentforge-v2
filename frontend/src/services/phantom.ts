@@ -65,6 +65,9 @@ export const phantom = {
   signals: () => get<{ signals: Signal[]; anomalies: { project_id: string; project: string; kind: string; severity: string; message: string }[] }>('/signals'),
   hunt: (region: string) => post<{ run_id: string; websocket_url: string }>('/hunt', { region, max_rounds: 2 }),
   run: (id: string) => get<{ status: string; stats: Record<string, unknown>; log: string[] }>(`/runs/${id}`),
+  // Business exports — plain links (public, read-only data), so the browser handles the download
+  exportXlsxUrl: `${API_BASE}/phantom/export.xlsx`,
+  exportCsvUrl: (table: string) => `${API_BASE}/phantom/export/${table}.csv`,
 };
 
 export const WS_BASE = API_BASE.replace('http://', 'ws://').replace('https://', 'wss://').replace('/api/v1', '');

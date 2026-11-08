@@ -12,6 +12,7 @@ from typing import Optional
 from uuid import UUID
 
 from fastapi import APIRouter, BackgroundTasks, Depends, HTTPException, Query
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
 from sqlalchemy.orm import Session
 
@@ -213,3 +214,27 @@ def get_run(run_id: UUID, db: Session = Depends(get_db)):
 async def rebuild(user: User = Depends(get_current_user)):
     from app.phantom.pipeline import rebuild_projects
     return await asyncio.to_thread(rebuild_projects)
+
+
+# ─── Business exports: the dashboard's data as Excel / CSV (Sheets, Power BI) ───
+
+BOM = chr(0xFEFF)  # lets Excel open UTF-8 CSVs (₹, en dashes) correctly
+EXPORT_TABLES = ("projects", "who_to_call", "evidence", "anomalies", "score_terms", "articles")
+
+
+@router.get("/export.xlsx")
+def export_xlsx(db: Session = Depends(get_db)):
+    """Formatted workbook: KPI summary, filterable tables, live SUMIFS analysis, native charts."""
+    from app.phantom.export import build_xlsx, tables
+    return Response(build_xlsx(tables(db)), media_type="application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+                    headers={"Content-Disposition": 'attachment; filename="PhantomHunter.xlsx"'})
+
+
+@router.get("/export/{table}.csv")
+def export_csv(table: str, db: Session = Depends(get_db)):
+    """One star-schema table as UTF-8 CSV — imports directly into Google Sheets or Power BI."""
+    if table not in EXPORT_TABLES:
+        raise HTTPException(404, f"Unknown table. Choose one of: {', '.join(EXPORT_TABLES)}")
+    from app.phantom.export import tables, to_csv
+    return Response(BOM + to_csv(tables(db)[table]), media_type="text/csv; charset=utf-8",
+                    headers={"Content-Disposition": f'attachment; filename="phantom_{table}.csv"'})

@@ -109,7 +109,15 @@ export default function PhantomHunter() {
               Every announced data centre is a promise. Agents read the public news, verify every claim against its source, and score how likely each project is to really get built — and who should call them this month.
             </div>
           </div>
-          <div style={{ display: 'flex', gap: 8 }}>
+          <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap', alignItems: 'center' }}>
+            <a href={phantom.exportXlsxUrl} download title="Formatted workbook: KPIs, filterable tables, live SUMIFS analysis and charts — opens in Excel or Google Sheets"
+               style={{ padding: '0.6rem 1rem', borderRadius: radii.md, border: `1px solid ${colors.borderLight}`, background: 'rgba(16,185,129,0.15)', color: '#fff', fontWeight: 600, textDecoration: 'none' }}>
+              📊 Excel
+            </a>
+            <a href={phantom.exportCsvUrl('projects')} download title="Projects table as CSV — for Google Sheets or Power BI"
+               style={{ padding: '0.6rem 1rem', borderRadius: radii.md, border: `1px solid ${colors.borderLight}`, background: 'rgba(255,255,255,0.05)', color: '#fff', fontWeight: 600, textDecoration: 'none' }}>
+              ⬇ CSV
+            </a>
             {['malaysia', 'india'].map((r) => (
               <button key={r} disabled={hunting} onClick={() => startHunt(r)} style={{ padding: '0.6rem 1rem', borderRadius: radii.md, border: `1px solid ${colors.borderLight}`, background: hunting ? 'rgba(255,255,255,0.04)' : 'linear-gradient(135deg, rgba(124,58,237,0.35), rgba(6,182,212,0.25))', color: '#fff', cursor: hunting ? 'wait' : 'pointer', fontWeight: 600 }}>
                 {hunting ? '⏳ Hunting…' : `🛰️ Hunt ${r[0].toUpperCase() + r.slice(1)}`}

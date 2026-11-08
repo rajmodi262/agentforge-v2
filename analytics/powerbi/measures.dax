@@ -1,0 +1,55 @@
+// Phantom Hunter — DAX measures for Power BI
+// Create a blank table called _Measures (Home → Enter data → OK), then add each measure below to it
+// (Modeling → New measure, paste one block). Table names match analytics/data/*.csv.
+
+Projects = COUNTROWS ( projects )
+
+Announced MW = SUM ( projects[capacity_mw] )
+
+Reality MW = SUM ( projects[reality_mw] )
+
+Phantom MW = SUM ( projects[phantom_mw] )
+
+Reality Share = DIVIDE ( [Reality MW], [Announced MW] )
+
+Avg Reality Score = AVERAGE ( projects[reality_score] )
+
+// Capacity-weighted score: big projects count more than small ones
+Weighted Reality Score =
+    DIVIDE (
+        SUMX ( projects, projects[capacity_mw] * projects[reality_score] ),
+        SUM ( projects[capacity_mw] )
+    )
+
+Likely Projects = CALCULATE ( [Projects], projects[reality_score] >= 0.7 )
+
+Phantom Risk Projects = CALCULATE ( [Projects], projects[reality_score] < 0.45 )
+
+Single Source Projects = CALCULATE ( [Projects], projects[n_sources] = 1 )
+
+Single Source Share = DIVIDE ( [Single Source Projects], [Projects] )
+
+// Open opportunities for power / IPP sales: likely enough, no partner, pre-construction
+Open Power Opportunities MW =
+    CALCULATE (
+        [Reality MW],
+        ISBLANK ( projects[power_partner] ),
+        projects[stage] <= 3,
+        projects[reality_score] >= 0.45
+    )
+
+Evidence Items = COUNTROWS ( evidence )
+
+Headline-only Evidence Share =
+    DIVIDE ( CALCULATE ( [Evidence Items], evidence[text_kind] = "summary" ), [Evidence Items] )
+
+High Severity Anomalies = CALCULATE ( COUNTROWS ( anomalies ), anomalies[severity] = "high" )
+
+Top Call Priority (Power) =
+    CALCULATE ( MAX ( who_to_call[priority] ), who_to_call[segment] = "Power & IPPs" )
+
+// Dynamic title for the report header
+Headline =
+    FORMAT ( [Announced MW] / 1000, "0.0" ) & " GW announced → "
+        & FORMAT ( [Reality MW] / 1000, "0.0" ) & " GW likely ("
+        & FORMAT ( [Reality Share], "0%" ) & ")"

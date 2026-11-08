@@ -42,3 +42,10 @@ generated_reports/
 
 # Docker
 docker-compose.override.yml
+
+# Local artifacts
+.coverage
+coverage.xml
+*.log
+.playwright-mcp/
+backend/knowledge_store/
