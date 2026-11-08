@@ -1,13 +1,14 @@
 """Generate a Power BI Project (.pbip) for Phantom Hunter — no Power BI needed to build it.
 
 A .pbix is a binary only Power BI Desktop can write. A .pbip is Microsoft's text-based
-equivalent: Power BI Desktop opens it fully built (data, relationships, measures, report
-page), and File → Save as → .pbix converts it.
+equivalent: Power BI Desktop opens it fully built (data, relationships, measures, a dark
+"Phantom" theme and two report pages), and File → Save as → .pbix converts it.
 
     python analytics/powerbi/build_pbip.py [OUTPUT_FOLDER]
 
 Output: OUTPUT_FOLDER/PhantomHunter.pbip (+ .SemanticModel, .Report, data/*.csv).
 Measures come from measures.dax; data from analytics/data/*.csv. Standard library only.
+After opening: Home → Refresh (a .pbip stores no data), then Save as .pbix.
 """
 
 from __future__ import annotations
@@ -56,15 +57,19 @@ def parse_dax(path: Path):
 
 def m_query(table: str) -> str:
     types = ", ".join(f'{{"{c}", {mt}}}' for c, (_, mt) in SCHEMA[table].items())
-    return "\n".join([
+    lines = [
         "let",
         f'    Source = Csv.Document(File.Contents(DataFolder & "\\{table}.csv"), [Delimiter = ",", Encoding = 65001, QuoteStyle = QuoteStyle.Csv]),',
         "    Promoted = Table.PromoteHeaders(Source, [PromoteAllScalars = true]),",
         '    Blanks = Table.ReplaceValue(Promoted, "", null, Replacer.ReplaceValue, Table.ColumnNames(Promoted)),  // empty cell → blank, so ISBLANK works',
         f'    Typed = Table.TransformColumnTypes(Blanks, {{{types}}}, "en-US")',
-        "in",
-        "    Typed",
-    ])
+    ]
+    last = "Typed"
+    if table == "projects":  # readable axis label instead of "(Blank)"
+        lines[-1] += ","
+        lines.append('    Placed = Table.ReplaceValue(Typed, null, "Place not stated", Replacer.ReplaceValue, {"state"})')
+        last = "Placed"
+    return "\n".join(lines + ["in", f"    {last}"])
 
 
 def model(data_folder: Path) -> dict:
@@ -94,7 +99,6 @@ def model(data_folder: Path) -> dict:
         tables.append(table)
     rels = [{"name": f"{t}_to_projects", "fromTable": t, "fromColumn": "project_id", "toTable": "projects", "toColumn": "project_id"}
             for t in SCHEMA if t != "projects"]
-    folder = str(data_folder)
     return {
         "compatibilityLevel": 1567,
         "model": {
@@ -105,21 +109,83 @@ def model(data_folder: Path) -> dict:
             "tables": tables,
             "relationships": rels,
             "expressions": [{"name": "DataFolder", "kind": "m",
-                             "expression": f'"{folder}" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]'}],
+                             "expression": f'"{data_folder}" meta [IsParameterQuery = true, Type = "Text", IsParameterQueryRequired = true]'}],
             "annotations": [{"name": "PBI_QueryOrder", "value": json.dumps(["DataFolder", *SCHEMA])},
                             {"name": "__PBI_TimeIntelligenceEnabled", "value": "0"}],
         },
     }
 
 
-# ─────────────── report ───────────────
+# ─────────────── report: dark "Phantom" theme + two styled pages ───────────────
+
+INK, PANEL, EDGE, MUTED = "#0B0A1F", "#16143A", "#2E2A5C", "#94A3B8"
+VIOLET, CYAN, GREEN, RED, AMBER, PINK = "#A78BFA", "#22D3EE", "#34D399", "#F87171", "#FBBF24", "#F472B6"
+
+THEME_FILE = "PhantomHunterDark.json"
+THEME = {
+    "name": "Phantom Hunter Dark",
+    "dataColors": [VIOLET, GREEN, CYAN, AMBER, RED, PINK, "#818CF8", "#F97316"],
+    "background": INK, "foreground": "#F1F5F9", "tableAccent": "#7C3AED",
+    "good": GREEN, "neutral": AMBER, "bad": RED, "maximum": GREEN, "center": AMBER, "minimum": RED,
+    "textClasses": {
+        "callout": {"fontSize": 28, "fontFace": "Segoe UI Semibold", "color": "#FFFFFF"},
+        "title": {"fontSize": 12, "fontFace": "Segoe UI Semibold", "color": "#E2E8F0"},
+        "header": {"fontSize": 11, "fontFace": "Segoe UI Semibold", "color": "#E2E8F0"},
+        "label": {"fontSize": 10, "fontFace": "Segoe UI", "color": "#CBD5E1"},
+    },
+    "visualStyles": {
+        "page": {"*": {"background": [{"color": {"solid": {"color": INK}}, "transparency": 0}],
+                       "outspace": [{"color": {"solid": {"color": INK}}, "transparency": 0}]}},
+        "*": {"*": {
+            "background": [{"show": True, "color": {"solid": {"color": PANEL}}, "transparency": 0}],
+            "border": [{"show": True, "color": {"solid": {"color": EDGE}}, "radius": 14}],
+            "dropShadow": [{"show": True, "color": {"solid": {"color": "#000000"}}, "position": "Outer", "preset": "BottomRight", "transparency": 55}],
+            "title": [{"show": True, "fontColor": {"solid": {"color": "#E2E8F0"}}, "fontSize": 12, "fontFamily": "Segoe UI Semibold"}],
+            "visualHeader": [{"foreground": {"solid": {"color": MUTED}}, "border": {"solid": {"color": PANEL}}, "background": {"solid": {"color": PANEL}}}],
+            "categoryAxis": [{"labelColor": {"solid": {"color": "#CBD5E1"}}, "titleColor": {"solid": {"color": MUTED}}, "gridlineColor": {"solid": {"color": EDGE}}}],
+            "valueAxis": [{"labelColor": {"solid": {"color": MUTED}}, "titleColor": {"solid": {"color": MUTED}}, "gridlineColor": {"solid": {"color": EDGE}}}],
+            "legend": [{"labelColor": {"solid": {"color": "#E2E8F0"}}}],
+            "labels": [{"color": {"solid": {"color": "#FFFFFF"}}}],
+            "categoryLabels": [{"color": {"solid": {"color": MUTED}}}],
+        }},
+        "tableEx": {"*": {
+            "columnHeaders": [{"fontColor": {"solid": {"color": "#FFFFFF"}}, "backColor": {"solid": {"color": "#4C1D95"}}, "fontSize": 10}],
+            "values": [{"fontColorPrimary": {"solid": {"color": "#E2E8F0"}}, "backColorPrimary": {"solid": {"color": PANEL}},
+                        "fontColorSecondary": {"solid": {"color": "#E2E8F0"}}, "backColorSecondary": {"solid": {"color": "#1E1B4B"}}, "fontSize": 10}],
+            "grid": [{"gridHorizontal": True, "gridHorizontalColor": {"solid": {"color": EDGE}}, "gridVertical": False, "rowPadding": 4}],
+        }},
+        "slicer": {"*": {"items": [{"fontColor": {"solid": {"color": "#E2E8F0"}}, "fontSize": 11}],
+                         "header": [{"fontColor": {"solid": {"color": VIOLET}}, "show": False}]}},
+        "textbox": {"*": {"background": [{"show": False}], "border": [{"show": False}], "dropShadow": [{"show": False}]}},
+    },
+}
+
+
+def lit(v) -> dict:
+    """Power BI literal expression: strings quoted, numbers suffixed D, booleans bare."""
+    if isinstance(v, bool):
+        val = "true" if v else "false"
+    elif isinstance(v, (int, float)):
+        val = f"{v}D"
+    else:
+        val = f"'{v}'"
+    return {"expr": {"Literal": {"Value": val}}}
+
+
+def color(c: str) -> dict:
+    return {"solid": {"color": lit(c)}}
+
 
 def _field(kind: str, table: str, prop: str) -> dict:
-    alias = table[0]
-    return {kind: {"Expression": {"SourceRef": {"Source": alias}}, "Property": prop}, "Name": f"{table}.{prop}"}
+    return {kind: {"Expression": {"SourceRef": {"Source": table[0]}}, "Property": prop}, "Name": f"{table}.{prop}"}
 
 
-def visual(vtype: str, x, y, w, h, roles: dict, title: str = "", order_by=None) -> dict:
+def _container(x, y, w, h, single: dict, z: int = 0) -> dict:
+    cfg = {"name": uuid.uuid4().hex[:20], "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": z, "width": w, "height": h}}], "singleVisual": single}
+    return {"x": x, "y": y, "z": z, "width": w, "height": h, "config": json.dumps(cfg), "filters": "[]"}
+
+
+def visual(vtype: str, x, y, w, h, roles: dict, title: str = "", order_by=None, objects=None, vc=None) -> dict:
     """roles: {role: [(kind, table, prop), ...]} where kind is Column or Measure."""
     fields = [f for fs in roles.values() for f in fs]
     tables = sorted({t for _, t, _ in fields})
@@ -132,37 +198,117 @@ def visual(vtype: str, x, y, w, h, roles: dict, title: str = "", order_by=None) 
               "projections": {r: [{"queryRef": f"{t}.{p}", **({"active": True} if vtype == "slicer" else {})} for _, t, p in fs]
                               for r, fs in roles.items()},
               "prototypeQuery": query, "drillFilterOtherVisuals": True}
+    vco = {k: [dict(v[0])] for k, v in (vc or {}).items()}
     if title:
-        single["vcObjects"] = {"title": [{"properties": {"show": {"expr": {"Literal": {"Value": "true"}}},
-                                                          "text": {"expr": {"Literal": {"Value": f"'{title}'"}}}}}]}
-    name = uuid.uuid4().hex[:20]
-    cfg = {"name": name, "layouts": [{"id": 0, "position": {"x": x, "y": y, "z": 0, "width": w, "height": h}}], "singleVisual": single}
-    return {"x": x, "y": y, "z": 0, "width": w, "height": h, "config": json.dumps(cfg), "filters": "[]"}
+        props = vco.setdefault("title", [{"properties": {}}])[0].setdefault("properties", {})
+        props.update({"show": lit(True), "text": lit(title)})
+    if vco:
+        single["vcObjects"] = vco
+    if objects:
+        single["objects"] = objects
+    return _container(x, y, w, h, single)
+
+
+def textbox(x, y, w, h, runs) -> dict:
+    """runs: [(text, size_pt, hex_color, bold)] in one paragraph."""
+    para = [{"textRuns": [{"value": t, "textStyle": {"fontSize": f"{sz}pt", "color": c, "fontWeight": "bold" if b else "normal",
+                                                         "fontFamily": "Segoe UI Semibold" if b else "Segoe UI"}} for t, sz, c, b in runs]}]
+    return _container(x, y, w, h, {"visualType": "textbox", "drillFilterOtherVisuals": True,
+                                   "objects": {"general": [{"properties": {"paragraphs": para}}]},
+                                   "vcObjects": {k: [{"properties": {"show": lit(False)}}] for k in ("background", "border", "dropShadow")}}, z=1)
+
+
+def kpi(x, y, w, h, measure: str, title: str, accent: str) -> dict:
+    """Card with a coloured value and a matching accent border."""
+    return visual("card", x, y, w, h, {"Values": [("Measure", HOME, measure)]}, title,
+                  objects={"labels": [{"properties": {"color": color(accent), "fontSize": lit(30)}}],
+                           "categoryLabels": [{"properties": {"show": lit(False)}}]},
+                  vc={"border": [{"properties": {"show": lit(True), "color": color(accent), "radius": lit(14)}}],
+                      "title": [{"properties": {"fontColor": color("#CBD5E1")}}]})
+
+
+def series_colors(*pairs) -> list:
+    return [{"properties": {"fill": color(c)}, "selector": {"metadata": f"{HOME}.{m}"}} for m, c in pairs]
+
+
+def country_colors(pairs) -> list:
+    return [{"properties": {"fill": color(c)}, "selector": {"data": [{"scopeId": {"Comparison": {
+        "ComparisonKind": 0, "Left": {"Column": {"Expression": {"SourceRef": {"Entity": "projects"}}, "Property": "country"}},
+        "Right": {"Literal": {"Value": f"'{v}'"}}}}}]}} for v, c in pairs]
+
+
+def col_widths(table: str, widths) -> list:
+    return [{"properties": {"value": lit(w)}, "selector": {"metadata": f"{table}.{c}"}} for c, w in widths]
+
+
+def _section(name: str, visuals: list) -> dict:
+    return {"name": "ReportSection" + uuid.uuid4().hex[:12], "displayName": name, "displayOption": 1,
+            "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": visuals}
+
+
+M = lambda n: ("Measure", HOME, n)  # noqa: E731
+C = lambda t, c: ("Column", t, c)  # noqa: E731
+TOP_LEGEND = [{"properties": {"show": lit(True), "position": lit("Top")}}]
+NO_FRAME = {k: [{"properties": {"show": lit(False)}}] for k in ("background", "border", "dropShadow")}
+
+
+def page_pipeline() -> dict:
+    return _section("Pipeline reality", [
+        textbox(20, 8, 640, 52, [("👻 Phantom Hunter  ", 22, "#FFFFFF", True), ("India + Malaysia data-centre pipeline", 12, MUTED, False)]),
+        visual("card", 660, 12, 600, 46, {"Values": [M("Headline")]},
+               objects={"labels": [{"properties": {"color": color(CYAN), "fontSize": lit(17)}}],
+                        "categoryLabels": [{"properties": {"show": lit(False)}}]}, vc=NO_FRAME),
+        kpi(20, 70, 300, 105, "Announced MW", "📣 Announced MW", VIOLET),
+        kpi(335, 70, 300, 105, "Reality MW", "✅ Reality-weighted MW", GREEN),
+        kpi(650, 70, 300, 105, "Phantom MW", "👻 Phantom MW", RED),
+        kpi(965, 70, 295, 105, "Reality Share", "🎯 Reality share", AMBER),
+        visual("clusteredBarChart", 20, 188, 620, 316, {"Category": [C("projects", "state")], "Y": [M("Announced MW"), M("Reality MW")]},
+               "📍 Announced vs likely MW by state", order_by=M("Announced MW"),
+               objects={"dataPoint": series_colors(("Announced MW", "#7C3AED"), ("Reality MW", GREEN)), "legend": TOP_LEGEND}),
+        visual("funnel", 655, 188, 300, 316, {"Category": [C("projects", "stage_name")], "Y": [M("Projects")]}, "🪜 Evidence ladder",
+               objects={"dataPoint": [{"properties": {"showAllDataPoints": lit(True)}}],
+                        "labels": [{"properties": {"color": color(INK), "fontSize": lit(10)}}]}),
+        visual("slicer", 970, 188, 290, 150, {"Values": [C("projects", "country")]}, "🌏 Country"),
+        visual("slicer", 970, 352, 290, 152, {"Values": [C("projects", "score_band")]}, "🎚 Reality band"),
+        visual("tableEx", 20, 516, 1240, 194, {"Values": [C("who_to_call", "project"), C("who_to_call", "segment"),
+                                                          C("who_to_call", "priority"), C("who_to_call", "reasons")]},
+               "📞 Who to call this month", order_by=C("who_to_call", "priority"),
+               objects={"columnWidth": col_widths("who_to_call", (("project", 330), ("segment", 170), ("priority", 70), ("reasons", 620)))}),
+    ])
+
+
+def page_explorer() -> dict:
+    return _section("Project explorer", [
+        textbox(20, 8, 900, 52, [("🔎 Project explorer  ", 22, "#FFFFFF", True),
+                                 ("size vs reality, and what each project still has to prove", 12, MUTED, False)]),
+        kpi(20, 70, 240, 95, "Likely Projects", "🟢 Likely (≥70%)", GREEN),
+        kpi(272, 70, 240, 95, "Phantom Risk Projects", "🔴 Phantom risk (<45%)", RED),
+        kpi(524, 70, 240, 95, "Single Source Share", "📰 Single-source share", AMBER),
+        kpi(776, 70, 240, 95, "Open Power Opportunities MW", "⚡ Open power MW", CYAN),
+        kpi(1028, 70, 232, 95, "High Severity Anomalies", "🚨 High-severity anomalies", PINK),
+        visual("scatterChart", 20, 178, 620, 330, {"Category": [C("projects", "name")], "Series": [C("projects", "country")],
+                                                  "X": [M("Announced MW")], "Y": [M("Avg Reality Score")]},
+               "🫧 Size vs reality score (each dot = a project)",
+               objects={"dataPoint": country_colors((("India", VIOLET), ("Malaysia", CYAN))), "legend": TOP_LEGEND}),
+        visual("columnChart", 655, 178, 605, 330, {"Category": [C("projects", "stage_name")], "Series": [C("projects", "country")], "Y": [M("Projects")]},
+               "🏗 Projects by stage and country",
+               objects={"dataPoint": country_colors((("India", VIOLET), ("Malaysia", CYAN))), "legend": TOP_LEGEND}),
+        visual("tableEx", 20, 520, 1240, 190, {"Values": [C("projects", "name"), C("projects", "developer"), C("projects", "state"),
+                                                          C("projects", "stage_name"), C("projects", "capacity_mw"), C("projects", "reality_score"),
+                                                          C("projects", "weakest_assumption")]},
+               "🧾 Projects and their weakest assumption", order_by=C("projects", "capacity_mw"),
+               objects={"columnWidth": col_widths("projects", (("name", 300), ("developer", 140), ("state", 120), ("stage_name", 95),
+                                                               ("capacity_mw", 95), ("reality_score", 90), ("weakest_assumption", 380)))}),
+    ])
 
 
 def report() -> dict:
-    M = lambda n: ("Measure", HOME, n)  # noqa: E731
-    C = lambda t, c: ("Column", t, c)  # noqa: E731
-    vs = [
-        visual("card", 20, 10, 1240, 60, {"Values": [M("Headline")]}),
-        visual("card", 20, 80, 300, 110, {"Values": [M("Announced MW")]}, "Announced MW"),
-        visual("card", 335, 80, 300, 110, {"Values": [M("Reality MW")]}, "Reality-weighted MW"),
-        visual("card", 650, 80, 300, 110, {"Values": [M("Phantom MW")]}, "Phantom MW"),
-        visual("card", 965, 80, 295, 110, {"Values": [M("Reality Share")]}, "Reality share"),
-        visual("clusteredBarChart", 20, 205, 620, 300, {"Category": [C("projects", "state")], "Y": [M("Announced MW"), M("Reality MW")]},
-               "Announced vs reality-weighted MW by state", order_by=M("Announced MW")),
-        visual("funnel", 655, 205, 300, 300, {"Category": [C("projects", "stage_name")], "Y": [M("Projects")]}, "Evidence ladder — projects by stage"),
-        visual("slicer", 970, 205, 290, 140, {"Values": [C("projects", "country")]}, "Country"),
-        visual("slicer", 970, 355, 290, 150, {"Values": [C("projects", "score_band")]}, "Reality band"),
-        visual("tableEx", 20, 515, 1240, 195, {"Values": [C("who_to_call", "project"), C("who_to_call", "segment"),
-                                                          C("who_to_call", "priority"), C("who_to_call", "reasons")]},
-               "Who to call this month", order_by=C("who_to_call", "priority")),
-    ]
-    section = {"name": "ReportSection" + uuid.uuid4().hex[:12], "displayName": "Pipeline reality", "displayOption": 1,
-               "width": 1280, "height": 720, "config": "{}", "filters": "[]", "visualContainers": vs}
-    cfg = {"version": "5.59", "themeCollection": {}, "activeSectionIndex": 0, "defaultDrillFilterOtherVisuals": True,
-           "settings": {"useStylableVisualContainerHeader": True}}
-    return {"config": json.dumps(cfg), "layoutOptimization": 0, "sections": [section]}
+    cfg = {"version": "5.59", "themeCollection": {"customTheme": {"name": THEME_FILE, "version": "5.59", "type": 1}},
+           "activeSectionIndex": 0, "defaultDrillFilterOtherVisuals": True, "settings": {"useStylableVisualContainerHeader": True}}
+    return {"config": json.dumps(cfg), "layoutOptimization": 0,
+            "resourcePackages": [{"resourcePackage": {"name": "RegisteredResources", "type": 1, "disabled": False,
+                                                      "items": [{"type": 202, "path": THEME_FILE, "name": THEME_FILE}]}}],
+            "sections": [page_pipeline(), page_explorer()]}
 
 
 def platform(kind: str) -> dict:
@@ -176,15 +322,17 @@ def build(out: Path) -> Path:
     data.mkdir(exist_ok=True)
     for t in SCHEMA:
         shutil.copy2(DATA / f"{t}.csv", data / f"{t}.csv")
-    shutil.copy2(HERE / "PhantomHunter_theme.json", out / "PhantomHunter_theme.json")
     sm, rp = out / f"{NAME}.SemanticModel", out / f"{NAME}.Report"
+    res = rp / "StaticResources" / "RegisteredResources"
     sm.mkdir(exist_ok=True)
-    rp.mkdir(exist_ok=True)
+    res.mkdir(parents=True, exist_ok=True)
     w = lambda p, obj: p.write_text(json.dumps(obj, indent=2, ensure_ascii=False), encoding="utf-8")  # noqa: E731
     w(sm / "model.bim", model(data.resolve()))
     w(sm / "definition.pbism", {"version": "1.0", "settings": {}})
     w(sm / ".platform", platform("SemanticModel"))
     w(rp / "report.json", report())
+    w(res / THEME_FILE, THEME)
+    w(out / THEME_FILE, THEME)  # standalone copy: View → Themes → Browse for themes
     w(rp / "definition.pbir", {"version": "1.0", "datasetReference": {"byPath": {"path": f"../{NAME}.SemanticModel"}, "byConnection": None}})
     w(rp / ".platform", platform("Report"))
     pbip = out / f"{NAME}.pbip"
