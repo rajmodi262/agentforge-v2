@@ -42,6 +42,8 @@ class BaseAgent:
 
     # ─── Multi-step reasoning config ───
     reasoning_steps: int = 1  # 1 = single-shot, 3 = think→critique→refine
+    # Output token budget per LLM call — raise for agents that emit long artifacts
+    max_output_tokens: int = 4096
     critique_prompt: str = (
         "You just produced the analysis above. Now critically review it.\n"
         "Identify exactly 3 weaknesses, blind spots, or overly optimistic assumptions.\n"
@@ -71,6 +73,11 @@ class BaseAgent:
 
     def __init__(self):
         self.claude = get_claude_service()
+        # SELF_CRITIQUE_AGENTS switches an agent onto the think → critique → refine loop
+        from app.config import get_settings
+        enabled = {k.strip().lower() for k in get_settings().self_critique_agents.split(",") if k.strip()}
+        if self.name.lower().replace(" agent", "").strip() in enabled:
+            self.reasoning_steps = 3
 
     async def run(
         self,
@@ -207,6 +214,12 @@ class BaseAgent:
             except ValidationError as ve:
                 logger.warning(f"{self.name} output validation failed: {ve}")
 
+        # ─── Gap fill: one targeted call for any field the model left blank ───
+        if model and not self.claude.mock_mode:
+            fill = await self._fill_empty_fields(active_prompt, brief, parsed_output, model, workflow_id)
+            total_tokens += fill["tokens_used"]
+            total_cost += fill["cost"]
+
         execution_time = int(time.time() - start_time)
 
         # Notify: agent completed
@@ -247,28 +260,41 @@ class BaseAgent:
                         user_message=user_message,
                         output_model=output_model,
                         agent_name=self.name,
-                        max_tokens=4096,
+                        max_tokens=self.max_output_tokens,
                     )
                 else:
                     result = await self.claude.generate(
                         system_prompt=system_prompt,
                         user_message=user_message,
                         agent_name=self.name,
-                        max_tokens=4096,
+                        max_tokens=self.max_output_tokens,
                     )
 
                 # Validate structured output so malformed/invalid data triggers a
                 # retry instead of silently flowing downstream. Enforced only for
-                # real LLM calls — mock mode keeps its lenient behavior.
+                # real LLM calls — mock mode keeps its lenient behavior. On the LAST
+                # attempt we accept best-effort output rather than hard-failing the
+                # whole agent (weaker/free models don't always nail strict schemas;
+                # the downstream Pydantic step already tolerates partial output).
                 if output_model and not self.claude.mock_mode:
                     parsed = self._parse_output(result["content"])
-                    output_model(**parsed)  # raises ValidationError if invalid → retry
+                    try:
+                        output_model(**parsed)
+                    except ValidationError:
+                        if attempt < max_retries - 1:
+                            raise  # retry
+                        logger.warning(
+                            f"{self.name}: output failed schema after {max_retries} attempts — "
+                            f"using best-effort partial output"
+                        )
 
                 # Observability: persist this LLM call (no-op without workflow_id)
                 await self.claude.write_agent_log(
                     workflow_id, self.name,
                     tokens=result.get("tokens_used", 0), cost=result.get("cost", 0.0),
-                    latency_ms=int((time.time() - t0) * 1000), status="success",
+                    latency_ms=int((time.time() - t0) * 1000),
+                    status="fallback" if result.get("provider") == "mock" else "success",
+                    provider=result.get("provider"),
                     input_preview=user_message, output_preview=str(result.get("content", "")),
                 )
                 return result
@@ -290,6 +316,74 @@ class BaseAgent:
                 workflow_id, self.name, str(last_error)
             )
         raise RuntimeError(f"{self.name} failed after {max_retries} attempts: {last_error}")
+
+    _PLACEHOLDERS = {"", "null", "none", "n/a", "na", "tbd", "unknown", "-", "..."}
+
+    @classmethod
+    def _empty_fields(cls, output: Dict[str, Any], model: Type[BaseModel]) -> List[str]:
+        """Fields left blank — including placeholder text a small model writes instead ("null", "N/A")."""
+        def blank(v):
+            if v in (None, [], {}):
+                return True
+            return isinstance(v, str) and v.strip().lower() in cls._PLACEHOLDERS
+        return [k for k in model.model_fields if blank(output.get(k))]
+
+    async def _fill_empty_fields(
+        self,
+        system_prompt: str,
+        brief: str,
+        output: Dict[str, Any],
+        model: Type[BaseModel],
+        workflow_id: Optional[str] = None,
+    ) -> Dict[str, Any]:
+        """Ask only for the fields left blank, then merge them in place.
+
+        Small models (e.g. a local 3B) often skip optional keys; regenerating the
+        whole analysis is slow, so this asks for just the gaps. Best-effort: any
+        failure keeps the original output.
+        """
+        missing = self._empty_fields(output, model)
+        if not missing:
+            return {"tokens_used": 0, "cost": 0.0}
+        if workflow_id:
+            await ws_manager.send_agent_thinking(
+                workflow_id, self.name, f"Filling {len(missing)} empty field(s): {', '.join(missing)}"
+            )
+        schema = model.model_json_schema()
+        wanted = {k: schema["properties"][k] for k in missing}
+        sub = {"type": "object", "properties": wanted, "required": missing}
+        if "$defs" in schema:
+            sub["$defs"] = schema["$defs"]
+        example = {k: self.output_schema.get(k, "...") for k in missing}
+        message = (
+            f"STARTUP BRIEF: {brief}\n\n"
+            f"YOUR ANALYSIS SO FAR:\n{json.dumps(output, indent=2)[:6000]}\n\n"
+            f"These fields are still EMPTY: {', '.join(missing)}.\n"
+            f"Fill in ONLY these fields with specific, realistic content consistent with the analysis above. "
+            f"Do not leave any of them empty, and never answer \"null\", \"N/A\" or \"unknown\" — "
+            f"give your best specific estimate instead.\n\nReturn a JSON object with exactly these keys, shaped like:\n"
+            f"{json.dumps(example, indent=2)}"
+        )
+        try:
+            if self.claude.provider == "ollama":
+                from app.services.claude_service import strict_schema
+                result = await self.claude._ollama_generate(system_prompt, message, 2048, schema=strict_schema(sub))
+            else:
+                result = await self.claude.generate(system_prompt, message, agent_name=self.name, max_tokens=2048)
+            patch = self._parse_output(result["content"])
+            filled = [k for k in missing if k not in self._empty_fields(patch, model)]
+            merged = {**output, **{k: patch[k] for k in filled}}
+            try:
+                merged = model(**merged).model_dump()
+            except ValidationError:
+                pass  # keep the raw merge; downstream already tolerates partial shapes
+            output.clear()
+            output.update(merged)
+            logger.info(f"{self.name}: gap fill completed {len(filled)}/{len(missing)} empty fields")
+            return {"tokens_used": result.get("tokens_used", 0), "cost": result.get("cost", 0.0)}
+        except Exception as e:
+            logger.warning(f"{self.name}: gap fill skipped: {e}")
+            return {"tokens_used": 0, "cost": 0.0}
 
     async def _run_tools(
         self,
@@ -386,9 +480,18 @@ class BaseAgent:
         start = content.find("{")
         end = content.rfind("}") + 1
         if start >= 0 and end > start:
-            return json.loads(content[start:end])
+            try:
+                return json.loads(content[start:end])
+            except json.JSONDecodeError:
+                pass
 
-        raise ValueError(f"Could not parse JSON from {self.name} output")
+        # Last resort: tolerant loader that repairs truncated JSON (LLMs in JSON
+        # mode sometimes get cut off at the token limit mid-structure).
+        from app.json_utils import loads_tolerant
+        try:
+            return loads_tolerant(content)
+        except ValueError:
+            raise ValueError(f"Could not parse JSON from {self.name} output")
 
     def _generate_preview(self, output: Dict[str, Any]) -> str:
         """Generate a short preview string for WebSocket notification."""
@@ -430,12 +533,5 @@ class BaseAgent:
         return self.system_prompt
 
 
-# Agent registry for MCP / Prompt IDE
+# Agent registry for MCP / Prompt IDE — populated automatically by __init_subclass__.
 AGENT_REGISTRY = {}
-
-
-def _register_agent(cls):
-    """Decorator-free registration — called at import time by subclasses."""
-    key = cls.name.lower().replace(" agent", "").strip()
-    AGENT_REGISTRY[key] = cls
-    return cls

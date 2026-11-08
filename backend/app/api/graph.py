@@ -7,7 +7,7 @@ Also provides a simple ASCII visualization for debugging.
 from fastapi import APIRouter
 from typing import List, Dict, Any
 
-router = APIRouter(prefix="/api/v1/workflow", tags=["Workflow Graph"])
+router = APIRouter(prefix="/workflow", tags=["Workflow Graph"])
 
 # Graph topology (matches the LangGraph StateGraph in orchestrator.py)
 GRAPH_NODES = [
@@ -18,18 +18,23 @@ GRAPH_NODES = [
     {"id": "finance", "label": "Finance Agent", "description": "Revenue projections, burn rate, runway", "color": "#e94560", "icon": "💰"},
     {"id": "analytics", "label": "Analytics Agent", "description": "KPIs, metrics framework, dashboards", "color": "#0f3460", "icon": "📊"},
     {"id": "operations", "label": "Operations Agent", "description": "Hiring plan, legal, compliance", "color": "#533483", "icon": "⚙️"},
+    {"id": "board_meeting", "label": "Board Meeting", "description": "Agents debate and challenge each other's assumptions", "color": "#e94560", "icon": "🏛️"},
+    {"id": "synthesis", "label": "Chief Synthesizer", "description": "Merges all outputs + debate into one blueprint", "color": "#0f3460", "icon": "🧠"},
     {"id": "report", "label": "Report Compiler", "description": "Aggregates all outputs into PDF", "color": "#16213e", "icon": "📄"},
 ]
 
 GRAPH_EDGES = [
     {"from": "__start__", "to": "ceo", "label": "Initialize"},
     {"from": "ceo", "to": "research", "label": "Vision → Market Analysis"},
-    {"from": "research", "to": "marketing", "label": "Research → GTM Strategy"},
-    {"from": "marketing", "to": "developer", "label": "GTM → Tech Architecture"},
-    {"from": "developer", "to": "finance", "label": "Architecture → Financials"},
+    {"from": "research", "to": "marketing", "label": "Research → GTM Strategy (parallel)"},
+    {"from": "research", "to": "developer", "label": "Research → Tech Architecture (parallel)"},
+    {"from": "marketing", "to": "finance", "label": "Pricing → Financials (fan-in)"},
+    {"from": "developer", "to": "finance", "label": "Infra Costs → Financials (fan-in)"},
     {"from": "finance", "to": "analytics", "label": "Financials → KPI Framework"},
     {"from": "analytics", "to": "operations", "label": "KPIs → Operations Plan"},
-    {"from": "operations", "to": "report", "label": "Ops → Report Generation"},
+    {"from": "operations", "to": "board_meeting", "label": "All Outputs → Debate"},
+    {"from": "board_meeting", "to": "synthesis", "label": "Debate → Synthesis"},
+    {"from": "synthesis", "to": "report", "label": "Blueprint → PDF"},
     {"from": "report", "to": "__end__", "label": "Complete"},
 ]
 
@@ -46,15 +51,15 @@ async def get_workflow_graph() -> Dict[str, Any]:
         "version": "1.1.10",
         "graph_type": "StateGraph",
         "state_schema": "WorkflowState",
-        "topology": "sequential",
+        "topology": "dependency-ordered DAG with parallel fan-out/fan-in",
         "nodes": GRAPH_NODES,
         "edges": GRAPH_EDGES,
         "metadata": {
-            "total_agents": len([n for n in GRAPH_NODES if n["id"] != "report"]),
+            "total_agents": len([n for n in GRAPH_NODES if n["id"] not in ("report", "board_meeting", "synthesis")]),
             "total_nodes": len(GRAPH_NODES),
             "total_edges": len(GRAPH_EDGES),
-            "supports_conditional_routing": True,
-            "supports_human_in_the_loop": True,
+            "supports_conditional_routing": False,
+            "supports_human_in_the_loop": False,
             "supports_parallel_execution": True,
         },
     }
@@ -70,11 +75,14 @@ async def get_workflow_mermaid() -> Dict[str, str]:
     lines.append('    S["🚀 START"] --> CEO["👔 CEO Agent"]')
     lines.append('    CEO --> RES["🔍 Research Agent"]')
     lines.append('    RES --> MKT["📢 Marketing Agent"]')
-    lines.append('    MKT --> DEV["💻 Developer Agent"]')
-    lines.append('    DEV --> FIN["💰 Finance Agent"]')
+    lines.append('    RES --> DEV["💻 Developer Agent"]')
+    lines.append('    MKT --> FIN["💰 Finance Agent"]')
+    lines.append('    DEV --> FIN')
     lines.append('    FIN --> ANA["📊 Analytics Agent"]')
     lines.append('    ANA --> OPS["⚙️ Operations Agent"]')
-    lines.append('    OPS --> RPT["📄 Report Compiler"]')
+    lines.append('    OPS --> BRD["🏛️ Board Meeting"]')
+    lines.append('    BRD --> SYN["🧠 Chief Synthesizer"]')
+    lines.append('    SYN --> RPT["📄 Report Compiler"]')
     lines.append('    RPT --> E["✅ END"]')
     lines.append("")
     lines.append("    style S fill:#1a1a2e,color:#fff")

@@ -300,6 +300,11 @@ img { max-width: 100%; display: block; }
   justify-content: center;
   font-size: 14px;
 }
+.navbar__right {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xl);
+}
 .navbar__links {
   display: flex;
   gap: var(--space-xl);

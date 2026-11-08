@@ -1,0 +1,16 @@
+{
+ "round1_before_fixes": {
+  "n": 40,
+  "correct": 25,
+  "under": 7,
+  "over": 2,
+  "other": 6
+ },
+ "round2_fresh_after_fixes": {
+  "n": 40,
+  "correct": 31,
+  "under": 4,
+  "over": 2,
+  "other": 3
+ }
+}

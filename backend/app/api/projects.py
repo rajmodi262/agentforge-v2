@@ -171,10 +171,16 @@ async def start_project_workflow(
         session_factory=_factory,
     )
 
+    # Tell the client the effective AI mode immediately so it can badge demo runs
+    from app.services.claude_service import get_claude_service
+    mode = get_claude_service().mode_info()
+
     return {
         "message": "Workflow started",
         "workflow_id": str(workflow.id),
         "websocket_url": f"/api/v1/ws/{workflow.id}",
+        "mode": mode["mode"],
+        "provider": mode["provider"],
     }
 
 

@@ -10,9 +10,10 @@ from app.tools.code_sandbox import sandbox_tool
 
 class DeveloperAgent(BaseAgent):
     name = "Developer Agent"
-    reasoning_steps = 3  # think → critique → refine
-    required_context_keys = ["ceo", "research", "marketing"]
+    reasoning_steps = 1  # single-shot — fewer Groq calls to stay under free-tier rate limits
+    required_context_keys = ["ceo", "research"]
     tools = [("code_sandbox", sandbox_tool)]
+    max_output_tokens = 12000  # generated starter code (5 files) overflows 4k and truncates the JSON
 
     system_prompt = """You are the Developer Agent of AgentForge AI. You are a senior full-stack engineer
 who has architected systems at Flipkart, Razorpay, and PhonePe.
@@ -23,7 +24,7 @@ Design the complete technical architecture, development roadmap, AND generate st
 READING PREVIOUS AGENT OUTPUTS:
 - CEO Agent: use business_model_type to determine architecture pattern
 - Research Agent: use competitor analysis to identify technical moats
-- Marketing Agent: use channels and pricing to determine required integrations
+- CEO Agent: use revenue_model to determine required payment and billing integrations
 
 YOUR DELIVERABLES:
 1. Recommended tech stack with justification for each choice

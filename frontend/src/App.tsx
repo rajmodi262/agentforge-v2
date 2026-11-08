@@ -15,6 +15,8 @@ import KnowledgePage from './pages/KnowledgePage';
 import PromptsPage from './pages/PromptsPage';
 import AdminPage from './pages/AdminPage';
 import SharedReport from './pages/SharedReport';
+import PhantomHunter from './pages/PhantomHunter';
+import PhantomProject from './pages/PhantomProject';
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -31,11 +33,20 @@ function LenisProvider({ children }: { children: React.ReactNode }) {
       smoothWheel: true,
     });
 
+    // Expose the instance so pages can drive smooth scroll (e.g. scroll to the
+    // live pipeline on launch). Native scrollIntoView doesn't work under Lenis.
+    (window as unknown as { __lenis?: Lenis }).__lenis = lenis;
+
     lenis.on('scroll', ScrollTrigger.update);
-    gsap.ticker.add((time) => { lenis.raf(time * 1000); });
+    const ticker = (time: number) => { lenis.raf(time * 1000); };
+    gsap.ticker.add(ticker);
     gsap.ticker.lagSmoothing(0);
 
-    return () => { lenis.destroy(); };
+    return () => {
+      gsap.ticker.remove(ticker);
+      lenis.destroy();
+      delete (window as unknown as { __lenis?: Lenis }).__lenis;
+    };
   }, [isLanding]);
 
   return <>{children}</>;
@@ -56,6 +67,12 @@ export default function App() {
               } />
               <Route path="/report/:projectId" element={
                 <ProtectedRoute><Report /></ProtectedRoute>
+              } />
+              <Route path="/phantom" element={
+                <ProtectedRoute><PhantomHunter /></ProtectedRoute>
+              } />
+              <Route path="/phantom/:id" element={
+                <ProtectedRoute><PhantomProject /></ProtectedRoute>
               } />
               <Route path="/observability" element={
                 <ProtectedRoute><ObservabilityPage /></ProtectedRoute>

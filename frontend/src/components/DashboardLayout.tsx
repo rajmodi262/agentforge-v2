@@ -9,6 +9,7 @@ import { useAuth } from '../hooks/useAuth';
 import { colors, typography, spacing, radii, gradients } from '../styles/tokens';
 
 const NAV_ITEMS = [
+  { path: '/phantom', icon: '👻', label: 'Phantom Hunter' },
   { path: '/dashboard', icon: '📋', label: 'Projects' },
   { path: '/observability', icon: '📊', label: 'Observability' },
   { path: '/knowledge', icon: '🧠', label: 'Knowledge' },
@@ -67,7 +68,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         {/* Nav Items */}
         <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '2px', padding: `0 ${spacing.sm}` }}>
           {NAV_ITEMS.map(item => {
-            const active = location.pathname === item.path;
+            const active = location.pathname === item.path || (item.path === '/phantom' && location.pathname.startsWith('/phantom/'));
             return (
               <button
                 key={item.path}

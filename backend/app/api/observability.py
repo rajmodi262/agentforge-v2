@@ -16,9 +16,11 @@ from sqlalchemy import func, desc
 from typing import Optional
 
 from app.database import get_db
-from app.models.db_models import AgentLog, WorkflowRun, AgentTask
+from app.api.auth import get_current_user
+from app.api.admin import require_admin
+from app.models.db_models import AgentLog, WorkflowRun, AgentTask, Project, User
 
-router = APIRouter(prefix="/api/v1/observability", tags=["Observability"])
+router = APIRouter(prefix="/observability", tags=["Observability"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/logs")
@@ -29,9 +31,14 @@ async def get_logs(
     limit: int = Query(50, le=200),
     offset: int = 0,
     db: Session = Depends(get_db),
+    user: User = Depends(get_current_user),
 ):
-    """Paginated agent logs with filters."""
+    """Paginated agent logs with filters. Non-admins only see logs of their own runs
+    (log previews contain the user's business idea)."""
     query = db.query(AgentLog).order_by(desc(AgentLog.created_at))
+    if user.role not in ("admin", "owner"):
+        own = db.query(WorkflowRun.id).join(Project, WorkflowRun.project_id == Project.id).filter(Project.user_id == user.id)
+        query = query.filter(AgentLog.workflow_id.in_(own))
 
     if workflow_id:
         query = query.filter(AgentLog.workflow_id == workflow_id)

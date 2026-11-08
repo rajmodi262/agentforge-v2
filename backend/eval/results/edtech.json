@@ -1,0 +1,577 @@
+{
+  "idea": {
+    "id": "edtech",
+    "idea": "An adaptive learning platform that prepares high-school students in Southeast Asia for university entrance exams."
+  },
+  "pipeline_is_a": true,
+  "baseline_blueprint": {
+    "vision_and_problem": {
+      "vision": "To democratize access to high-quality, personalized university entrance exam preparation for every high-school student in Southeast Asia, bridging the gap between aspiration and opportunity.",
+      "problem": "Southeast Asian high-school students face immense pressure to perform on highly competitive university entrance exams. Current preparation methods are often expensive, one-size-fits-all, and inaccessible to a large segment of the population. This leads to unequal opportunities and significant student anxiety. Existing digital solutions are fragmented, lack true adaptivity, and don't cater to regional curriculum nuances."
+    },
+    "market_research": {
+      "tam": {
+        "description": "Total Addressable Market: All high-school students in Southeast Asia (approx. 100M students across Indonesia, Philippines, Vietnam, Thailand, Malaysia, Singapore, Myanmar, Cambodia, Laos, Brunei, Timor-Leste).",
+        "size_usd": "10B"
+      },
+      "sam": {
+        "description": "Serviceable Available Market: High-school students in target countries (Indonesia, Philippines, Vietnam, Thailand) actively seeking or having access to exam prep resources, with internet connectivity (approx. 50M students).",
+        "size_usd": "5B"
+      },
+      "som": {
+        "description": "Serviceable Obtainable Market: Target market share within 3 years, focusing on early adopters and digitally-savvy segments in major urban centers (approx. 1M students).",
+        "size_usd": "100M"
+      },
+      "competition": [
+        "Local tutoring centers (e.g., Guroo.ph, Ruangguru's offline presence)",
+        "Global online platforms (e.g., Coursera, edX - indirect, Khan Academy - free, limited exam focus)",
+        "Regional edtech startups (e.g., Zenius, Pahamify in Indonesia)",
+        "University-specific prep courses (often high-cost, limited reach)"
+      ],
+      "trends": [
+        "Increasing smartphone penetration and internet access.",
+        "Growing demand for STEM education.",
+        "Government initiatives promoting digital learning.",
+        "Parental willingness to invest in education.",
+        "Shift towards blended learning models."
+      ]
+    },
+    "go_to_market": {
+      "pricing_model": {
+        "type": "Freemium with tiered subscriptions",
+        "details": "Free tier: Limited access to core concepts and practice questions. Premium Tier 1 ($10/month): Full access to adaptive learning modules, practice tests, and basic analytics. Premium Tier 2 ($25/month): Includes personalized AI tutor support, live Q&A sessions, and advanced performance insights. Annual discounts available (15%)."
+      },
+      "acquisition_channels": {
+        "digital_marketing": [
+          "Targeted Facebook/Instagram Ads (demographics: 15-18 yrs, interests: education, specific universities, exam subjects). Budget: $50k/month initially.",
+          "Google Search Ads (keywords: 'university entrance exam prep [country]', '[exam name] tutor', 'best study apps SEA'). Budget: $30k/month.",
+          "YouTube Pre-roll Ads & Influencer Collaborations (educational YouTubers in target countries). Budget: $20k/month.",
+          "SEO Optimization (content marketing: blog posts on study tips, exam strategies, university guides)."
+        ],
+        "partnerships": [
+          "High School Outreach Programs: Collaborate with school counselors and student clubs for workshops and demos. Offer referral bonuses.",
+          "EdTech Aggregators: Partner with platforms that list educational resources.",
+          "Telco Bundles: Explore partnerships for data-inclusive subscription packages."
+        ],
+        "referral_program": "In-app referral system: 'Refer a friend, get 1 month free premium'.",
+        "initial_target_countries": [
+          "Philippines",
+          "Indonesia"
+        ]
+      },
+      "sales_process": "Primarily self-serve online. Dedicated sales team for institutional partnerships (schools, government bodies) starting Year 2.",
+      "customer_lifetime_value_projection": "$150 (Avg. 10 months subscription at $15/month avg. revenue per user)",
+      "customer_acquisition_cost_target": "$25 (Target blended CAC across all channels)"
+    },
+    "technical_architecture": {
+      "tech_stack": {
+        "frontend": "React Native (for cross-platform mobile apps - iOS/Android), React.js (for web dashboard)",
+        "backend": "Python (Django/Flask) for core logic, AI/ML models",
+        "database": "PostgreSQL (relational data), MongoDB (user progress, adaptive learning data)",
+        "ai_ml": "TensorFlow/PyTorch for adaptive learning algorithms (knowledge tracing, content recommendation), NLP for AI tutor.",
+        "cloud_infrastructure": "AWS (EC2, S3, RDS, Lambda) for scalability and reliability.",
+        "ci_cd": "GitHub Actions, Docker, Kubernetes.",
+        "analytics": "Mixpanel, Google Analytics."
+      },
+      "key_features": [
+        "Adaptive learning engine (adjusts difficulty, content based on student performance).",
+        "Personalized study plans.",
+        "Extensive question bank (aligned with national curricula).",
+        "Mock exams simulating real test conditions.",
+        "Performance analytics dashboard (student & parent views).",
+        "AI-powered chatbot for instant doubt clearing.",
+        "Gamification elements (points, badges, leaderboards)."
+      ],
+      "scalability_plan": "Microservices architecture, auto-scaling cloud resources, database sharding.",
+      "data_privacy_compliance": "Adherence to PDPA (Singapore), DPA (Philippines), UU PDP (Indonesia) and GDPR principles."
+    },
+    "financial_projections": {
+      "funding_ask": {
+        "amount_usd": "2M",
+        "use_of_funds": "Product development (40%), Marketing & Sales (35%), Operations & Hiring (20%), Working Capital (5%)."
+      },
+      "revenue_model_assumptions": "Avg. ARPU: $15/month. Conversion rate from free to paid: 5%. Churn rate: 8% monthly.",
+      "three_year_trajectory": {
+        "year_1": {
+          "revenue_usd": "500k",
+          "users_paid": "30k",
+          "expenses_usd": "2.5M",
+          "net_income_usd": "-2M",
+          "runway_months": 12
+        },
+        "year_2": {
+          "revenue_usd": "3M",
+          "users_paid": "180k",
+          "expenses_usd": "4M",
+          "net_income_usd": "-1M",
+          "runway_months": 18
+        },
+        "year_3": {
+          "revenue_usd": "10M",
+          "users_paid": "550k",
+          "expenses_usd": "6M",
+          "net_income_usd": "4M",
+          "runway_months": "N/A (profitable)"
+        }
+      },
+      "key_metrics_to_track": [
+        "Monthly Active Users (MAU)",
+        "Paid Subscribers",
+        "Conversion Rate (Free to Paid)",
+        "Churn Rate",
+        "Customer Acquisition Cost (CAC)",
+        "Customer Lifetime Value (CLTV)",
+        "Average Revenue Per User (ARPU)"
+      ]
+    },
+    "operations_and_hiring": {
+      "team_structure_initial": {
+        "founders": "CEO (Vision, Strategy, Fundraising), CTO (Tech, Product Dev), CPO (Curriculum, Pedagogy)",
+        "key_hires_year_1": [
+          "Lead AI/ML Engineer (1)",
+          "Senior Backend Engineer (2)",
+          "Frontend/Mobile Engineer (3)",
+          "UX/UI Designer (1)",
+          "Content Specialists/Subject Matter Experts (4 - per country/curriculum)",
+          "Digital Marketing Manager (1)",
+          "Community Manager (1)",
+          "Customer Support Representatives (2)"
+        ]
+      },
+      "hiring_plan_3_years": {
+        "year_1": "Focus on core engineering, product, content, and initial marketing/support.",
+        "year_2": "Expand engineering team, build out sales team for partnerships, scale marketing, regional content managers.",
+        "year_3": "Further scale engineering, product, sales (institutional), international expansion team, data science."
+      },
+      "office_space": "Remote-first initially, with co-working spaces in key hubs (e.g., Manila, Jakarta, Singapore) for team meetups starting Year 2.",
+      "legal_and_compliance": "Engage local legal counsel in each target country for incorporation, employment law, data privacy, and educational regulations.",
+      "customer_support_strategy": "Multi-channel support (in-app chat, email, FAQ). Tiered support system with escalation protocols. AI chatbot for L1 support."
+    },
+    "key_risks": {
+      "market_adoption": {
+        "risk": "Slow adoption due to entrenched traditional tutoring methods or low digital literacy in certain segments.",
+        "mitigation": "Aggressive freemium strategy, localized content and marketing, strong referral programs, partnerships with schools to build trust and demonstrate value."
+      },
+      "competition": {
+        "risk": "Intense competition from established local players and potential new entrants.",
+        "mitigation": "Focus on superior adaptive learning technology and personalization, deep curriculum localization, building a strong community, and strategic partnerships."
+      },
+      "regulatory_landscape": {
+        "risk": "Varying and evolving educational regulations and data privacy laws across Southeast Asian countries.",
+        "mitigation": "Proactive legal counsel engagement in each market, flexible platform architecture to adapt to regulatory changes, transparent data handling policies."
+      },
+      "content_quality_and_localization": {
+        "risk": "Difficulty in creating high-quality, accurate, and culturally relevant content for diverse curricula.",
+        "mitigation": "Hire experienced local subject matter experts, rigorous content review process, user feedback loops for continuous improvement, phased rollout by country."
+      },
+      "monetization_challenges": {
+        "risk": "Lower-than-expected conversion rates from free to paid tiers, or price sensitivity in target markets.",
+        "mitigation": "Continuous A/B testing of pricing tiers and feature gating, demonstrating clear ROI for premium features, exploring alternative revenue streams (e.g., B2B school licenses)."
+      },
+      "technical_scalability": {
+        "risk": "Platform instability or performance issues as user base grows rapidly.",
+        "mitigation": "Robust cloud infrastructure (AWS), microservices architecture, load testing, continuous monitoring, and performance optimization."
+      }
+    }
+  },
+  "pipeline_blueprint": {
+    "vision_and_problem": {
+      "ceo": {
+        "startup_name_suggestion": "EduAdapt SEA",
+        "problem_statement": "High-school students in Southeast Asia face significant challenges in preparing for highly competitive university entrance exams. Existing resources are often generic, not tailored to individual learning paces or specific regional exam curricula, leading to suboptimal preparation and reduced university admission chances.",
+        "solution_description": "An adaptive learning platform leveraging AI to personalize study plans, content, and practice tests for high-school students aiming for university entrance exams across Southeast Asia. The platform will dynamically adjust difficulty and focus based on student performance, providing targeted support and efficient preparation.",
+        "target_user_primary": "High-school students (grades 10-12) in Southeast Asia preparing for university entrance exams.",
+        "target_user_secondary": "Parents of these students, and potentially high-school educators seeking supplementary resources.",
+        "business_model_type": "B2C",
+        "revenue_model": "Subscription-based (monthly/annual access to platform features and content), with potential for premium one-off tutoring or specialized course packages.",
+        "geographic_focus": "Southeast Asia (initially focusing on major markets like Singapore, Malaysia, Thailand, Philippines, Vietnam, Indonesia).",
+        "industry_vertical": "EdTech / E-learning",
+        "stage_assumption": "Seed",
+        "key_assumptions": [
+          "There is a significant unmet demand for personalized exam preparation in Southeast Asia.",
+          "Students and parents are willing to pay for a subscription-based online learning platform.",
+          "The platform can effectively adapt to the diverse curricula and exam formats across different Southeast Asian countries."
+        ],
+        "top_risks": [
+          "Competition from established global and local EdTech players, as well as traditional tutoring centers.",
+          "Difficulty in accurately adapting to the nuances of various national university entrance exams and curricula.",
+          "User acquisition costs and retention rates in a price-sensitive market."
+        ],
+        "questions_for_research_agent": [
+          "What are the specific university entrance exam structures and curricula in key Southeast Asian countries (e.g., Singapore's A-Levels, Malaysia's SPM, Thailand's O-NET/GAT/PAT, Philippines' NCEE, Vietnam's THPT)?",
+          "What is the current market size and growth potential for online exam preparation in Southeast Asia?",
+          "Who are the primary competitors, and what are their strengths, weaknesses, and pricing models?"
+        ],
+        "questions_for_marketing_agent": [
+          "What are the most effective channels to reach high-school students and their parents in Southeast Asia for an EdTech product?",
+          "How can we position EduAdapt SEA to stand out against existing tutoring services and online platforms?",
+          "What pricing strategies would be most effective for subscription models in different Southeast Asian markets?"
+        ],
+        "questions_for_developer_agent": [
+          "What AI/ML techniques are most suitable for creating an adaptive learning engine that can handle diverse educational content and user learning patterns?",
+          "What are the technical requirements for building a scalable platform that can support a large number of concurrent users across different regions?",
+          "How can we ensure the platform's content is easily updatable to reflect changes in exam syllabi and formats?"
+        ],
+        "questions_for_finance_agent": [
+          "What are the projected customer acquisition costs (CAC) and lifetime value (LTV) for this subscription model in the target markets?",
+          "What are the key financial metrics to track for a Seed-stage EdTech startup in this region?",
+          "What are the potential funding requirements for content development, platform scaling, and market penetration?"
+        ],
+        "executive_brief": "EduAdapt SEA is a B2C EdTech startup aiming to provide an AI-powered adaptive learning platform for high-school students in Southeast Asia preparing for university entrance exams. The core problem is the lack of personalized and regionally relevant study resources, leading to suboptimal preparation. Our solution offers dynamic, AI-driven personalized learning paths, practice tests, and content tailored to specific exam curricula. The primary target users are students aged 15-18 in key Southeast Asian countries, with a subscription-based revenue model. Key risks include intense competition, curriculum adaptation challenges, and user acquisition costs. The immediate focus is on validating market demand, understanding regional exam specifics, and developing a robust, scalable platform."
+      }
+    },
+    "market_research": {
+      "research": {
+        "market_size": {
+          "tam": "$12B",
+          "sam": "$1.8B",
+          "som": "$0.02B",
+          "source": "Industry Reports 2024"
+        },
+        "market_growth_rate": "19% CAGR (2023-2028)",
+        "market_trends": [
+          "AI adoption in startup",
+          "Shift to cloud-native startup platforms"
+        ],
+        "competitors": [
+          {
+            "name": "LegacyCorp Startup",
+            "description": "Incumbent player",
+            "funding": "Series C, $50M",
+            "weakness": "Outdated UI, expensive"
+          }
+        ],
+        "customer_personas": [
+          {
+            "name": "Tech-savvy Manager",
+            "description": "Mid-level manager looking for efficiency",
+            "pain_points": [
+              "Manual workflows",
+              "Data silos"
+            ],
+            "willingness_to_pay": "₹447/month"
+          }
+        ],
+        "regulatory_considerations": [
+          "Data privacy laws (DPDP Act)",
+          "Industry-specific compliance"
+        ],
+        "market_opportunities": [
+          "Underserved tier-2 markets",
+          "AI-driven personalization"
+        ],
+        "market_risks": [
+          "Price sensitivity",
+          "Low switching costs"
+        ],
+        "research_gaps": [
+          "Detailed churn data of competitors",
+          "Exact LTV across different cohorts"
+        ],
+        "sources_consulted": [
+          "Gartner Reports",
+          "Industry Whitepapers",
+          "Public Financials"
+        ]
+      }
+    },
+    "go_to_market": {
+      "marketing": {
+        "brand_name": "AdaptiLearn",
+        "brand_tagline": "Your AI-Powered Path to University Success",
+        "brand_personality": "Empowering, intelligent, supportive, and results-oriented. We are the smart, modern guide for ambitious students.",
+        "positioning_statement": "For high-school students in Southeast Asia overwhelmed by university entrance exams, AdaptiLearn is the AI-powered adaptive learning platform that provides personalized study plans and targeted practice, unlike generic platforms or expensive traditional tutors, ensuring efficient preparation and maximizing admission chances.",
+        "target_channels": [
+          {
+            "channel": "Social Media Marketing (TikTok, Instagram, YouTube)",
+            "strategy": "Targeted ad campaigns showcasing student success stories, AI personalization benefits, and exam-specific tips. Influencer collaborations with popular student creators and educational content creators. Organic content focusing on study hacks, exam strategies, and motivational content.",
+            "expected_cac": "$8 - $15"
+          },
+          {
+            "channel": "Search Engine Marketing (Google Ads)",
+            "strategy": "Bid on keywords related to university entrance exams in SEA, specific subject prep, and competitor names. Focus on long-tail keywords for niche exam preparations. Utilize remarketing to re-engage website visitors.",
+            "expected_cac": "$15 - $25"
+          },
+          {
+            "channel": "Partnerships with Schools & Educational Institutions",
+            "strategy": "Offer pilot programs or discounted access to schools. Develop co-branded content or webinars. Engage with school counselors and teachers to recommend the platform. Focus on building trust and demonstrating value to institutions.",
+            "expected_cac": "$50 - $100 (initial outreach, lower for renewals)"
+          }
+        ],
+        "launch_strategy": {
+          "phase_1": "Pre-Launch Buzz (Month 1-2): Build anticipation through social media teasers, influencer partnerships, and a waitlist signup campaign offering early bird discounts. Gather initial user feedback through a closed beta with select students.",
+          "phase_2": "Official Launch (Month 3-5): Full public launch with targeted paid ad campaigns across social and search. Initiate school partnership outreach. Focus on driving initial user acquisition and gathering testimonials. Offer a limited-time launch discount.",
+          "phase_3": "Growth & Optimization (Month 6+): Scale successful acquisition channels. Introduce referral programs and community-building initiatives. Analyze user data to refine personalization algorithms and content. Expand country-specific exam coverage based on demand."
+        },
+        "pricing_strategy": {
+          "starter_plan": "Basic Access: $15/month - Core adaptive learning features, access to 1-2 exam types, limited practice tests.",
+          "popular_plan": "Pro Plan: $25/month - Full adaptive learning, access to all exam types, unlimited practice tests, detailed performance analytics, priority support.",
+          "trial": "7-Day Free Trial - Full access to the Pro Plan features to experience the platform's capabilities."
+        },
+        "viral_mechanics": [
+          "Refer-a-Friend Program: Reward both the referrer and the referred with discounts or extended premium access.",
+          "Social Sharing: Encourage users to share their progress, high scores, or study milestones on social media with branded templates.",
+          "Gamification & Leaderboards: Award points for completing modules, achieving milestones, and referring friends, with public leaderboards to foster competition."
+        ],
+        "estimated_monthly_budget": "$50,000 - $75,000 (Seed Stage)"
+      }
+    },
+    "technical_architecture": {
+      "developer": {
+        "recommended_stack": {
+          "frontend": "React/Next.js",
+          "backend": "Python FastAPI",
+          "database": "PostgreSQL + Redis",
+          "hosting": "AWS / Vercel",
+          "payments": "Stripe / Razorpay"
+        },
+        "mvp_features": [
+          {
+            "feature": "Core startup workflow",
+            "priority": "P0",
+            "effort_days": 8
+          }
+        ],
+        "architecture_diagram": "Client -> Load Balancer -> Startupsync API -> Database",
+        "development_roadmap": {
+          "month_1": "Core API and Auth",
+          "month_2": "Frontend Integration",
+          "month_3": "Beta testing and bug fixes"
+        },
+        "estimated_monthly_infra_cost": "₹5000/month",
+        "generated_code": {
+          "backend_entrypoint": "from fastapi import FastAPI...",
+          "database_schema": "CREATE TABLE users...",
+          "api_routes": "@app.get('/api')...",
+          "docker_compose": "version: '3'...",
+          "env_template": "DB_URL=..."
+        }
+      }
+    },
+    "financial_projections": {
+      "finance": {
+        "revenue_projections": {
+          "month_1": {
+            "subscribers": 35,
+            "revenue": 32714.0,
+            "costs": 40000.0,
+            "profit": -30000.0
+          },
+          "month_6": {
+            "subscribers": 451,
+            "revenue": 667218.0,
+            "costs": 200000.0,
+            "profit": 100000.0
+          },
+          "month_12": {
+            "subscribers": 1841,
+            "revenue": 1892537.0,
+            "costs": 500000.0,
+            "profit": 500000.0
+          },
+          "month_36": {
+            "subscribers": 9178,
+            "revenue": 8419182.0,
+            "costs": 1500000.0,
+            "profit": 3500000.0
+          }
+        },
+        "unit_economics": {
+          "gross_margin": "63%",
+          "ltv_cac_ratio": "12:1",
+          "average_revenue_per_user": "₹99",
+          "cost_per_unit": "₹50"
+        },
+        "break_even_analysis": {
+          "expected_break_even_month": "Month 17",
+          "monthly_fixed_costs": "₹200000",
+          "break_even_subscribers": 500
+        },
+        "funding_recommendation": "Raise $1M Pre-seed",
+        "key_financial_risks": [
+          "Higher CAC than expected",
+          "Delayed monetization"
+        ]
+      }
+    },
+    "operations_and_hiring": {
+      "operations": {
+        "week_1_to_4_checklist": [
+          {
+            "week": 1,
+            "tasks": [
+              "Register domain startupflow.com",
+              "Set up cloud infrastructure"
+            ]
+          },
+          {
+            "week": 2,
+            "tasks": [
+              "Launch landing page"
+            ]
+          },
+          {
+            "week": 3,
+            "tasks": [
+              "Beta testing"
+            ]
+          },
+          {
+            "week": 4,
+            "tasks": [
+              "Public launch"
+            ]
+          }
+        ],
+        "hiring_plan": {
+          "month_1": [
+            "1 Full-stack Developer",
+            "1 Designer (part-time)"
+          ],
+          "month_3": [
+            "1 Marketing Lead",
+            "1 Customer Success Agent"
+          ],
+          "month_6": [
+            "2 Sales Reps",
+            "1 Data Analyst"
+          ]
+        },
+        "process_documentation": {
+          "daily_ops": "Daily standups, weekly sprint planning",
+          "quality_control": "Code reviews, automated testing",
+          "customer_support": "ZenDesk SLA within 2 hours"
+        },
+        "immediate_actions": [
+          "Register domain startupflow.com",
+          "Set up cloud infrastructure"
+        ],
+        "legal_checklist": [
+          "Incorporate company",
+          "Draft Terms of Service",
+          "File for trademarks"
+        ],
+        "tools_stack": [
+          {
+            "tool": "Notion",
+            "purpose": "Documentation",
+            "cost": "$10/mo"
+          },
+          {
+            "tool": "Slack",
+            "purpose": "Communication",
+            "cost": "$8/mo"
+          }
+        ],
+        "decision_framework": "Data-driven, customer-centric",
+        "success_criteria_90_days": [
+          "444+ active subscribers",
+          "< 10% monthly churn"
+        ]
+      },
+      "analytics": {
+        "core_kpis": [
+          {
+            "kpi": "Monthly Active Users (MAU)",
+            "target": "Grow MAU by 20% MoM for the first 12 months",
+            "measurement": "Count of unique users who logged in or interacted with the platform at least once in a given month. Tracked via user session data."
+          },
+          {
+            "kpi": "Conversion Rate (Free Trial to Paid)",
+            "target": "Achieve 15% conversion rate by Month 6, 25% by Month 12",
+            "measurement": "Percentage of users who convert from the 7-day free trial to a paid subscription. Calculated as (Paid Subscribers / Trial Users) * 100."
+          },
+          {
+            "kpi": "Customer Lifetime Value (LTV)",
+            "target": "Achieve LTV:CAC ratio of 12:1 by Month 12 (as per Finance Agent)",
+            "measurement": "Average revenue generated by a customer over their entire relationship with AdaptiLearn. Calculated as Average Revenue Per User (ARPU) / Churn Rate. Tracked via subscription and user data."
+          },
+          {
+            "kpi": "Average Session Duration",
+            "target": "Increase average session duration by 10% QoQ",
+            "measurement": "The average amount of time users spend actively engaged on the platform per session. Tracked via user interaction events within sessions."
+          },
+          {
+            "kpi": "User Engagement Score",
+            "target": "Achieve an average engagement score of 70/100 by Month 9",
+            "measurement": "A composite score derived from key user actions such as time spent on platform, number of practice questions completed, modules accessed, and progress made. Specific weighting to be defined based on user behavior analysis."
+          }
+        ],
+        "tracking_plan": {
+          "events": [
+            "User Sign Up",
+            "User Login",
+            "Free Trial Start",
+            "Subscription Purchase (Starter/Pro)",
+            "Subscription Renewal",
+            "Subscription Cancellation",
+            "Module Accessed",
+            "Practice Test Started",
+            "Practice Test Completed",
+            "Question Answered",
+            "AI Feedback Received",
+            "Progress Metric Updated",
+            "User Profile Updated",
+            "Payment Successful",
+            "Payment Failed",
+            "Referral Initiated",
+            "Referral Converted",
+            "Marketing Campaign Clicked (UTM parameters)",
+            "Website Visit (Page View)",
+            "Feature Usage (e.g., specific AI tool)"
+          ],
+          "tools": [
+            "Mixpanel",
+            "Google Analytics",
+            "Stripe Webhooks (for payment events)",
+            "Internal Logging (for backend events)"
+          ]
+        },
+        "growth_metrics": {
+          "north_star_metric": "Monthly Active Users (MAU) who complete at least one study module or practice test",
+          "leading_indicators": [
+            "Free Trial Sign-ups",
+            "Website Traffic (by channel)",
+            "User Session Duration",
+            "Number of Practice Questions Answered",
+            "Module Completion Rate",
+            "Feature Adoption Rate"
+          ],
+          "lagging_indicators": [
+            "Monthly Recurring Revenue (MRR)",
+            "Customer Lifetime Value (LTV)",
+            "Churn Rate",
+            "Net Promoter Score (NPS)",
+            "Profitability"
+          ]
+        },
+        "dashboard_recommendations": [
+          "Acquisition Dashboard: Track channel performance (CAC, conversion rates by channel), campaign ROI, and traffic sources.",
+          "Engagement Dashboard: Monitor MAU, DAU, session duration, feature usage, and user activity funnels.",
+          "Monetization Dashboard: Display MRR, ARPU, LTV, churn rate, conversion rates (trial to paid), and revenue breakdown by plan.",
+          "Product Analytics Dashboard: Visualize user progress, module completion rates, practice test performance, and AI feedback engagement.",
+          "Financial Overview Dashboard: Track revenue, costs, profit, burn rate, and runway (integrating Finance Agent's data)."
+        ]
+      }
+    },
+    "key_risks": {
+      "board_meeting": {
+        "debate_points": [],
+        "consensus_score": 76,
+        "key_risks_after_debate": [
+          "Execution speed against incumbents",
+          "Regulatory compliance in data handling"
+        ],
+        "revised_recommendations": [
+          "Prioritize SOC2 compliance early",
+          "Focus on a niche tier-2 market before expanding"
+        ],
+        "board_decision": "The board approves the strategic direction for Boardspot with a focus on sustainable growth and early monetization."
+      }
+    }
+  },
+  "verdict": {
+    "status": "analysis_complete",
+    "agent": "Judge"
+  }
+}

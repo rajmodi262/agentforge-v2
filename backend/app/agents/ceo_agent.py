@@ -5,7 +5,7 @@ from app.agents.base_agent import BaseAgent
 
 class CEOAgent(BaseAgent):
     name = "CEO Agent"
-    reasoning_steps = 3  # think → critique → refine
+    reasoning_steps = 1  # single-shot — fewer Groq calls to stay under free-tier rate limits
 
     system_prompt = """You are the CEO Agent of AgentForge AI. You are the orchestrator — the first agent 
 to analyze a startup idea and prepare the ground for all other agents.

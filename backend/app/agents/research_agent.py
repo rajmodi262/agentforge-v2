@@ -10,7 +10,8 @@ from app.tools.web_search import web_search
 
 async def _research_web_search(brief: str, context: Dict[str, Any]) -> Any:
     """Run targeted web searches based on the CEO's questions."""
-    queries = []
+    # Always ground on the idea itself first, then the CEO's specific questions
+    queries = [brief.splitlines()[0][:120] if brief else ""]
 
     # Extract questions from CEO output if available
     ceo_output = context.get("ceo_output", {})
@@ -19,8 +20,8 @@ async def _research_web_search(brief: str, context: Dict[str, Any]) -> Any:
         queries.extend(ceo_questions[:3])  # Top 3 questions
 
     # If no CEO questions, generate from brief
-    if not queries:
-        queries = [
+    if len(queries) == 1:
+        queries += [
             f"market size {brief[:80]}",
             f"competitors {brief[:80]}",
             f"industry trends {brief[:80]}",
@@ -36,7 +37,7 @@ async def _research_web_search(brief: str, context: Dict[str, Any]) -> Any:
 
 class ResearchAgent(BaseAgent):
     name = "Research Agent"
-    reasoning_steps = 3  # think → critique → refine
+    reasoning_steps = 1  # single-shot — fewer Groq calls to stay under free-tier rate limits
     required_context_keys = ["ceo"]
     tools = [("web_search", _research_web_search)]
 

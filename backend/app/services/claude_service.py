@@ -18,6 +18,67 @@ from app.config import get_settings
 logger = logging.getLogger(__name__)
 settings = get_settings()
 
+# Groq's free tier counts max_tokens against an 8k tokens-per-minute budget, so a
+# large output budget (e.g. the Developer agent's 12k) is rejected with a 413.
+GROQ_MAX_OUTPUT_TOKENS = 4096
+
+def strict_schema(schema: dict) -> dict:
+    """Copy of a Pydantic JSON schema where nothing may be left blank.
+
+    Every property becomes required, strings need ≥1 char, arrays ≥1 item and
+    free-form objects ≥1 key. Under constrained decoding this stops small local
+    models from answering optional fields with "" / [] / {}.
+    """
+    import copy
+
+    def walk(node):
+        if isinstance(node, dict):
+            # Optional[X] → anyOf [X, null]: drop the null branch so "no answer" isn't an option
+            opts = node.get("anyOf")
+            if isinstance(opts, list) and len(opts) > 1:
+                kept = [o for o in opts if o.get("type") != "null"]
+                if kept and len(kept) < len(opts):
+                    node["anyOf"] = kept
+            props = node.get("properties")
+            if isinstance(props, dict):
+                node["required"] = list(props)
+                for p in props.values():
+                    p.pop("default", None)
+            t = node.get("type")
+            if t == "string":
+                node.setdefault("minLength", 1)
+            elif t == "array":
+                node.setdefault("minItems", 1)
+            elif t == "object" and not props:
+                node.setdefault("minProperties", 1)
+            for v in node.values():
+                walk(v)
+        elif isinstance(node, list):
+            for v in node:
+                walk(v)
+        return node
+
+    return walk(copy.deepcopy(schema))
+
+
+_ollama_probe = {"ok": False, "at": 0.0}
+
+
+def _ollama_reachable() -> bool:
+    """Is a local Ollama server answering? Cached for 30 s so the chain stays cheap."""
+    if not settings.ollama_base_url:
+        return False
+    now = time.monotonic()
+    if now - _ollama_probe["at"] < 30:
+        return _ollama_probe["ok"]
+    try:
+        import httpx
+        ok = httpx.get(f"{settings.ollama_base_url}/api/version", timeout=1.5).status_code == 200
+    except Exception:
+        ok = False
+    _ollama_probe.update(ok=ok, at=now)
+    return ok
+
 
 # ─────────────────────────────── Keywords & Mock Helpers ───────────────────────────────
 
@@ -183,6 +244,18 @@ class ClaudeService:
     def __init__(self):
         self.mock_mode = settings.mock_mode
         self.provider = self._resolve_provider()
+        self.degraded_to_mock = False  # set True if a live request ever falls back to mock
+        self._last_call_ts = 0.0       # for the optional inter-call throttle
+        self._call_lock = asyncio.Lock()
+        # Gemini multi-key rotation: primary key + any comma-separated extras, deduped.
+        extra = [k.strip() for k in (settings.gemini_api_keys or "").split(",") if k.strip()]
+        seen, self._gemini_keys = set(), []
+        for k in ([settings.gemini_api_key] + extra):
+            if k and k not in seen:
+                seen.add(k)
+                self._gemini_keys.append(k)
+        self._gemini_rr = 0            # round-robin cursor
+        self._gemini_client_cache = {}  # key -> genai.Client
         self.client = None
         self.gemini_model = settings.gemini_model
         self.groq_model = settings.groq_model
@@ -195,10 +268,66 @@ class ClaudeService:
         # Initialize the primary provider's client; alternates are lazy-initialized
         self.client = self._get_client(self.provider)
         if self.client is None:
-            logger.warning("No AI provider client available — falling back to mock mode")
+            logger.warning("No AI provider client available — falling back to DEMO (mock) mode")
             self.mock_mode = True
+            self.provider = "mock"
         else:
             logger.info(f"AI Service initialized (primary provider={self.provider})")
+
+    def mode_info(self) -> dict:
+        """Effective runtime AI mode, for surfacing in the API/UI.
+
+        Reflects what will ACTUALLY happen on the next call — including the
+        silent fallback to mock when no provider client could be created — so
+        the frontend can show an honest "DEMO DATA" badge.
+        """
+        return {
+            "mode": "mock" if self.mock_mode else "live",
+            "provider": self.provider,
+        }
+
+    async def verify_provider(self) -> dict:
+        """Confirm the configured provider key actually works, once per process.
+
+        A key can be *present but invalid* (revoked/expired) — in which case
+        every request silently falls back to mock. Without this check the UI
+        would dishonestly show "live". We do one cheap ping; if it fails we
+        honestly degrade to mock so the badge tells the truth. Cached.
+        """
+        if getattr(self, "_verified", False) or self.mock_mode:
+            self._verified = True
+            return self.mode_info()
+
+        # JSON-shaped ping: the Groq/Gemini paths enforce JSON output, so a plain-text
+        # reply would spuriously fail. Small token budget keeps the check cheap.
+        _ping = ("health check", 'Return this exact JSON object: {"status": "ok"}', 50)
+        last_err = None
+        for provider in self._provider_chain():
+            client = self._get_client(provider)
+            if client is None:
+                continue
+            try:
+                if provider == "groq":
+                    await self._groq_generate(client, *_ping)
+                elif provider == "ollama":
+                    await self._ollama_generate(*_ping)
+                elif provider == "gemini":
+                    await self._gemini_generate(client, *_ping)
+                else:
+                    await self._claude_generate(client, *_ping)
+                self.provider = provider
+                self._verified = True
+                logger.info(f"AI provider verified: {provider}")
+                return self.mode_info()
+            except Exception as e:
+                last_err = e
+                logger.warning(f"Provider '{provider}' failed verification: {e}")
+
+        logger.error(f"All AI providers failed verification ({last_err}) — running in DEMO (mock) mode")
+        self.mock_mode = True
+        self.provider = "mock"
+        self._verified = True
+        return self.mode_info()
 
     def _resolve_provider(self) -> str:
         """Determine the primary AI provider."""
@@ -212,15 +341,44 @@ class ClaudeService:
             return "claude"
         if pref == "gemini" and settings.gemini_api_key:
             return "gemini"
+        if pref == "ollama":
+            return "ollama"
         if pref == "auto":
-            # Prefer Groq (fast + generous free tier), then Gemini, then Claude
+            # Prefer Groq (fast + generous free tier), then Gemini, then Claude, then a local model
             if settings.groq_api_key:
                 return "groq"
             if settings.gemini_api_key:
                 return "gemini"
             if settings.anthropic_api_key:
                 return "claude"
+            if _ollama_reachable():
+                return "ollama"
         return "mock"
+
+    def _gemini_client_for(self, key: str):
+        """Lazily create + cache a genai client for a specific key."""
+        cli = self._gemini_client_cache.get(key)
+        if cli is None:
+            try:
+                from google import genai
+                cli = genai.Client(api_key=key)
+                self._gemini_client_cache[key] = cli
+            except Exception as e:
+                logger.warning(f"Gemini client init failed for a key: {e}")
+                return None
+        return cli
+
+    async def _throttle(self):
+        """Enforce a minimum gap between live calls (free-tier RPM protection)."""
+        interval = settings.ai_min_call_interval
+        if interval <= 0:
+            return
+        async with self._call_lock:
+            now = time.monotonic()
+            wait = self._last_call_ts + interval - now
+            if wait > 0:
+                await asyncio.sleep(wait)
+            self._last_call_ts = time.monotonic()
 
     @staticmethod
     def _provider_key(provider: str) -> str:
@@ -228,14 +386,16 @@ class ClaudeService:
             "groq": settings.groq_api_key,
             "gemini": settings.gemini_api_key,
             "claude": settings.anthropic_api_key,
+            # a local model needs no key — it is "available" when the server answers
+            "ollama": settings.ollama_base_url if _ollama_reachable() else "",
         }.get(provider, "")
 
     def _provider_chain(self) -> list:
         """Ordered providers to try: primary first, then any other with a key."""
         chain = []
-        if self.provider in ("groq", "gemini", "claude"):
+        if self.provider in ("groq", "gemini", "claude", "ollama"):
             chain.append(self.provider)
-        for p in ("groq", "gemini", "claude"):
+        for p in ("groq", "gemini", "claude", "ollama"):
             if p not in chain and self._provider_key(p):
                 chain.append(p)
         return chain
@@ -256,6 +416,8 @@ class ClaudeService:
             elif provider == "claude" and settings.anthropic_api_key:
                 from anthropic import Anthropic
                 client = Anthropic(api_key=settings.anthropic_api_key)
+            elif provider == "ollama" and _ollama_reachable():
+                client = settings.ollama_base_url  # plain HTTP API, no SDK object needed
         except ImportError as e:
             logger.warning(f"{provider} SDK not installed: {e}")
         except Exception as e:
@@ -279,6 +441,8 @@ class ClaudeService:
         if self.mock_mode:
             return await self._mock_generate(agent_name, user_message)
 
+        await self._throttle()
+
         # Try each available provider in order, then fall back to mock
         last_err = None
         for provider in self._provider_chain():
@@ -287,16 +451,23 @@ class ClaudeService:
                 continue
             try:
                 if provider == "groq":
-                    return await self._groq_generate(client, system_prompt, user_message, max_tokens)
+                    result = await self._groq_generate(client, system_prompt, user_message, max_tokens)
+                elif provider == "ollama":
+                    result = await self._ollama_generate(system_prompt, user_message, max_tokens)
                 elif provider == "gemini":
-                    return await self._gemini_generate(client, system_prompt, user_message, max_tokens)
+                    result = await self._gemini_generate(client, system_prompt, user_message, max_tokens)
                 else:
-                    return await self._claude_generate(client, system_prompt, user_message, max_tokens)
+                    result = await self._claude_generate(client, system_prompt, user_message, max_tokens)
+                result["provider"] = provider
+                return result
             except Exception as e:
                 last_err = e
                 logger.warning(f"Provider '{provider}' failed: {e} — trying next")
 
         logger.error(f"All providers failed ({last_err}) — falling back to mock for this request")
+        # Mark that at least one live request silently degraded to mock this process —
+        # lets callers (e.g. the eval) detect token-budget/rate-limit contamination.
+        self.degraded_to_mock = True
         return await self._mock_generate(agent_name, user_message)
 
     async def generate_structured(
@@ -319,6 +490,8 @@ class ClaudeService:
         if self.mock_mode:
             return await self._mock_generate(agent_name, user_message)
 
+        await self._throttle()
+
         # Use the provider's native function/tool calling where supported,
         # validating against the Pydantic model. Anything else (or any failure)
         # falls back to JSON-mode generate() + downstream parsing.
@@ -335,6 +508,15 @@ class ClaudeService:
                     return await self._groq_generate_structured(
                         client, system_prompt, user_message, output_model, agent_name, max_tokens
                     )
+            elif self.provider == "ollama" and _ollama_reachable():
+                # Ollama constrains decoding to the JSON schema itself (structured outputs).
+                # The strict variant forbids blank fields, which small models otherwise
+                # emit for every optional (defaulted) key.
+                result = await self._ollama_generate(
+                    system_prompt, user_message, max_tokens, schema=strict_schema(output_model.model_json_schema())
+                )
+                output_model(**json.loads(result["content"]))  # validate; failure → fallback below
+                return result
         except Exception as e:
             logger.warning(f"Structured generation failed for {agent_name}: {e}, falling back to regular")
 
@@ -382,6 +564,7 @@ class ClaudeService:
 
         return {
             "content": _json.dumps(validated.model_dump()),
+            "provider": "claude",
             "thought": thought_text.strip(),
             "tokens_used": total_tokens,
             "cost": cost,
@@ -405,7 +588,7 @@ class ClaudeService:
         response = await asyncio.to_thread(
             client.chat.completions.create,
             model=self.groq_model,
-            max_tokens=max_tokens,
+            max_tokens=min(max_tokens, GROQ_MAX_OUTPUT_TOKENS),
             temperature=0.4,
             messages=[
                 {"role": "system", "content": system_prompt},
@@ -431,6 +614,7 @@ class ClaudeService:
 
         return {
             "content": _json.dumps(validated.model_dump()),
+            "provider": "groq",
             "thought": "",
             "tokens_used": total_tokens,
             "cost": cost,
@@ -478,6 +662,7 @@ class ClaudeService:
         await asyncio.sleep(random.uniform(0.5, 1.5))
         mock_data = _generate_dynamic_mock(agent_name, user_message)
         return {
+            "provider": "mock",
             "content": json.dumps(mock_data),
             "thought": f"Analyzing the brief to formulate {agent_name} strategy. Identifying key market parameters and aligning with the CEO's vision. Extracting insights...",
             "tokens_used": random.randint(800, 2500),
@@ -509,7 +694,7 @@ class ClaudeService:
         response = await asyncio.to_thread(
             client.chat.completions.create,
             model=self.groq_model,
-            max_tokens=max_tokens,
+            max_tokens=min(max_tokens, GROQ_MAX_OUTPUT_TOKENS),
             temperature=0.4,  # Lower temp for reliable structured JSON output
             response_format={"type": "json_object"},
             messages=[
@@ -539,11 +724,6 @@ class ClaudeService:
             "cost": cost,
         }
 
-    @retry(
-        wait=wait_exponential(multiplier=1, min=2, max=10),
-        stop=stop_after_attempt(3),
-        reraise=True
-    )
     async def _gemini_generate(
         self,
         client,
@@ -551,7 +731,55 @@ class ClaudeService:
         user_message: str,
         max_tokens: int,
     ) -> dict:
-        """Make a real Google Gemini API call with production-grade error handling."""
+        """Gemini call with round-robin across all configured keys.
+
+        Tries keys starting at the round-robin cursor; on a per-key rate limit
+        (429 / RESOURCE_EXHAUSTED) it advances to the next key instead of failing,
+        so multiple free-tier keys multiply throughput. The passed `client` is
+        ignored in favour of the rotating key pool.
+        """
+        keys = self._gemini_keys or ([settings.gemini_api_key] if settings.gemini_api_key else [])
+        if not keys:
+            raise ValueError("No Gemini API key configured")
+
+        last_err = None
+        n = len(keys)
+        # Gemini returns transient 503 "high demand" spikes; back off and retry the
+        # pool before handing the request to the next provider in the chain.
+        for backoff in (0, 2, 5):
+            if backoff:
+                logger.warning(f"Gemini overloaded — retrying in {backoff}s")
+                await asyncio.sleep(backoff)
+            for i in range(n):
+                idx = (self._gemini_rr + i) % n
+                cli = self._gemini_client_for(keys[idx])
+                if cli is None:
+                    continue
+                try:
+                    result = await self._gemini_call_once(cli, system_prompt, user_message, max_tokens)
+                    self._gemini_rr = (idx + 1) % n  # next call starts at the following key
+                    return result
+                except Exception as e:
+                    last_err = e
+                    msg = str(e)
+                    if "429" in msg or "RESOURCE_EXHAUSTED" in msg or "quota" in msg.lower():
+                        logger.warning(f"Gemini key #{idx + 1} rate-limited — rotating to next key")
+                        continue
+                    if "503" in msg or "UNAVAILABLE" in msg:
+                        break  # whole service is overloaded — back off, then retry
+                    raise
+            else:
+                break  # every key was rate-limited — no point retrying the pool
+        raise last_err or RuntimeError("Gemini: all keys failed")
+
+    async def _gemini_call_once(
+        self,
+        client,
+        system_prompt: str,
+        user_message: str,
+        max_tokens: int,
+    ) -> dict:
+        """One Gemini API call on a specific client (no retry — rotation handles 429)."""
         from google.genai import types
 
         combined_prompt = f"{system_prompt}\n\n---\n\n{user_message}"
@@ -567,6 +795,13 @@ class ClaudeService:
                     max_output_tokens=max_tokens,
                     temperature=0.4,  # Lower temp for reliable structured JSON output
                     response_mime_type="application/json",
+                    # 2.5 Flash "thinks" by default and those hidden tokens count against
+                    # max_output_tokens, truncating the JSON mid-object. The agents already
+                    # reason explicitly (critique/debate), so spend the budget on the answer.
+                    thinking_config=(
+                        types.ThinkingConfig(thinking_budget=0)
+                        if "flash" in (self.gemini_model or "") else None
+                    ),
                 ),
             )
         )
@@ -601,6 +836,59 @@ class ClaudeService:
             "tokens_used": total_tokens,
             "cost": cost,
         }
+
+    async def _ollama_generate(
+        self,
+        system_prompt: str,
+        user_message: str,
+        max_tokens: int,
+        schema: Optional[dict] = None,
+        model: Optional[str] = None,
+        num_ctx: Optional[int] = None,
+        temperature: float = 0.4,
+    ) -> dict:
+        """Local model via Ollama's chat API — free, private, no rate limits.
+
+        With `schema`, Ollama constrains decoding to that JSON schema (structured
+        outputs); otherwise it enforces plain JSON mode.
+        """
+        import httpx
+
+        payload = {
+            "model": model or settings.ollama_model,
+            "messages": [
+                {"role": "system", "content": f"{system_prompt}\n\nRespond ONLY with a single valid JSON object."},
+                {"role": "user", "content": user_message},
+            ],
+            "stream": False,
+            "format": schema or "json",
+            "keep_alive": "30m",
+            "options": {"temperature": temperature, "num_predict": max_tokens, "num_ctx": num_ctx or settings.ollama_num_ctx,
+                        "repeat_penalty": 1.1},  # stops small models looping until the token cap
+        }
+        # A local server can hiccup while it swaps models in and out of VRAM (chat
+        # model ↔ RAG embedder); retry briefly rather than degrading the run to mock.
+        last_err = None
+        for attempt in range(3):
+            try:
+                async with httpx.AsyncClient(timeout=settings.ollama_timeout) as client:
+                    r = await client.post(f"{settings.ollama_base_url}/api/chat", json=payload)
+                    r.raise_for_status()
+                    data = r.json()
+                break
+            except Exception as e:
+                last_err = e
+                logger.warning(f"Ollama call failed (attempt {attempt + 1}/3): {e!r}")
+                await asyncio.sleep(2 * (attempt + 1))
+        else:
+            raise last_err
+
+        content = (data.get("message") or {}).get("content", "")
+        if not content.strip():
+            raise ValueError("Ollama returned empty response")
+        tokens = (data.get("prompt_eval_count") or 0) + (data.get("eval_count") or 0)
+        logger.info(f"Ollama ({model or settings.ollama_model}) call: {tokens} tokens, local (free)")
+        return {"content": content, "thought": "", "tokens_used": tokens, "cost": 0.0, "provider": "ollama"}
 
     @retry(
         wait=wait_exponential(multiplier=1, min=2, max=10),
@@ -649,6 +937,7 @@ class ClaudeService:
         cost: float = 0.0,
         latency_ms: int = 0,
         status: str = "success",
+        provider: Optional[str] = None,
         input_preview: str = "",
         output_preview: str = "",
     ) -> None:
@@ -661,11 +950,12 @@ class ClaudeService:
         if not workflow_id:
             return
 
-        provider = "mock" if self.mock_mode else self.provider
+        provider = provider or ("mock" if self.mock_mode else self.provider)
         model_name = {
             "groq": self.groq_model,
             "gemini": self.gemini_model,
             "claude": settings.claude_model,
+            "ollama": settings.ollama_model,
         }.get(provider) or provider
 
         def _insert():

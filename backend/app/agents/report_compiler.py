@@ -22,14 +22,18 @@ class ReportCompiler:
             "sections": []
         }
 
+        # The synthesized blueprint leads (it's the coherent, cross-checked result),
+        # then the board's verdict, then each specialist's full analysis as appendix.
         section_map = {
-            "ceo_output": {"title": "1. Executive Summary", "icon": "🎯"},
-            "research_output": {"title": "2. Market Research Report", "icon": "🔍"},
-            "marketing_output": {"title": "3. Marketing Strategy", "icon": "📣"},
-            "developer_output": {"title": "4. Technical Roadmap", "icon": "💻"},
-            "finance_output": {"title": "5. Financial Projections", "icon": "💰"},
-            "analytics_output": {"title": "6. KPI Framework", "icon": "📊"},
-            "operations_output": {"title": "7. Operations Checklist", "icon": "⚙️"},
+            "final_blueprint_output": {"title": "1. Master Blueprint — Synthesized", "icon": "🏆"},
+            "board_meeting_output": {"title": "2. Board Verdict & Debate", "icon": "🏛️"},
+            "ceo_output": {"title": "3. Executive Summary (CEO Agent)", "icon": "🎯"},
+            "research_output": {"title": "4. Market Research Report", "icon": "🔍"},
+            "marketing_output": {"title": "5. Marketing Strategy", "icon": "📣"},
+            "developer_output": {"title": "6. Technical Roadmap", "icon": "💻"},
+            "finance_output": {"title": "7. Financial Projections", "icon": "💰"},
+            "analytics_output": {"title": "8. KPI Framework", "icon": "📊"},
+            "operations_output": {"title": "9. Operations Checklist", "icon": "⚙️"},
         }
 
         for key, meta in section_map.items():
@@ -82,28 +86,40 @@ class ReportCompiler:
                     f"{section['icon']} {section['title']}", heading_style
                 ))
 
+                def _esc(text):
+                    """Escape ReportLab paragraph markup."""
+                    return (str(text).replace("&", "&amp;")
+                            .replace("<", "&lt;").replace(">", "&gt;"))
+
+                def _render(value, indent=0, label=None):
+                    """Recursively render any nested structure with real depth."""
+                    pad = "&nbsp;" * (indent * 4)
+                    nice = label.replace("_", " ").title() if label else None
+                    if isinstance(value, dict):
+                        if nice:
+                            elements.append(Paragraph(f"{pad}<b>{_esc(nice)}</b>", body_style))
+                        for k, v in value.items():
+                            _render(v, indent + (1 if nice else 0), str(k))
+                    elif isinstance(value, list):
+                        if nice:
+                            elements.append(Paragraph(f"{pad}<b>{_esc(nice)}:</b>", body_style))
+                        for item in value:
+                            if isinstance(item, (dict, list)):
+                                _render(item, indent + 1)
+                            else:
+                                elements.append(Paragraph(f"{pad}&nbsp;&nbsp;• {_esc(item)}", body_style))
+                    else:
+                        if nice:
+                            elements.append(Paragraph(f"{pad}<b>{_esc(nice)}:</b> {_esc(value)}", body_style))
+                        else:
+                            elements.append(Paragraph(f"{pad}• {_esc(value)}", body_style))
+
                 content = section.get("content", {})
                 if isinstance(content, dict):
                     for key, value in content.items():
-                        label = key.replace("_", " ").title()
-                        if isinstance(value, str):
-                            elements.append(Paragraph(
-                                f"<b>{label}:</b> {value}", body_style
-                            ))
-                        elif isinstance(value, list):
-                            elements.append(Paragraph(f"<b>{label}:</b>", body_style))
-                            for item in value:
-                                if isinstance(item, str):
-                                    elements.append(Paragraph(f"  • {item}", body_style))
-                                elif isinstance(item, dict):
-                                    summary = ", ".join(f"{k}: {v}" for k, v in item.items() if isinstance(v, str))
-                                    elements.append(Paragraph(f"  • {summary}", body_style))
-                        elif isinstance(value, dict):
-                            elements.append(Paragraph(f"<b>{label}:</b>", body_style))
-                            for k, v in value.items():
-                                elements.append(Paragraph(
-                                    f"  {k.replace('_', ' ').title()}: {v}", body_style
-                                ))
+                        _render(value, 0, str(key))
+                elif content:
+                    _render(content, 0)
 
                 elements.append(Spacer(1, 15))
 

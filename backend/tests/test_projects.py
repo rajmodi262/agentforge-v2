@@ -1,3 +1,4 @@
+import pytest
 """Tests for Projects API endpoints."""
 
 
@@ -83,7 +84,20 @@ def test_create_project_html_sanitized(client, auth_headers):
     assert "<script>" not in data["business_idea"]
 
 
-def test_start_workflow(client, auth_headers, test_project):
+@pytest.fixture
+def stub_workflow(monkeypatch):
+    """The /start tests check the HTTP contract only (orchestration is covered in test_orchestrator).
+    A real background workflow would outlive the test and race the next test's table drop on the
+    shared in-memory SQLite connection, so record the call instead of running it."""
+    calls = []
+
+    async def _fake_run_workflow(**kwargs):
+        calls.append(kwargs)
+    monkeypatch.setattr("app.api.projects.run_workflow", _fake_run_workflow)
+    return calls
+
+
+def test_start_workflow(client, auth_headers, test_project, stub_workflow):
     """Test starting a workflow for a project."""
     project_id = test_project["id"]
     response = client.post(
@@ -94,9 +108,10 @@ def test_start_workflow(client, auth_headers, test_project):
     data = response.json()
     assert "workflow_id" in data
     assert "websocket_url" in data
+    assert stub_workflow and stub_workflow[0]["project_id"] == project_id
 
 
-def test_start_workflow_already_running(client, auth_headers, test_project, db_session):
+def test_start_workflow_already_running(client, auth_headers, test_project, db_session, stub_workflow):
     """Test that starting a workflow while status is 'running' returns 400.
     
     In mock mode the background task completes nearly instantly, so we

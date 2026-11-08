@@ -17,10 +17,13 @@ from typing import Optional
 
 from app.database import get_db
 from app.models.db_models import KnowledgeDocument
+from app.api.auth import get_current_user
+
+MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
 
 logger = logging.getLogger(__name__)
 
-router = APIRouter(prefix="/api/v1/knowledge", tags=["Knowledge Base"])
+router = APIRouter(prefix="/knowledge", tags=["Knowledge Base"], dependencies=[Depends(get_current_user)])
 
 UPLOAD_DIR = os.path.join(os.path.dirname(__file__), "..", "..", "knowledge_store")
 
@@ -51,7 +54,9 @@ async def upload_document(
     # Save file
     doc_id = str(uuid.uuid4())
     save_path = os.path.join(UPLOAD_DIR, f"{doc_id}{ext}")
-    content = await file.read()
+    content = await file.read(MAX_UPLOAD_BYTES + 1)
+    if len(content) > MAX_UPLOAD_BYTES:
+        raise HTTPException(413, "File too large (max 10 MB)")
     with open(save_path, "wb") as f:
         f.write(content)
 
@@ -89,6 +94,7 @@ async def upload_document(
                         "filename": file.filename,
                         "chunk_index": i,
                         "project_id": project_id or "",
+                        "source": "knowledge",
                     }],
                 )
                 stored_count += 1
@@ -97,6 +103,7 @@ async def upload_document(
 
     # Persist document metadata in DB (survives restarts)
     doc_record = KnowledgeDocument(
+        id=uuid.UUID(doc_id),  # same id as the RAG chunk ids, so delete can find them
         filename=file.filename,
         file_size=len(content),
         extension=ext,

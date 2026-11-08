@@ -9,7 +9,8 @@ Production-grade multi-agent orchestrator with:
 
 Graph topology:
 
-  START → CEO → Research → [Marketing, Developer, Finance] → Analytics → Operations → Board Meeting → Report → END
+  START → CEO → Research → [Marketing ‖ Developer] → Finance → Analytics → Operations
+        → Board Meeting → Synthesis → Report → END
 """
 
 import os
@@ -156,22 +157,29 @@ def _store_rag(project_id, agent_name, output, workflow_id):
 
 
 def _retrieve_rag(query, project_id, workflow_id) -> str:
-    """Fetch similar past analyses to enrich the current agent's context.
+    """Fetch grounding context: uploaded knowledge-base docs + this project's past runs.
 
-    Best-effort: returns "" if the vector store is unavailable or empty.
+    Best-effort: returns "" if the vector store is unavailable or nothing relevant matches.
     Excludes the current workflow so an agent never reads its own siblings.
     """
     try:
-        from app.services.rag_service import retrieve_similar_context
-        results = retrieve_similar_context(
+        from app.services.rag_service import retrieve_similar_context, retrieve_knowledge
+        sections = []
+        knowledge = retrieve_knowledge(query=query, project_id=project_id, n_results=3)
+        if knowledge:
+            sections.append("KNOWLEDGE BASE (uploaded documents):\n" + "\n\n".join(
+                f"[{k['metadata'].get('filename', 'document')}] {k['document'][:800]}" for k in knowledge
+            ))
+        past = retrieve_similar_context(
             query=query,
             project_id=project_id,
             n_results=3,
             exclude_workflow_id=workflow_id,
         )
-        if not results:
-            return ""
-        return "\n\n".join(r["document"][:800] for r in results if r.get("document"))
+        past = [r for r in past if r.get("document")]
+        if past:
+            sections.append("PAST ANALYSES OF THIS PROJECT:\n" + "\n\n".join(r["document"][:800] for r in past))
+        return "\n\n".join(sections)
     except Exception as e:
         logger.debug(f"RAG retrieve skipped: {e}")
         return ""
@@ -301,7 +309,12 @@ def _make_agent_node(agent_key: str, AgentClass):
                 _retrieve_rag, brief, state["project_id"], workflow_id
             )
             if retrieved:
-                brief = f"{brief}\n\nRELEVANT PAST ANALYSES (for additional context):\n{retrieved}"
+                brief = f"{brief}\n\nRETRIEVED CONTEXT (RAG — use where relevant):\n{retrieved}"
+                sources = [s for s in ("KNOWLEDGE BASE", "PAST ANALYSES") if s in retrieved]
+                await ws_manager.send_agent_tool_call(
+                    workflow_id, agent.name, "rag_retrieval",
+                    f"Retrieved context from: {', '.join(sources)}",
+                )
 
             # Run the agent
             result = await agent.run(
@@ -349,6 +362,35 @@ def _make_agent_node(agent_key: str, AgentClass):
     return node_fn
 
 
+async def synthesis_node(state: WorkflowState) -> dict:
+    """Editor stage: weave specialists + board debate into one coherent blueprint."""
+    workflow_id = state["workflow_id"]
+    from app.agents.synthesizer import synthesize_blueprint
+    from app.services.claude_service import get_claude_service
+
+    try:
+        await ws_manager.send_agent_started(workflow_id, "Chief Synthesizer")
+        await ws_manager.send_agent_thinking(
+            workflow_id, "Chief Synthesizer",
+            "Synthesizing all specialist analyses and the board debate into one coherent blueprint..."
+        )
+        synth = await synthesize_blueprint(
+            state["brief"], state.get("agent_outputs", {}), get_claude_service(),
+            workflow_id=workflow_id,
+        )
+        await ws_manager.send_agent_completed(
+            workflow_id, "Chief Synthesizer", "Final blueprint synthesized from all agents"
+        )
+        return {
+            "agent_outputs": {"final_blueprint_output": synth["blueprint"]},
+            "completed_agents": ["Chief Synthesizer"],
+            "total_tokens": synth.get("tokens_used", 0),
+        }
+    except Exception as e:
+        logger.error(f"[LangGraph] Synthesis node failed: {e}")
+        return {"agent_outputs": {"final_blueprint_output": {"error": str(e)}}}
+
+
 async def report_node(state: WorkflowState) -> dict:
     """Final node: compiles all agent outputs into a PDF report."""
     workflow_id = state["workflow_id"]
@@ -393,21 +435,18 @@ AGENT_PIPELINE = [
 def build_workflow_graph() -> StateGraph:
     """Construct the AgentForge 9-node LangGraph with parallel execution.
     
-    Graph topology (diamond with parallel fan-out/fan-in):
-    
-        START → ceo → ┬─ research ──┐
-                      ├─ marketing ─┤
-                      ├─ developer ─┤ → analytics → operations → board_meeting → report → END
-                      └─ finance ───┘
-    
-    - CEO runs sequentially first
-    - Research, Marketing, Developer, Finance run in PARALLEL (they all consume
-      CEO output but don't depend on each other)
-    - Analytics waits for all 4 parallel agents to complete (fan-in)
-    - Operations feeds into the Board Meeting debate
-    - Board Meeting synthesizes all outputs into a consensus
-    - Report compiles the final PDF
-    
+    Graph topology (dependency-ordered, with parallel fan-out/fan-in):
+
+        START → ceo → research → ┬─ marketing ─┐
+                                 └─ developer ─┘ → finance → analytics → operations
+              → board_meeting → synthesis → report → END
+
+    - Edges follow each agent's `required_context_keys`, so every agent
+      actually receives the upstream outputs its prompt relies on
+    - Marketing and Developer run in PARALLEL (both need only CEO + Research)
+    - Finance waits for both (fan-in) so it can use real pricing + infra costs
+    - Board Meeting debates all outputs; Synthesis merges them; Report builds the PDF
+
     The `_merge_dicts` reducer on `agent_outputs` handles concurrent writes
     safely — each agent writes to a unique key (e.g., `marketing_output`).
     """
@@ -422,26 +461,34 @@ def build_workflow_graph() -> StateGraph:
     # Add board meeting debate node
     graph.add_node("board_meeting", board_meeting_node)
 
+    # Add synthesis (editor) node — coherent blueprint from all agents + debate
+    graph.add_node("synthesis", synthesis_node)
+
     # Add report compiler node
     graph.add_node("report", report_node)
 
     # ─── Edges: Sequential lead-in ───
     graph.add_edge(START, "ceo")
 
-    # ─── Edges: Parallel fan-out (ceo → 4 agents simultaneously) ───
+    # Research runs next: every downstream specialist needs market context
     graph.add_edge("ceo", "research")
-    graph.add_edge("ceo", "marketing")
-    graph.add_edge("ceo", "developer")
-    graph.add_edge("ceo", "finance")
 
-    # ─── Edges: Fan-in (all 4 → analytics) ───
-    # Native LangGraph fan-in: analytics waits for ALL listed nodes to complete
-    graph.add_edge(["research", "marketing", "developer", "finance"], "analytics")
+    # ─── Edges: Parallel fan-out (research → marketing + developer) ───
+    # Both consume CEO + Research output and don't depend on each other.
+    graph.add_edge("research", "marketing")
+    graph.add_edge("research", "developer")
+
+    # ─── Edges: Fan-in (marketing + developer → finance) ───
+    # Native LangGraph fan-in: finance waits for BOTH, so it can price and cost
+    # the plan using the real GTM pricing and infrastructure estimates.
+    graph.add_edge(["marketing", "developer"], "finance")
+    graph.add_edge("finance", "analytics")
 
     # ─── Edges: Sequential tail ───
     graph.add_edge("analytics", "operations")
     graph.add_edge("operations", "board_meeting")
-    graph.add_edge("board_meeting", "report")
+    graph.add_edge("board_meeting", "synthesis")
+    graph.add_edge("synthesis", "report")
     graph.add_edge("report", END)
 
     return graph
@@ -475,6 +522,13 @@ async def run_workflow(
         if not found:
             logger.error(f"Workflow {workflow_id} not found in database")
             return
+
+        # Announce the effective AI mode up front so the UI can badge mock runs honestly.
+        # verify_provider() pings the key so a revoked/invalid key degrades to mock truthfully.
+        from app.services.claude_service import get_claude_service
+        mode = await get_claude_service().verify_provider()
+        await ws_manager.send_workflow_started(workflow_id, mode["mode"], mode["provider"])
+        logger.info(f"[LangGraph] Workflow {workflow_id} running in {mode['mode']} mode (provider={mode['provider']})")
 
         # Build initial state
         initial_state: WorkflowState = {

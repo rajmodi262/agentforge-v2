@@ -14,6 +14,7 @@ from app.api.admin import router as admin_router
 from app.api.n8n import router as n8n_router
 from app.api.mcp import router as mcp_router
 from app.api.share import router as share_router
+from app.api.phantom import router as phantom_router
 
 api_router = APIRouter()
 
@@ -31,5 +32,6 @@ api_router.include_router(prompts_router, tags=["Prompt IDE"])
 api_router.include_router(admin_router, tags=["Admin"])
 api_router.include_router(n8n_router, tags=["n8n Integration"])
 api_router.include_router(mcp_router, tags=["MCP Protocol"])
+api_router.include_router(phantom_router)
 
 

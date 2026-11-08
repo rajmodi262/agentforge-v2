@@ -43,6 +43,9 @@ def _build_real_groq_service():
     client = Groq(api_key=_GROQ_KEY)
     svc.client = client
     svc._clients = {"groq": client}  # prime the lazy client cache
+    svc._call_lock = asyncio.Lock()     # used by the optional inter-call throttle
+    svc._last_call_ts = 0.0
+    svc.degraded_to_mock = False
     return svc
 
 

@@ -19,11 +19,37 @@
 
 </div>
 
+## 👻 Flagship module: Phantom Hunter
+
+> *Every data centre announced is a promise. Phantom Hunter tells you which promises will keep their power on — and who to call before your competitor does.*
+
+An agentic intelligence system for the **India + Malaysia (Johor) data-centre pipeline**. Scout agents read public news (Bing News, Google News, GDELT); a local LLM (qwen2.5:7b via Ollama) extracts structured evidence; a **deterministic verifier checks every claim against its source text**; mentions are resolved into projects; and each project gets a **transparent reality score** on an evidence ladder (announced → site → approved → **power** → building → live), its **weakest assumption**, anomaly flags, and a **who-to-call** ranking for power, electrical and cooling suppliers.
+
+| | |
+|---|---|
+| **Why** | The market's loudest argument: how much of the announced pipeline is real? (Bernstein ~35% credible; Capgemini ~1 in 5 interconnection requests never materialise). The answer depends on which *evidence layer* a project has reached. |
+| **Core idea** | LLM proposes, verifier disposes — no claim reaches the score without a quote that exists in the article and fits the stage. "Power" means *secured*, never just mentioned. |
+| **UI** | `/phantom` — 3D Reality Globe (announced vs reality-weighted MW), who-to-call, evidence-ladder funnel, cited chat; `/phantom/:id` — the project dossier with Bull vs Bear debate. |
+| **Cost** | $0 — runs on a laptop GPU. |
+
+📖 Full write-up, design decisions and interview Q&A: **[PHANTOM_HUNTER.md](PHANTOM_HUNTER.md)** · 📊 Evaluation: **[PHANTOM_EVAL.md](PHANTOM_EVAL.md)** · 🛠 Build log: **[PHANTOM_HUNTER_TRACKER.md](PHANTOM_HUNTER_TRACKER.md)**
+
+---
+
 ## 🎯 What is AgentForge?
 
-AgentForge is a **production-grade multi-agent AI system** that transforms a raw business idea into a comprehensive startup blueprint. It orchestrates **7 specialized AI agents** through a sophisticated LangGraph state-machine workflow, featuring parallel execution, multi-step reasoning, and a unique Board Meeting debate mechanism for cross-validation.
+AgentForge is a **multi-agent AI orchestration system** that turns a raw business idea into a structured startup blueprint. It runs **7 specialized agents** through a LangGraph state machine with real parallel fan-out/fan-in, a multi-step reasoning loop (generate → self-critique → refine), a Board Meeting debate stage that cross-checks the agents against each other, and a **Chief Synthesizer** that weaves the specialists' work and the debate into one coherent blueprint.
 
-> **💡 Example:** You type *"AI-powered fitness coaching app"* → AgentForge deploys 7 agents simultaneously → Within minutes, you get a 30-page PDF blueprint covering market research, competitive analysis, technical architecture, financial projections, go-to-market strategy, operations plan, and risk assessment.
+> **💡 Example:** You type *"AI-powered fitness coaching app"* → the CEO agent frames it → Research grounds it with live search + RAG → Marketing and Developer run in parallel → Finance prices it from their numbers and a calculator audits the maths → Analytics and Operations build on all of it → the Board Meeting debates the weak points → the Chief Synthesizer composes the final coherent blueprint → you get a PDF covering market sizing, competition, technical architecture, financials, GTM, and operations.
+
+### Honest status (read this first)
+
+This is a portfolio/demo project, built to show real multi-agent orchestration — not a polished commercial SaaS. To keep it truthful:
+
+- **Real LLM by default.** `MOCK_MODE` defaults to **false**. With a (free) API key set, every agent calls a live model.
+- **No key? You still get a working demo** — agents return clearly **simulated** data, and the UI shows a persistent **`⚠ DEMO DATA`** badge plus an inline warning in the live stream. Mock output is never presented as real analysis.
+- **Free to run.** A free [Groq](https://console.groq.com) key (Llama 3.3) drives the whole pipeline at no cost; Gemini Flash and Claude are drop-in alternatives.
+- **What's genuinely implemented:** the LangGraph parallel topology, WebSocket streaming, JWT auth (bcrypt + rate limiting), provider fallback chain, and PDF report generation. See [Limitations](#-limitations) for what's still rough.
 
 ---
 
@@ -80,14 +106,12 @@ AgentForge is a **production-grade multi-agent AI system** that transforms a raw
 └─────────────────────────────────────────────────────────────┘
 ```
 
-### 🔀 Agent Pipeline (9-Node Diamond Topology)
+### 🔀 Agent Pipeline (Dependency-Ordered DAG)
 
 ```
-START → CEO Agent → ┬─ Research Agent  ─┐
-                    ├─ Marketing Agent ─┤
-                    ├─ Developer Agent ─┤─→ Analytics → Operations → Board Meeting → Report → END
-                    └─ Finance Agent   ─┘
-                      (parallel fan-out)    (fan-in)        (sequential)         (debate)
+START → CEO → Research → ┬─ Marketing ─┐
+                         └─ Developer ─┘→ Finance → Analytics → Operations → Board Meeting → Synthesis → Report → END
+                       (parallel fan-out)  (fan-in)            (sequential)        (debate)      (editor)
 ```
 
 ### 🧠 Multi-Step Reasoning (Per Agent)
@@ -122,9 +146,9 @@ sequenceDiagram
     LG->>UI: Establish WebSocket connection
     
     rect rgb(30, 41, 59)
-        note over LG, AG: Parallel Agent Execution (Diamond Topology)
-        LG->>AG: Fan-out: Invoke CEO, Research, Marketing, Dev, & Finance agents
-        AG-->>UI: Live-stream thinking tokens & reasoning steps via WS
+        note over LG, AG: Dependency-Ordered Execution (parallel where independent)
+        LG->>AG: CEO → Research, then fan-out Marketing ‖ Developer, fan-in to Finance
+        AG-->>UI: Live-stream agent progress, tool calls & reasoning steps via WS
     end
 
     rect rgb(15, 23, 42)
@@ -295,20 +319,55 @@ When you submit a business idea, AgentForge generates a comprehensive blueprint 
 ## 🔧 Environment Variables
 
 ```env
-# AI Provider (at least one required)
-ANTHROPIC_API_KEY=sk-ant-...       # Claude API
-GOOGLE_API_KEY=AIza...             # Gemini API (free tier)
+# AI Provider — set ONE for real output (Groq's free tier is recommended)
+GROQ_API_KEY=gsk_...               # Groq / Llama 3.3 — free tier, fast
+GEMINI_API_KEY=AIza...             # Gemini Flash — free tier (alternative)
+ANTHROPIC_API_KEY=sk-ant-...       # Claude (alternative)
+AI_PROVIDER=auto                   # auto = first key found
 
-# Database
+# Database (omit for SQLite in dev)
 DATABASE_URL=postgresql://user:pass@localhost/agentforge
 
-# Security
+# Security (auto-generated in dev if left default; required in production)
 JWT_SECRET_KEY=your-secret-key
+ENVIRONMENT=development            # production enforces real secret + API key
 
-# Optional
-MOCK_MODE=true                     # Use dynamic mocks (no API cost)
-LOG_LEVEL=INFO
+# Mock mode — defaults to false. If left false with NO key, agents return
+# simulated data shown behind a "DEMO DATA" badge (never as real analysis).
+MOCK_MODE=false
 ```
+
+See [`.env.example`](.env.example) for the full list.
+
+---
+
+## 📐 Evaluation
+
+The whole point of a multi-agent system is the claim that it beats a single prompt. AgentForge ships a harness that **measures** that instead of asserting it:
+
+```bash
+cd backend
+python -m eval.run            # all sample ideas → EVAL_RESULTS.md
+python -m eval.run --ideas 3  # quick run on the first 3
+```
+
+- **Baseline:** one strong-prompt LLM call (senior-analyst persona, same sections) — a fair, not strawman, baseline.
+- **Pipeline:** the real 7 agents + Board Meeting debate + Chief Synthesizer, via the production agent classes (no DB needed).
+- **Judge:** a separate blind LLM scores both anonymized blueprints on specificity, internal consistency, actionability, risk depth, and realism. A/B order is alternated per idea to cancel position bias.
+- **Output:** `EVAL_RESULTS.md` (headline delta, per-dimension table, per-idea winners, token cost) plus raw artifacts in `backend/eval/results/`.
+
+> Requires a working AI key — the harness refuses to run on mock data so the numbers are never fake.
+
+---
+
+## ⚠️ Limitations
+
+In the spirit of honesty (this is a portfolio piece, not a commercial product):
+
+- **Output quality is only as good as the model.** On the free Groq/Gemini tiers, the blueprint is a solid structured draft, not investment-grade analysis.
+- **Multi-agent value is measured, not assumed.** A real eval harness ([`backend/eval/`](backend/eval)) pits the 7-agent pipeline against a strong single-prompt baseline, scored by a blind LLM judge — run `python -m eval.run` with a working key to (re)generate `EVAL_RESULTS.md`. See [Evaluation](#-evaluation).
+- **Tools are partly placeholder.** Web search returns labelled placeholders unless a Brave key is set; agents are instructed not to cite placeholders as fact.
+- **Single-tenant, demo-scale.** No billing, quotas, or production hardening beyond auth + rate limiting.
 
 ---
 

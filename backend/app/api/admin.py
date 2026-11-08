@@ -10,7 +10,7 @@ from app.database import get_db
 from app.models.db_models import AuditLog, User, Project, WorkflowRun, AgentLog
 from app.api.auth import get_current_user
 
-router = APIRouter(prefix="/api/v1/admin", tags=["Admin"])
+router = APIRouter(prefix="/admin", tags=["Admin"])
 
 
 def require_admin(current_user: User = Depends(get_current_user)) -> User:

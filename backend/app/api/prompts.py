@@ -4,6 +4,7 @@ from fastapi import APIRouter, Depends, HTTPException, Body
 from sqlalchemy.orm import Session
 from sqlalchemy import desc
 from typing import Optional
+from uuid import UUID
 from app.database import get_db
 from app.models.db_models import PromptVersion
 from app.agents.ceo_agent import CEOAgent
@@ -13,8 +14,12 @@ from app.agents.developer_agent import DeveloperAgent
 from app.agents.finance_agent import FinanceAgent
 from app.agents.analytics_agent import AnalyticsAgent
 from app.agents.operations_agent import OperationsAgent
+from app.api.auth import get_current_user
+from app.api.admin import require_admin
 
-router = APIRouter(prefix="/api/v1/prompts", tags=["Prompt IDE"])
+# Reading prompts needs a login; changing them needs admin — an active prompt changes
+# every user's agents, so it is an admin action.
+router = APIRouter(prefix="/prompts", tags=["Prompt IDE"], dependencies=[Depends(get_current_user)])
 
 AGENT_REGISTRY = {
     "ceo": CEOAgent, "research": ResearchAgent, "marketing": MarketingAgent,
@@ -49,7 +54,7 @@ async def list_versions(agent_name: str, db: Session = Depends(get_db)):
 
 @router.post("/{agent_name}/versions")
 async def create_version(agent_name: str, system_prompt: str = Body(...),
-                         notes: Optional[str] = Body(None), db: Session = Depends(get_db)):
+                         notes: Optional[str] = Body(None), db: Session = Depends(get_db), admin=Depends(require_admin)):
     if agent_name not in AGENT_REGISTRY:
         raise HTTPException(404, f"Agent '{agent_name}' not found")
     mx = db.query(PromptVersion).filter(PromptVersion.agent_name == agent_name
@@ -63,11 +68,17 @@ async def create_version(agent_name: str, system_prompt: str = Body(...),
 
 
 @router.put("/{agent_name}/versions/{vid}/activate")
-async def activate_version(agent_name: str, vid: str, db: Session = Depends(get_db)):
+async def activate_version(agent_name: str, vid: str, db: Session = Depends(get_db), admin=Depends(require_admin)):
+    if agent_name not in AGENT_REGISTRY:
+        raise HTTPException(404, f"Agent '{agent_name}' not found")
     db.query(PromptVersion).filter(PromptVersion.agent_name == agent_name
                                     ).update({"is_active": False})
     if vid != "current":
-        ver = db.query(PromptVersion).filter(PromptVersion.id == vid).first()
+        try:
+            UUID(vid)
+        except ValueError:
+            raise HTTPException(400, "Invalid version id")
+        ver = db.query(PromptVersion).filter(PromptVersion.id == vid, PromptVersion.agent_name == agent_name).first()
         if not ver:
             raise HTTPException(404, "Version not found")
         ver.is_active = True

@@ -9,6 +9,7 @@ that runs multiple Claude calls internally to simulate the debate.
 """
 
 import json
+from app.json_utils import loads_tolerant
 import time
 import logging
 from typing import Dict, Any
@@ -83,7 +84,7 @@ async def board_meeting_node(state: dict) -> dict:
                 system_prompt=f"You are {challenger} in a startup board meeting. Be constructive but rigorous.",
                 user_message=challenge_prompt,
                 agent_name="Board Meeting",
-                max_tokens=1500,
+                max_tokens=3000,
             )
             total_tokens += result["tokens_used"]
             total_cost += result["cost"]
@@ -102,7 +103,7 @@ async def board_meeting_node(state: dict) -> dict:
                 start = content.find("{")
                 end = content.rfind("}") + 1
                 if start >= 0 and end > start:
-                    challenge_data = json.loads(content[start:end])
+                    challenge_data = loads_tolerant(content[start:end])
                 else:
                     challenge_data = {"challenges": [{"weakness": "Could not parse challenge", "evidence": "N/A", "recommendation": "N/A"}]}
 
@@ -153,7 +154,7 @@ async def board_meeting_node(state: dict) -> dict:
             system_prompt="You are a neutral board secretary producing a consensus document.",
             user_message=synthesis_prompt,
             agent_name="Board Meeting",
-            max_tokens=2000,
+            max_tokens=4096,
         )
         total_tokens += synthesis_result["tokens_used"]
         total_cost += synthesis_result["cost"]
@@ -171,7 +172,7 @@ async def board_meeting_node(state: dict) -> dict:
             start = content.find("{")
             end = content.rfind("}") + 1
             if start >= 0 and end > start:
-                board_output = json.loads(content[start:end])
+                board_output = loads_tolerant(content[start:end])
             else:
                 board_output = {
                     "consensus_score": 60,

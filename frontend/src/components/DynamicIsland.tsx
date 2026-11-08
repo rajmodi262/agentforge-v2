@@ -17,9 +17,11 @@ interface DynamicIslandProps {
   currentAgent?: string;
   /** Number of completed agents (0-7) */
   completedCount?: number;
+  /** Effective AI mode from the workflow hook — 'mock' shows a DEMO DATA badge */
+  mode?: 'live' | 'mock' | '';
 }
 
-export default function DynamicIsland({ workflowStatus, currentAgent, completedCount = 0 }: DynamicIslandProps) {
+export default function DynamicIsland({ workflowStatus, currentAgent, completedCount = 0, mode = '' }: DynamicIslandProps) {
   const [scrollState, setScrollState] = useState<IslandState>('ready');
   const { scrollYProgress } = useScroll();
 
@@ -49,7 +51,8 @@ export default function DynamicIsland({ workflowStatus, currentAgent, completedC
   const config: Record<IslandState, { text: string; icon: string; color: string; width: number }> = {
     ready:      { text: 'System Ready',                                icon: '🟢', color: '#10b981', width: 140 },
     pipeline:   { text: 'Neural Pipeline Active',                      icon: '🧠', color: '#7c3aed', width: 200 },
-    processing: { text: agentLabel ? `${agentLabel} Agent (${completedCount}/7)` : `Processing (${completedCount}/7)`, icon: '⚡', color: '#f59e0b', width: 230 },
+    // 9 pipeline stages: 7 agents + Board Meeting + Chief Synthesizer
+    processing: { text: agentLabel ? `${agentLabel} (${completedCount}/9)` : `Processing (${completedCount}/9)`, icon: '⚡', color: '#f59e0b', width: 230 },
     complete:   { text: 'Blueprint Generated ✓',                       icon: '🎯', color: '#06b6d4', width: 200 },
     error:      { text: 'Pipeline Error',                              icon: '⚠️', color: '#ef4444', width: 160 },
   };
@@ -64,7 +67,39 @@ export default function DynamicIsland({ workflowStatus, currentAgent, completedC
       transform: 'translateX(-50%)',
       zIndex: 9999,
       pointerEvents: 'none',
+      display: 'flex',
+      alignItems: 'center',
+      gap: '8px',
     }}>
+      {/* Honesty badge: simulated data is never shown as real analysis */}
+      <AnimatePresence>
+        {mode === 'mock' && (
+          <motion.div
+            key="demo-badge"
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            exit={{ opacity: 0, scale: 0.8 }}
+            style={{
+              background: 'rgba(245, 158, 11, 0.15)',
+              border: '1px solid #f59e0b',
+              borderRadius: '999px',
+              height: '36px',
+              display: 'flex',
+              alignItems: 'center',
+              padding: '0 14px',
+              fontFamily: "'JetBrains Mono', monospace",
+              fontSize: '10px',
+              fontWeight: 700,
+              letterSpacing: '0.08em',
+              color: '#f59e0b',
+              whiteSpace: 'nowrap',
+            }}
+            title="No live LLM configured — agents are returning simulated demo data."
+          >
+            ⚠ DEMO DATA
+          </motion.div>
+        )}
+      </AnimatePresence>
       <motion.div
         layout
         initial={{ opacity: 0, y: -20 }}

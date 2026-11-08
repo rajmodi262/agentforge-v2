@@ -11,6 +11,12 @@
 import { useState, useEffect, useRef, useCallback } from 'react';
 
 /* ─── Event types from the backend WebSocketManager ─── */
+export interface WorkflowStartedEvent {
+  type: 'workflow_started';
+  mode: 'live' | 'mock';
+  provider: string;
+}
+
 export interface AgentStartedEvent {
   type: 'agent_started';
   agent: string;
@@ -78,6 +84,7 @@ export interface CatchupEvent {
 }
 
 export type WorkflowEvent =
+  | WorkflowStartedEvent
   | AgentStartedEvent
   | AgentThinkingEvent
   | AgentToolCallEvent
@@ -117,6 +124,8 @@ const RECONNECT_MAX_ATTEMPTS = 10;
 /* ─── The Hook ─── */
 export function useWorkflowSocket() {
   const [status, setStatus] = useState<WorkflowStatus>('idle');
+  const [mode, setMode] = useState<'live' | 'mock' | ''>('');
+  const [provider, setProvider] = useState<string>('');
   const [currentAgent, setCurrentAgent] = useState<string>('');
   const [completedAgents, setCompletedAgents] = useState<string[]>([]);
   const [terminalLines, setTerminalLines] = useState<TerminalLine[]>([]);
@@ -141,6 +150,20 @@ export function useWorkflowSocket() {
     setEvents((prev) => [...prev, data]);
 
     switch (data.type) {
+      case 'workflow_started': {
+        setMode(data.mode);
+        setProvider(data.provider);
+        if (data.mode === 'mock') {
+          pushLine({ type: 'error', text: '  ⚠ DEMO MODE — responses below are SIMULATED mock data, not a live LLM.' });
+          pushLine({ type: 'info', text: '    Set a free GROQ_API_KEY to run real multi-agent analysis.' });
+          pushLine({ type: 'info', text: '' });
+        } else {
+          pushLine({ type: 'success', text: `  ● LIVE — running on ${data.provider}` });
+          pushLine({ type: 'info', text: '' });
+        }
+        break;
+      }
+
       case 'agent_started': {
         setCurrentAgent(data.agent);
         const agentKey = AGENT_KEYS[data.agent] || data.agent;
@@ -252,7 +275,7 @@ export function useWorkflowSocket() {
         pushLine({ type: 'success', text: '  ✓ Reconnected successfully' });
       } else {
         pushLine({ type: 'success', text: '✓ Connected to neural pipeline' });
-        pushLine({ type: 'command', text: '> Initializing 7-agent sequential workflow...' });
+        pushLine({ type: 'command', text: '> Initializing pipeline: 7 agents + board debate + synthesis...' });
         pushLine({ type: 'info', text: '' });
       }
 
@@ -322,6 +345,8 @@ export function useWorkflowSocket() {
     reconnectAttemptRef.current = 0;
 
     setStatus('connecting');
+    setMode('');
+    setProvider('');
     setCompletedAgents([]);
     setTerminalLines([
       { type: 'info', text: '╔══════════════════════════════════════════════╗' },
@@ -359,6 +384,8 @@ export function useWorkflowSocket() {
 
   return {
     status,
+    mode,
+    provider,
     currentAgent,
     completedAgents,
     terminalLines,

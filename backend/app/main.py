@@ -78,6 +78,8 @@ app.add_middleware(
 # CORS — specific origins, not wildcard
 ALLOWED_ORIGINS = [
     settings.frontend_url,
+    "http://localhost:5180",   # AgentForge dedicated dev port
+    "http://127.0.0.1:5180",
     "http://localhost:5173",
     "http://localhost:5174",
     "http://localhost:3000",
@@ -103,7 +105,7 @@ async def root():
         "service": "AgentForge AI",
         "version": "1.0.0",
         "status": "running",
-        "mock_mode": settings.mock_mode,
+        "mock_mode": get_claude_service().mock_mode,
         "docs": "/docs",
     }
 
@@ -135,7 +137,10 @@ async def health():
         "status": "healthy",
         "version": "1.0.0",
         "database": db_status,
-        "mock_mode": settings.mock_mode,
+        # Effective runtime mode (reflects silent fallback to mock when no key/client),
+        # not just the configured flag — this is what actually runs.
+        "mock_mode": ai_svc.mock_mode if hasattr(ai_svc, 'mock_mode') else settings.mock_mode,
+        "configured_mock_mode": settings.mock_mode,
         "ai_provider": ai_svc.provider if hasattr(ai_svc, 'provider') else "unknown",
         "orchestration_engine": "LangGraph",
         "rag_pipeline": rag_status,

@@ -71,6 +71,7 @@ class Base(DeclarativeBase):
 def init_db():
     """Create all tables (for dev/SQLite — use Alembic for production)."""
     from app.models.db_models import User, Project, WorkflowRun, AgentTask, AgentMessage, ProjectReport  # noqa
+    import app.phantom.models  # noqa: F401 — Phantom Hunter tables
     Base.metadata.create_all(bind=engine)
     logger.info("Database tables created/verified")
 

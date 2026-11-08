@@ -18,6 +18,7 @@ import ParticleTrail from '../components/ParticleTrail';
 import SplitTextReveal from '../components/SplitTextReveal';
 import DynamicIsland from '../components/DynamicIsland';
 import HoverScramble from '../components/HoverScramble';
+import { API_BASE } from '../services/api';
 import VelocityWrapper from '../components/VelocityWrapper';
 import CodePreview from '../components/CodePreview';
 import DataFlowLines from '../components/DataFlowLines';
@@ -66,6 +67,14 @@ export default function Landing() {
       const project = await createProject({ title: idea.slice(0, 80), business_idea: idea });
       const { workflow_id } = await startWorkflow(project.id);
       workflow.connect(workflow_id);
+      // Immediately bring the live agent stream into view so the click has
+      // obvious feedback (the pipeline renders in a section further down).
+      // Native scrollIntoView doesn't work under Lenis — use its scrollTo.
+      setTimeout(() => {
+        const lenis = (window as unknown as { __lenis?: { scrollTo: (t: string, o?: object) => void } }).__lenis;
+        if (lenis?.scrollTo) lenis.scrollTo('#live-stream', { offset: -80, duration: 1.4 });
+        else document.getElementById('live-stream')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 150);
     } catch (err) {
       console.error('Launch failed:', err);
     } finally {
@@ -76,6 +85,10 @@ export default function Landing() {
   const handlePreloaderComplete = useCallback(() => {
     setLoaded(true);
     setShowScene(true);
+  }, []);
+
+  const scrollToSection = useCallback((id: string) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' });
   }, []);
 
   useEffect(() => {
@@ -114,6 +127,7 @@ export default function Landing() {
           workflowStatus={workflow.status}
           currentAgent={workflow.currentAgent}
           completedCount={workflow.completedAgents.length}
+          mode={workflow.mode}
         />
         <Navbar scrollProgress={scrollProgress} />
         <Scene
@@ -126,7 +140,7 @@ export default function Landing() {
         <MagnifierLens active={magnifierActive} />
         <VelocityWrapper>
           <div ref={containerRef} className="content-layer">
-            <HeroSection />
+            <HeroSection onGetStarted={() => scrollToSection('launch')} onWatchDemo={() => scrollToSection('agents')} />
             <MarqueeSection />
             <AgentsSection activeAgent={activeAgent} />
             <ThermalVisionSection thermalProgress={thermalProgress} />
@@ -136,6 +150,7 @@ export default function Landing() {
               onLaunch={handleLaunch}
               isLaunching={isLaunching}
               workflowStatus={workflow.status}
+              downloadUrl={workflow.downloadUrl}
             />
             <AgentDiveSection
               liveLines={workflow.terminalLines}
@@ -148,7 +163,7 @@ export default function Landing() {
             </div>
             <OutputSection completedAgents={workflow.completedAgents} />
             <ProofSection />
-            <CTASection />
+            <CTASection onGetStarted={() => scrollToSection('launch')} />
             <Footer />
           </div>
         </VelocityWrapper>
@@ -158,7 +173,7 @@ export default function Landing() {
 }
 
 /* ─── HERO with SplitTextReveal ─── */
-function HeroSection() {
+function HeroSection({ onGetStarted, onWatchDemo }: { onGetStarted: () => void; onWatchDemo: () => void }) {
   const ref = useRef<HTMLDivElement>(null);
   return (
     <section ref={ref} className="scroll-section section-hero" id="platform">
@@ -180,8 +195,8 @@ function HeroSection() {
           Drop your business idea into the neural core. Seven specialized AI agents will dissect, analyze, strategize, and build your complete business blueprint — in under two minutes.
         </motion.p>
         <motion.div className="section-hero__cta-group" style={{ justifyContent: 'center' }} initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 4.6, duration: 0.8 }}>
-          <MagneticButton>Launch Your Blueprint →</MagneticButton>
-          <MagneticButton variant="outline">Watch Demo</MagneticButton>
+          <MagneticButton onClick={onGetStarted}>Launch Your Blueprint →</MagneticButton>
+          <MagneticButton variant="outline" onClick={onWatchDemo}>Watch Demo</MagneticButton>
         </motion.div>
       </div>
       <motion.div className="section-hero__scroll-hint" initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 5.2, duration: 1 }}>
@@ -270,9 +285,10 @@ interface InputSectionProps {
   onLaunch: (val: string) => void;
   isLaunching: boolean;
   workflowStatus: string;
+  downloadUrl?: string;
 }
 
-function InputSection({ businessIdea, setBusinessIdea, onLaunch, isLaunching, workflowStatus }: InputSectionProps) {
+function InputSection({ businessIdea, setBusinessIdea, onLaunch, isLaunching, workflowStatus, downloadUrl }: InputSectionProps) {
   const [inViewRef, isInView] = useInView();
   const [typedText, setTypedText] = useState('');
   const fullText = 'An AI-powered sustainability analytics platform for enterprise carbon tracking...';
@@ -333,6 +349,23 @@ function InputSection({ businessIdea, setBusinessIdea, onLaunch, isLaunching, wo
         >
           {isRunning ? '⚡ Pipeline Running...' : isDone ? '✓ Blueprint Generated' : isLaunching ? 'Initializing...' : 'Initialize Sequence →'}
         </MagneticButton>
+        {isDone && downloadUrl && (
+          <motion.a
+            href={`${API_BASE.replace(/\/api\/v1$/, '')}${downloadUrl}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            style={{
+              display: 'inline-block', marginTop: 'var(--space-md)', padding: '14px 28px', borderRadius: 12,
+              background: 'var(--gradient-aura)', color: 'var(--text-primary)', textDecoration: 'none',
+              fontFamily: "'Space Grotesk'", fontWeight: 600, fontSize: 16, boxShadow: '0 0 32px var(--primary-glow)',
+            }}
+          >
+            📄 Download Blueprint PDF
+          </motion.a>
+        )}
       </motion.div>
 
       {/* Template Gallery */}
@@ -349,7 +382,7 @@ function AgentDiveSection({ liveLines, workflowStatus }: { liveLines?: any[]; wo
   const isLive = workflowStatus === 'running' || workflowStatus === 'completed';
 
   return (
-    <section ref={sectionRef} className="scroll-section" style={{ minHeight: '140vh', flexDirection: 'column', gap: 'var(--space-2xl)', padding: 'var(--space-4xl) var(--space-2xl)' }}>
+    <section id="pipeline" ref={sectionRef} className="scroll-section" style={{ minHeight: '140vh', flexDirection: 'column', gap: 'var(--space-2xl)', padding: 'var(--space-4xl) var(--space-2xl)' }}>
       {AGENTS.slice(0, 4).map((agent, i) => (
         <motion.div key={agent.id} className="text-center" initial={{ opacity: 0, x: i % 2 === 0 ? -60 : 60 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true, margin: '-50px' }} transition={{ duration: 0.8, ease: [0.25, 1, 0.5, 1] }} style={{ marginBottom: 'var(--space-xl)' }}>
           <div className="mono-label" style={{ color: agent.color, marginBottom: 'var(--space-sm)' }}>{agent.icon} {agent.name} Agent</div>
@@ -357,7 +390,7 @@ function AgentDiveSection({ liveLines, workflowStatus }: { liveLines?: any[]; wo
           <p className="body-md" style={{ maxWidth: '500px', margin: 'var(--space-md) auto 0' }}>{agent.stat}</p>
         </motion.div>
       ))}
-      <div style={{ maxWidth: '1000px', width: '100%', margin: '0 auto' }}>
+      <div id="live-stream" style={{ maxWidth: '1000px', width: '100%', margin: '0 auto', scrollMarginTop: '90px' }}>
         <CodePreview
           lines={TERMINAL_LINES}
           liveLines={isLive ? liveLines : undefined}
@@ -454,13 +487,13 @@ function ProofSection() {
 }
 
 /* ─── CTA ─── */
-function CTASection() {
+function CTASection({ onGetStarted }: { onGetStarted: () => void }) {
   return (
     <section className="section-cta scroll-section" id="cta" style={{ flexDirection: 'column', gap: 'var(--space-2xl)' }}>
       <motion.div className="text-center" initial={{ opacity: 0, y: 40, scale: 0.95 }} whileInView={{ opacity: 1, y: 0, scale: 1 }} viewport={{ once: true }} transition={{ duration: 1, ease: [0.16, 1, 0.3, 1] }}>
         <SplitTextReveal text="Your Startup Is Waiting." className="display-xl" tag="h2" highlightWords={['Is', 'Waiting.']} />
         <p className="body-lg" style={{ color: 'var(--text-secondary)', maxWidth: '500px', margin: 'var(--space-lg) auto var(--space-2xl)' }}>Seven minds are standing by. All they need is your idea.</p>
-        <MagneticButton>Launch Your Blueprint →</MagneticButton>
+        <MagneticButton onClick={onGetStarted}>Launch Your Blueprint →</MagneticButton>
       </motion.div>
     </section>
   );

@@ -8,8 +8,10 @@ from fastapi import APIRouter, Depends, Body
 from sqlalchemy.orm import Session
 from app.database import get_db
 from app.services.mcp_server import get_mcp_server
+from app.api.auth import get_current_user
+from app.api.admin import require_admin
 
-router = APIRouter(prefix="/mcp", tags=["MCP"])
+router = APIRouter(prefix="/mcp", tags=["MCP"], dependencies=[Depends(get_current_user)])
 
 
 @router.get("/initialize")
@@ -44,6 +46,7 @@ async def mcp_list_prompts():
 async def mcp_call_tool(
     payload: dict = Body(...),
     db: Session = Depends(get_db),
+    admin=Depends(require_admin),  # tools read across all projects
 ):
     """
     MCP tools/call — execute a tool.

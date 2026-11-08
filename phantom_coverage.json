@@ -1,0 +1,104 @@
+{
+ "queries": {
+  "malaysia": [
+   "Reliance Jio Visakhapatnam data centre",
+   "Reliance Jio Visakhapatnam data centre power supply",
+   "YTL Kulai data centre",
+   "YTL Kulai data centre power supply",
+   "Fortune Hospitality Hyderabad data centre",
+   "CtrlS Hyderabad data centre",
+   "Digital Connexion Visakhapatnam data centre",
+   "Digital Connexion Delhi NCR data centre",
+   "Princeton Digital Group India data centre",
+   "Princeton Digital Group India data centre power supply",
+   "Reliance Jio India data centre",
+   "Reliance Jio India data centre power supply",
+   "DayOne Johor data centre",
+   "DayOne Johor data centre power supply",
+   "NCT Alliance Selangor data centre",
+   "NCT Alliance Selangor data centre power supply"
+  ],
+  "india": [
+   "Reliance Jio Visakhapatnam data centre",
+   "Reliance Jio Visakhapatnam data centre power supply",
+   "YTL Kulai data centre",
+   "YTL Kulai data centre power supply",
+   "Fortune Hospitality Hyderabad data centre",
+   "CtrlS Hyderabad data centre",
+   "Digital Connexion Visakhapatnam data centre",
+   "Digital Connexion Delhi NCR data centre",
+   "Princeton Digital Group India data centre",
+   "Princeton Digital Group India data centre power supply",
+   "Reliance Jio India data centre",
+   "Reliance Jio India data centre power supply",
+   "DayOne Johor data centre",
+   "DayOne Johor data centre power supply",
+   "NCT Alliance Selangor data centre",
+   "NCT Alliance Selangor data centre power supply"
+  ]
+ },
+ "articles": {
+  "malaysia": {
+   "new": 312,
+   "duplicates": 92
+  },
+  "india": {
+   "new": 77,
+   "duplicates": 364
+  }
+ },
+ "new_articles_read": 92,
+ "projects_before": 174,
+ "projects_after": 203,
+ "new_projects": [
+  "Reliance Jio 40-Acre Data Centre",
+  "Princeton Digital Group DC2",
+  "CtrlS Third hyperscale Data Centre",
+  "Princeton Digital Group PDG data center campus",
+  "Princeton Digital Group data centre campus",
+  "Princeton Digital Group PDG Data Centre Campus",
+  "Princeton Digital Group Airoli West Data Center Campus",
+  "DayOne data centres",
+  "Reliance AI Data Centre",
+  "Reliance Jio 1 gigawatt AI data center",
+  "Reliance Jio gigawatt-scale AI data center",
+  "Digital Connexion 1 Gigawatts data centres",
+  "Google's facility",
+  "Digital Connexion AI-native data centre",
+  "Reliance's 500 MW facility",
+  "Google Data Centre",
+  "Reliance Jio Multi-GW AI-ready data centres",
+  "Reliance's 1 GW facility near Bhogapuram",
+  "Google's USD 15 billion AI data centre",
+  "Anant Raj RMZ's and Tillman Global Holdings' projects",
+  "Reliance Jio Andhra Pradesh's 6 GW data centre capacity target",
+  "Reliance Jio Adani's facility",
+  "Google Vizag Data Centre",
+  "Reliance Data Centre",
+  "DayOne Selangor data centre",
+  "Reliance Jio AI-enabled Data Centre",
+  "Meta AI-enabled data centre",
+  "Reliance Jio AI data centre in Jamnagar",
+  "YTL Sedenak Data Centre Campus",
+  "Fortune Hospitality Sanand Data Center Park",
+  "Fortune AI Data Centre Park",
+  "Google AI Hub",
+  "CtrlS 150 MW hyperscale AI factory",
+  "CtrlS \u20b9400-crore AI and cloud-ready data centre",
+  "CtrlS Bhopal Greenfield Data Centre",
+  "CtrlS Hyderabad Cloud Centre",
+  "Google\u2019s planned Visakhapatnam data centre",
+  "YTL Bukit Kerayong data centre campus",
+  "YTL Klang Valley Data Centre Campus",
+  "YTL Bukit Kerayong Data Centre"
+ ],
+ "more_sources": [
+  "YTL Corp 500MW campus",
+  "Princeton Digital Group Sedenak Tech Park (STeP)",
+  "Princeton Digital Group PDG Data Centre Expansion",
+  "HyperVault AI Data Center"
+ ],
+ "stage_upgrades": [
+  "Princeton Digital Group Sedenak Tech Park (STeP)"
+ ]
+}

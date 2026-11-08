@@ -100,3 +100,13 @@ def test_project(client, auth_headers):
     }, headers=auth_headers)
     assert response.status_code == 200
     return response.json()
+
+
+@pytest.fixture(autouse=True)
+def _no_live_web_search(monkeypatch):
+    """Keep the suite off the network: live Wikipedia search returns no results."""
+    from app.tools import web_search as web_search_module
+
+    async def _offline(query, count):
+        return []
+    monkeypatch.setattr(web_search_module, "_wikipedia_search", _offline)

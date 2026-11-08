@@ -23,10 +23,19 @@ def _get_collection():
     if _collection is None:
         try:
             import chromadb
+            from chromadb.config import Settings
             import os
+            # chromadb 0.5.x has a posthog telemetry bug that logs noisy
+            # "capture() takes 1 positional argument" ERRORs regardless of the
+            # anonymized_telemetry setting. Mute that logger — purely cosmetic.
+            logging.getLogger("chromadb.telemetry").setLevel(logging.CRITICAL)
             persist_dir = os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(__file__))), "chroma_data")
             os.makedirs(persist_dir, exist_ok=True)
-            _client = chromadb.PersistentClient(path=persist_dir)
+            # anonymized_telemetry=False silences the noisy posthog "capture()" error logs
+            _client = chromadb.PersistentClient(
+                path=persist_dir,
+                settings=Settings(anonymized_telemetry=False),
+            )
             _collection = _client.get_or_create_collection(
                 name="agentforge_agent_outputs",
                 metadata={"hnsw:space": "cosine"},
@@ -146,6 +155,44 @@ def retrieve_similar_context(
 
     except Exception as e:
         logger.warning(f"RAG retrieval failed: {e}")
+        return []
+
+
+def retrieve_knowledge(
+    query: str,
+    project_id: Optional[str] = None,
+    n_results: int = 3,
+    max_distance: float = 0.75,
+) -> List[Dict[str, Any]]:
+    """Retrieve uploaded knowledge-base chunks relevant to the query.
+
+    Matches documents uploaded for this project plus global uploads (no project).
+    Chunks farther than `max_distance` (cosine) are dropped as irrelevant.
+    """
+    collection = _get_collection()
+    if collection is None:
+        return []
+    scopes = [""] + ([project_id] if project_id else [])
+    try:
+        results = collection.query(
+            query_texts=[query],
+            n_results=n_results,
+            where={"$and": [{"source": "knowledge"}, {"project_id": {"$in": scopes}}]},
+        )
+        hits = []
+        if results and results["documents"]:
+            for i, doc in enumerate(results["documents"][0]):
+                distance = results["distances"][0][i] if results["distances"] else 0
+                if distance <= max_distance:
+                    hits.append({
+                        "document": doc[:2000],
+                        "metadata": results["metadatas"][0][i] if results["metadatas"] else {},
+                        "distance": distance,
+                    })
+        logger.info(f"RAG: Retrieved {len(hits)} knowledge-base chunks")
+        return hits
+    except Exception as e:
+        logger.warning(f"RAG knowledge retrieval failed: {e}")
         return []
 
 

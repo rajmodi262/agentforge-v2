@@ -112,6 +112,19 @@ class WebSocketManager:
 
     # ─── Convenience methods ───
 
+    async def send_workflow_started(self, workflow_id: str, mode: str, provider: str):
+        """Announce a workflow start, including the effective AI mode.
+
+        `mode` is "live" (real LLM) or "mock" (simulated demo data). The frontend
+        uses this to show an honest badge so mock output is never mistaken for
+        real analysis.
+        """
+        await self.broadcast(workflow_id, {
+            "type": "workflow_started",
+            "mode": mode,
+            "provider": provider,
+        })
+
     async def send_agent_started(self, workflow_id: str, agent_name: str):
         await self.broadcast(workflow_id, {
             "type": "agent_started",
