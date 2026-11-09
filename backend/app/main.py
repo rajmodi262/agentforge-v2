@@ -43,6 +43,9 @@ settings = get_settings()
 async def lifespan(app: FastAPI):
     """Startup/shutdown events."""
     init_db()
+    if settings.phantom_auto_seed:
+        from app.phantom.seed import auto_seed
+        auto_seed()  # a fresh clone shows the real Phantom Hunter data, not an empty dashboard
     logger.info(f"AgentForge AI started (mock_mode={settings.mock_mode})")
     yield
     logger.info("AgentForge AI shutting down")
@@ -51,7 +54,7 @@ async def lifespan(app: FastAPI):
 app = FastAPI(
     title="AgentForge AI",
     description="Multi-agent AI orchestration for startup business planning",
-    version="1.0.0",
+    version="2.0.0",
     docs_url="/docs",
     redoc_url="/redoc",
     lifespan=lifespan,

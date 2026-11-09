@@ -46,6 +46,7 @@ class Settings(BaseSettings):
     # verifier guards its output) and a stronger one for reasoning (debate, chat).
     phantom_extract_model: str = "qwen2.5:3b"
     phantom_reason_model: str = ""  # empty → OLLAMA_MODEL
+    phantom_auto_seed: bool = True  # fill empty Phantom tables from seed/phantom_seed.json.gz on startup
 
     # AI Provider: "groq" | "claude" | "gemini" | "ollama" | "auto" (auto picks whichever is available)
     ai_provider: str = "auto"

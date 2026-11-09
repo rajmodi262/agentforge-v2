@@ -148,7 +148,8 @@ def resolve(mentions: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
             continue  # "52 MW AI-ready data centre" alone is too ambiguous to merge safely
         prepared.append({
             **row, "dev": dev, "code": code, "country": d.get("country"),
-            "place": resolve_place(d.get("city"), d.get("state"), d.get("project_name"), d.get("details_quote"), *(d.get("context") or [])),
+            "place": d["_place"] if "_place" in d else  # precomputed in seed snapshots (no article context there)
+                     resolve_place(d.get("city"), d.get("state"), d.get("project_name"), d.get("details_quote"), *(d.get("context") or [])),
             "cap": d.get("capacity_mw"), "core": name_core(d.get("project_name"), dev),
         })
     prepared.sort(key=lambda r: (r["published"] is None, r["published"] or 0))

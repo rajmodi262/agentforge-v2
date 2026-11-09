@@ -31,7 +31,7 @@
 | LLM | Groq / Gemini (API keys) | **Local Ollama qwen2.5:7b** — $0, no keys |
 | Outputs | PDF report | Dashboard + 3D globe + **Excel, Google Sheets, Power BI, SQL** analytics pack |
 | Evaluation | LLM-as-judge | Planted-error test, two-round human audit, coverage-agent ablation |
-| Tests | 117 | **151** |
+| Tests | 117 | **154** |
 
 ## 👻 Flagship module: Phantom Hunter
 
@@ -208,20 +208,37 @@ sequenceDiagram
 
 ## 🚀 Quick Start
 
-### Prerequisites
+### ⚡ See Phantom Hunter in 2 minutes (no API key, no GPU)
+
+```bash
+git clone https://github.com/rajmodi262/agentforge-v2.git
+cd agentforge-v2/backend
+python -m venv venv && venv\Scriptsctivate        # macOS/Linux: source venv/bin/activate
+pip install -r requirements.txt
+uvicorn app.main:app --port 8000                       # first start loads the real dataset automatically
+# new terminal
+cd agentforge-v2/frontend && npm install && npm run dev  # open http://localhost:5180/phantom (register first)
+```
+
+On first start the backend fills the empty database from `backend/seed/phantom_seed.json.gz`: the real 208 projects,
+1,485 article records, 435 verified mentions and 372 evidence quotes (article bodies and user data are not included).
+Turn it off with `PHANTOM_AUTO_SEED=false`; reload any time with `python -m app.phantom.seed --force`.
+To collect fresh data, install [Ollama](https://ollama.com) with `qwen2.5:7b` and press **Hunt India / Hunt Malaysia**.
+
+### Prerequisites (full AgentForge)
 
 - Python 3.11+
 - Node.js 18+
-- Docker & Docker Compose
-- Claude API key or Gemini API key
+- Docker & Docker Compose (optional)
+- Ollama (local, free) or a Groq / Gemini / Claude API key
 
 ### 1. Clone & Configure
 
 ```bash
-git clone https://github.com/rajmodi262/agentforge.git
-cd agentforge
+git clone https://github.com/rajmodi262/agentforge-v2.git
+cd agentforge-v2
 cp .env.example .env
-# Edit .env with your API keys
+# Edit .env: AI_PROVIDER=ollama (free) or add an API key
 ```
 
 ### 2. Run with Docker (Recommended)
@@ -248,7 +265,7 @@ npm run dev
 
 | Service | URL |
 |---------|-----|
-| 🌐 Frontend | http://localhost:5173 |
+| 🌐 Frontend | http://localhost:5180 |
 | ⚡ Backend API | http://localhost:8000 |
 | 📚 API Docs | http://localhost:8000/docs |
 

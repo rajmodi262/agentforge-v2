@@ -48,6 +48,11 @@ def _load_mentions(db) -> List[Dict[str, Any]]:
         # Re-mine evidence from the stored article on every rebuild: the miner is deterministic,
         # so improving it upgrades all historical data without another LLM call.
         body = (a.text or "")[:MAX_CHARS]
+        if not body and d.get("_frozen"):
+            # Seeded snapshot (app/phantom/seed.py): article bodies are not redistributed, so there is
+            # nothing to re-check against — use the events as they were verified when exported.
+            out.append({"id": m.id, "data": d, "published": a.published_at, "article_id": a.id, "text_kind": a.text_kind})
+            continue
         # Re-verify stored LLM events with today's rules (stricter rules apply retroactively)
         tn = norm(body)
         llm_events = [e for e in d.get("events") or [] if e.get("source") != "miner"

@@ -20,7 +20,8 @@
 | Human audit of verified evidence | **62.5% → 77.5%** fully correct (round 2 = fresh sample, not the one we tuned on) |
 | Coverage agent ablation | its own follow-up queries added **+29 projects** (174 → 203) |
 | Analytics pack | Excel workbook (live SUMIFS + charts), Google Sheets formulas, Power BI dataset + 17 DAX measures, 11 SQL queries, computed findings — see `analytics/` |
-| Tests | 32 Phantom tests (no LLM, no network); full backend suite 151 passed |
+| Tests | 35 Phantom tests (no LLM, no network); full backend suite 154 passed |
+| Try it | a fresh clone loads the real dataset on first start (`backend/seed/`) — no API key needed to explore |
 
 ## 1. The problem — in the market's own words
 
