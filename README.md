@@ -31,7 +31,7 @@
 | LLM | Groq / Gemini (API keys) | **Local Ollama qwen2.5:7b** — $0, no keys |
 | Outputs | PDF report | Dashboard + 3D globe + **Excel, Google Sheets, Power BI, SQL** analytics pack |
 | Evaluation | LLM-as-judge | Planted-error test, two-round human audit, coverage-agent ablation |
-| Tests | 117 | **154** |
+| Tests | 117 | **159** |
 
 ## 👻 Flagship module: Phantom Hunter
 

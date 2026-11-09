@@ -13,6 +13,8 @@ Scope: **India + Malaysia (Johor)** data-centre pipeline, public sources only.
 
 | Time | Status | Work | Evidence / result |
 |---|---|---|---|
+| 10 Nov | ✅ | **Recall check** against 42 sites from 4 published lists (Firecrawl search + JSON extraction, 24 credits), matched by developer group + state, facility codes as identity | pipeline recall **63.9% strict / 75.0%** incl. location-unknown; misses listed in PHANTOM_EVAL.md §5 |
+| 10 Nov | ✅ | **Seed snapshot**: fresh clones load the real dataset on first start (no article bodies, no users) | rebuild from snapshot reproduces 208 projects exactly |
 | 08 Nov 19:10 | ✅ | **Final state.** Full backend suite **145 passed, 0 errors** (26 Phantom tests). Dashboard + dossier re-checked in the browser with full data, no console errors | see numbers below |
 | 08 Nov 19:00 | ⚠️→✅ | Dossier said "power partner: none named" while its own POWER evidence read "supply deal with **TNB**" (headline-only articles leave the LLM field empty). Added a utility gazetteer that names the partner from the *verified* POWER quote | 5 projects now name a partner (TNB ×4, CleanMax); who-to-call stops pitching power to them |
 | 08 Nov 18:55 | ⚠️→✅ | Dashboard said 90.8% verified, the eval said 87.5% (one averaged per mention, one pooled all claims). Both now call the same `claim_tally()` | one number everywhere: **87.5% of 1,404 claims** |

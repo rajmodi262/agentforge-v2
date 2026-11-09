@@ -1,0 +1,43 @@
+ref_id,developer,project,city,state,country,capacity_mw,status,year,source,source_url
+R01,Tata Communications,TIER-IV Data Centre GIFT City,GIFT City,Gujarat,India,,operational,,Wikipedia,https://en.wikipedia.org/wiki/Data_centre_industry_in_India
+R02,Google,Navi Mumbai data centre,Navi Mumbai,Maharashtra,India,19,announced,2025,Wikipedia,https://en.wikipedia.org/wiki/Data_centre_industry_in_India
+R03,Adani Enterprises,Chennai data centre (TN MoU),Chennai,Tamil Nadu,India,,announced,,Wikipedia,https://en.wikipedia.org/wiki/Data_centre_industry_in_India
+R04,Bharti Airtel,Nxtra Kolkata hyperscale,Kolkata,West Bengal,India,25,under construction,2022,Wikipedia,https://en.wikipedia.org/wiki/Data_centre_industry_in_India
+R05,Adani Enterprises,New Town Kolkata hyperscale (51.8 acres),Kolkata,West Bengal,India,,announced,,Wikipedia,https://en.wikipedia.org/wiki/Data_centre_industry_in_India
+R06,STT GDC India,Palava campus,Palava,Maharashtra,India,400,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R07,CtrlS Datacenters,Chandan Valley campus,Hyderabad,Telangana,India,612,announced,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R08,NTT Global Data Centers India,Bengaluru 4 (BLR4),Bengaluru,Karnataka,India,100,under construction,2024,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R09,Princeton Digital Group,MU2,Navi Mumbai,Maharashtra,India,120,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R10,Nxtra by Airtel,AI-ready campus Chennai,Chennai,Tamil Nadu,India,,announced,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R11,CapitaLand India,CapitaLand DC Chennai (Ambattur),Chennai,Tamil Nadu,India,54,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R12,Sify Infinit Spaces,AI-ready data centre Navi Mumbai,Navi Mumbai,Maharashtra,India,,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R13,Yotta Data Services,NM2,Navi Mumbai,Maharashtra,India,80,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R14,Pi Datacenters,Central Mumbai data center,Mumbai,Maharashtra,India,23,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R15,AdaniConneX,Navi Mumbai hyperscale campus,Navi Mumbai,Maharashtra,India,1000,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R16,L&T Vyoma,Panvel data center,Panvel,Maharashtra,India,,announced,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R17,Digital Connexion,Mumbai hyperscale campus,Mumbai,Maharashtra,India,40,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R18,Iron Mountain (Web Werks),CHN-1 Ambattur,Chennai,Tamil Nadu,India,23.2,under construction,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R19,Equinix India,MB3 Chandivali,Mumbai,Maharashtra,India,,operational,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/list-of-top-ten-largest-data-center-companies-in-india
+R20,CapitaLand India,CapitaLand DC Navi Mumbai Tower 2 (Airoli),Navi Mumbai,Maharashtra,India,,under construction,2026,Data Center Knowledge,https://www.datacenterknowledge.com/data-center-construction/new-data-center-developments-february-2026
+R21,Telekom Malaysia,TM One carrier-neutral data centres,Cyberjaya,Selangor,Malaysia,,operational,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R22,Bridge Data Centres,MY06 campus,Johor,Johor,Malaysia,,operational,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R23,NTT DATA,Rimba Digital Campus,Cyberjaya,Selangor,Malaysia,40,operational,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R24,AIMS Data Centre,Menara AIMS,Kuala Lumpur,Kuala Lumpur,Malaysia,,operational,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R25,EdgeConneX,Cyberjaya campus,Cyberjaya,Selangor,Malaysia,67,operational,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R26,DayOne (GDS),Johor campus,Johor,Johor,Malaysia,,announced,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R27,Google,Data centre & cloud region Selangor,Selangor,Selangor,Malaysia,,announced,2026,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R28,AirTrunk,JHB2,Johor Bahru,Johor,Malaysia,,announced,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R29,Princeton Digital Group,JH1 Sedenak Tech Park,Sedenak,Johor,Malaysia,150,announced,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R30,YTL,Green Data Center Park Kulai,Kulai,Johor,Malaysia,500,announced,,Black Ridge Research,https://www.blackridgeresearch.com/blog/latest-list-top-largest-data-center-companies-malaysia
+R31,TM Nxera,Iskandar Puteri campus,Iskandar Puteri,Johor,Malaysia,200,under construction,2026,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R32,Infinaxis,Infinaxis Cyberjaya,Cyberjaya,Selangor,Malaysia,12,operational,2025,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R33,ST Telemedia Global Data Centres,STT Johor (Nusa Cemerlang),Iskandar Puteri,Johor,Malaysia,166,under construction,2026,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R34,Digital Realty,KUL11 Cyberjaya,Cyberjaya,Selangor,Malaysia,15,operational,2026,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R35,AirTrunk,JHB1,Johor Bahru,Johor,Malaysia,150,operational,2026,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R36,AIMS Data Centre,AI & hyperscale data center (Cyberview land),Cyberjaya,Selangor,Malaysia,200,under construction,2027,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R37,Open DC,PE2 Bayan Lepas,Bayan Lepas,Penang,Malaysia,20,operational,2025,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R38,Pearl Computing Malaysia (Google),Elmina Business Park hyperscale,Elmina Business Park,Selangor,Malaysia,,under construction,2025,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R39,AirTrunk,JHB3/JHB4 Iskandar Puteri,Iskandar Puteri,Johor,Malaysia,280,under construction,2026,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R40,Gamuda,Port Dickson hyperscale data centres (2),Port Dickson,Negeri Sembilan,Malaysia,,under construction,2026,Mordor Intelligence,https://www.mordorintelligence.com/industry-reports/malaysia-data-center-market
+R41,NTT DATA,Johor campus,Johor,Johor,Malaysia,290,announced,,Mordor Intelligence (hyperscale),https://www.mordorintelligence.com/industry-reports/malaysia-hyperscale-data-center-market
+R42,Vantage Data Centers,Cyberjaya site,Cyberjaya,Selangor,Malaysia,256,announced,,Mordor Intelligence (hyperscale),https://www.mordorintelligence.com/industry-reports/malaysia-hyperscale-data-center-market

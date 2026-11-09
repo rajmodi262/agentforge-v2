@@ -68,7 +68,32 @@ After the fixed seed queries, the Coverage agent read the results and wrote its 
 
 Examples of queries it wrote: `Reliance Jio Visakhapatnam data centre`; `Reliance Jio Visakhapatnam data centre power supply`; `YTL Kulai data centre`; `YTL Kulai data centre power supply`; `Fortune Hospitality Hyderabad data centre`; `CtrlS Hyderabad data centre`
 
-## 5. What is not measured yet (and how it would be)
+## 5. Recall: how many real projects did the scouts miss?
+
+An independent reference list of 42 India and Malaysia data-centre sites was built from published lists (Black Ridge Research, Data Center Knowledge, Mordor Intelligence, Mordor Intelligence (hyperscale), Wikipedia), extracted with Firecrawl and checked by hand: `PHANTOM_RECALL_REFERENCE.csv`. Each site is matched to our projects by developer (parent/JV brands grouped) and state.
+
+| Slice | Sites | Found | Found, no location | Developer tracked, other site | Missing | Recall (strict) | Recall (incl. no location) |
+|---|---|---|---|---|---|---|---|
+| All | 42 | 25 | 4 | 6 | 7 | **59.5%** | 69.0% |
+| **Pipeline** (announced / building / 2025+) | 36 | 23 | 4 | 5 | 4 | **63.9%** | 75.0% |
+| India | 20 | 11 | 4 | 3 | 2 | **55.0%** | 75.0% |
+| Malaysia | 22 | 14 | 0 | 3 | 5 | **63.6%** | 63.6% |
+
+**Missed pipeline sites** (what the next scouting round should chase):
+
+- Pi Datacenters: Central Mumbai data center (Mumbai) — ❌ missing
+- Digital Connexion: Mumbai hyperscale campus (Mumbai) — 🟠 developer tracked, not this site
+- Iron Mountain (Web Werks): CHN-1 Ambattur (Chennai) — 🟠 developer tracked, not this site
+- CapitaLand India: CapitaLand DC Navi Mumbai Tower 2 (Airoli) (Navi Mumbai) — 🟠 developer tracked, not this site
+- Google: Data centre & cloud region Selangor (Selangor) — 🟠 developer tracked, not this site
+- Infinaxis: Infinaxis Cyberjaya (Cyberjaya) — ❌ missing
+- AIMS Data Centre: AI & hyperscale data center (Cyberview land) (Cyberjaya) — ❌ missing
+- Open DC: PE2 Bayan Lepas (Bayan Lepas) — ❌ missing
+- Pearl Computing Malaysia (Google): Elmina Business Park hyperscale (Elmina Business Park) — 🟠 developer tracked, not this site
+
+Caveats: the reference list is small and biased towards big, well-reported operators, so recall on smaller projects is probably lower; a developer+state match can be a different building on the same campus.
+
+## 6. What is not measured yet (and how it would be)
 
 - **Calibration of the reality score.** It needs outcomes (built vs cancelled) for scored projects. `score.calibrate()` computes the reliability table and Brier score once those labels exist; until then the layer priors are stated assumptions, not fitted values.
-- **Recall** (projects the scouts never found). Measurable against an analyst's list for one region.
+- **Recall on small projects.** The reference list in §5 comes from published lists, which favour large operators; an analyst's full list for one region would measure the long tail.
