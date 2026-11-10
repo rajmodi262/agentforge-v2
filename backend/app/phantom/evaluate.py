@@ -23,6 +23,7 @@ from pathlib import Path
 
 from app.database import SessionLocal
 from app.phantom.recall import recall_section
+from app.phantom.backtest import section as backtest_section
 from app.phantom.extract import KNOWN_DEVELOPERS, MAX_CHARS
 from app.phantom.models import PhArticle, PhEvidence, PhMention, PhProject
 from app.phantom.score import LAYERS
@@ -230,8 +231,9 @@ def main():
         *audit_section(),
         *coverage_section(),
         *recall_section(),
-        "", "## 6. What is not measured yet (and how it would be)", "",
-        "- **Calibration of the reality score.** It needs outcomes (built vs cancelled) for scored projects. `score.calibrate()` computes the reliability table and Brier score once those labels exist; until then the layer priors are stated assumptions, not fitted values.",
+        *backtest_section(),
+        "", "## 7. What is not measured yet (and how it would be)", "",
+        "- **A calibrated score at scale.** §6 is a first backtest on the projects old enough to judge; the layer priors are still stated assumptions until a few hundred outcomes exist to re-fit them.",
         "- **Recall on small projects.** The reference list in §5 comes from published lists, which favour large operators; an analyst's full list for one region would measure the long tail.",
     ]
     out = ROOT / "PHANTOM_EVAL.md"

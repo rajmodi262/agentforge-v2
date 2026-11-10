@@ -1,0 +1,41 @@
+{
+  "job": "official",
+  "queries": 22,
+  "found": 94,
+  "relevant": 14,
+  "full_text": 69,
+  "new": 94,
+  "credits": 94,
+  "calls": {
+    "search": 22,
+    "scrape": 50
+  },
+  "queries_by_region": {
+    "india": [
+      "data centre approved state cabinet MW site:pib.gov.in",
+      "data centre policy approval investment data center site:pib.gov.in",
+      "data centre approved state cabinet MW site:parivesh.nic.in",
+      "data centre policy approval investment data center site:parivesh.nic.in",
+      "data centre approved state cabinet MW site:investindia.gov.in",
+      "data centre policy approval investment data center site:investindia.gov.in",
+      "data centre approved state cabinet MW site:maharashtra.gov.in",
+      "data centre policy approval investment data center site:maharashtra.gov.in",
+      "data center environmental clearance MW site:telangana.gov.in",
+      "data centre land allotment acres site:tn.gov.in",
+      "data centre power supply MW substation site:up.gov.in"
+    ],
+    "malaysia": [
+      "data centre approved investment MW site:mida.gov.my",
+      "data centre electricity supply agreement MW site:mida.gov.my",
+      "data centre approved investment MW site:tnb.com.my",
+      "data centre electricity supply agreement MW site:tnb.com.my",
+      "data centre approved investment MW site:johor.gov.my",
+      "data centre electricity supply agreement MW site:johor.gov.my",
+      "data centre approved investment MW site:investselangor.my",
+      "data centre electricity supply agreement MW site:investselangor.my",
+      "data centre green lane approval site:iskandarmalaysia.com.my",
+      "data centre land acquisition acres Johor site:bursamalaysia.com",
+      "data centre MIDA approved projects site:mdec.my"
+    ]
+  }
+}

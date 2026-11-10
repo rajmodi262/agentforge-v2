@@ -13,6 +13,8 @@ Scope: **India + Malaysia (Johor)** data-centre pipeline, public sources only.
 
 | Time | Status | Work | Evidence / result |
 |---|---|---|---|
+| 10 Nov | ✅ | **Firecrawl upgrade**: whole-article reading (section by section), re-fetch of 257 headline-only articles, three targeted scouts (gaps / official / outcomes), calibration backtest | full text 247 → 681 · headline-only evidence 44% → 4.5% · recall 64% → **89%** · backtest Brier **0.097** on 67 projects (base rate 0.22) |
+| 10 Nov | ⚠️→✅ | Overnight rebuild crashed (LLM wrote capacity_basis "hyperscale"); then 560 projects with duplicates and ~58% correct BUILDING/LIVE evidence. Fixes: tolerant sort, merge on developer + place + capacity, drop placeless/sizeless clusters, subject check on evidence | **403 projects**; fresh audit sample 31/40 (77.5%); 175 tests pass |
 | 10 Nov | ✅ | **Recall check** against 42 sites from 4 published lists (Firecrawl search + JSON extraction, 24 credits), matched by developer group + state, facility codes as identity | pipeline recall **63.9% strict / 75.0%** incl. location-unknown; misses listed in PHANTOM_EVAL.md §5 |
 | 10 Nov | ✅ | **Seed snapshot**: fresh clones load the real dataset on first start (no article bodies, no users) | rebuild from snapshot reproduces 208 projects exactly |
 | 08 Nov 19:10 | ✅ | **Final state.** Full backend suite **145 passed, 0 errors** (26 Phantom tests). Dashboard + dossier re-checked in the browser with full data, no console errors | see numbers below |

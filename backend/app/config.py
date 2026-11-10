@@ -47,6 +47,10 @@ class Settings(BaseSettings):
     phantom_extract_model: str = "qwen2.5:3b"
     phantom_reason_model: str = ""  # empty → OLLAMA_MODEL
     phantom_auto_seed: bool = True  # fill empty Phantom tables from seed/phantom_seed.json.gz on startup
+    # Firecrawl scout (optional): search + full-text reading through api.firecrawl.dev
+    firecrawl_api_key: str = ""
+    phantom_search: str = "auto"          # auto → Firecrawl when a key is set, else free RSS feeds; or "firecrawl" | "feeds" | "both"
+    phantom_firecrawl_budget: int = 150   # hard credit cap per hunt / refetch run
 
     # AI Provider: "groq" | "claude" | "gemini" | "ollama" | "auto" (auto picks whichever is available)
     ai_provider: str = "auto"

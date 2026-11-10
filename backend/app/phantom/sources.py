@@ -172,12 +172,38 @@ async def gdelt(client: httpx.AsyncClient, query: str, region: str) -> list[Feed
     return out
 
 
-FEEDS = {"bing": bing_news, "google": google_news, "gdelt": gdelt}
+_fc_sems: dict = {}
 
 
-async def search(queries: Iterable[str], region: str, feeds: Iterable[str] = ("bing", "google", "gdelt")) -> list[FeedItem]:
+def _fc_sem() -> asyncio.Semaphore:
+    """Firecrawl concurrency limit (free-tier friendly), one per event loop."""
+    loop = asyncio.get_running_loop()
+    return _fc_sems.setdefault(id(loop), asyncio.Semaphore(4))
+
+
+async def firecrawl_news(client: httpx.AsyncClient, query: str, region: str) -> list[FeedItem]:
+    from app.phantom import firecrawl
+    async with _fc_sem():
+        return await firecrawl.search(client, query, REGIONS[region]["country"])
+
+
+FEEDS = {"bing": bing_news, "google": google_news, "gdelt": gdelt, "firecrawl": firecrawl_news}
+
+
+def default_feeds() -> tuple:
+    """Firecrawl when a key is configured (PHANTOM_SEARCH=auto), else the free feeds."""
+    from app.config import get_settings
+    from app.phantom import firecrawl
+    mode = (get_settings().phantom_search or "auto").lower()
+    free = ("bing", "google", "gdelt")
+    if mode == "feeds" or not firecrawl.enabled():
+        return free
+    return ("firecrawl", *free) if mode == "both" else ("firecrawl",)
+
+
+async def search(queries: Iterable[str], region: str, feeds: Optional[Iterable[str]] = None) -> list[FeedItem]:
     """Run every query on every feed; return de-duplicated items (by URL and by title)."""
-    feeds = list(feeds)
+    feeds = list(feeds) if feeds is not None else list(default_feeds())
     async with httpx.AsyncClient(headers=HEADERS, timeout=20, follow_redirects=True) as client:
         tasks = [FEEDS[f](client, q, region) for q in queries for f in feeds]
         results = await asyncio.gather(*tasks, return_exceptions=True)
@@ -246,7 +272,33 @@ async def fetch_article(client: httpx.AsyncClient, item: FeedItem) -> FetchedArt
                         text, kind = f"{item.title}\n\n{body}", "full"
         except Exception as e:
             logger.debug(f"[scout] fetch failed {item.url}: {e!r}")
+    if kind == "summary":
+        body = await firecrawl_read(client, item)
+        if body:
+            text, kind = f"{item.title}\n\n{body}", "full"
     return FetchedArticle(item=item, text=text, text_kind=kind, content_hash=hashlib.sha256(text.encode()).hexdigest())
+
+
+async def firecrawl_read(client: httpx.AsyncClient, item: FeedItem) -> Optional[str]:
+    """Fallback reader for pages a plain fetch can't get (bot walls, Google News JS redirects).
+    The publisher's robots.txt still decides: checked on the final URL after redirects."""
+    from app.phantom import firecrawl
+    if not firecrawl.enabled():
+        return None
+    try:
+        if item.feed != "google" and not await _allowed(client, item.url):
+            return None
+        async with _fc_sem():
+            page = await firecrawl.scrape(client, item.url)
+        if not page or "news.google." in page.final_url or not await _allowed(client, page.final_url):
+            return None  # still on Google's redirect page = no publisher article
+        body = firecrawl.clean_markdown(page.markdown)
+        return None if _looks_blocked(body) else body
+    except firecrawl.BudgetExceeded as e:
+        logger.info(f"[scout] {e}")
+    except Exception as e:
+        logger.debug(f"[scout] firecrawl read failed {item.url}: {e!r}")
+    return None
 
 
 async def fetch_all(items: list[FeedItem], concurrency: int = 6) -> list[FetchedArticle]:

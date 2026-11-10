@@ -1,0 +1,35 @@
+{
+  "job": "gaps",
+  "queries": 16,
+  "found": 131,
+  "relevant": 73,
+  "full_text": 42,
+  "new": 73,
+  "credits": 50,
+  "calls": {
+    "search": 16,
+    "scrape": 18
+  },
+  "queries_by_region": {
+    "india": [
+      "Google Navi Mumbai data centre",
+      "Bharti Airtel Nxtra Kolkata hyperscale data centre",
+      "Adani Enterprises New Town Kolkata hyperscale data centre",
+      "Nxtra by Airtel AI-ready campus Chennai data centre",
+      "Pi Datacenters Central Mumbai data center centre",
+      "Digital Connexion Mumbai hyperscale campus data centre",
+      "Iron Mountain CHN-1 Ambattur Chennai data centre",
+      "CapitaLand India DC Navi Mumbai Tower 2 data centre",
+      "Kolkata data centre MW hyperscale",
+      "New Town Kolkata data centre campus",
+      "West Bengal data centre MW investment"
+    ],
+    "malaysia": [
+      "Google Data centre & cloud region Selangor",
+      "Infinaxis Cyberjaya data centre",
+      "AIMS Data Centre AI & hyperscale center Cyberjaya",
+      "Open DC PE2 Bayan Lepas data centre",
+      "Pearl Computing Malaysia Elmina Business Park hyperscale data centre"
+    ]
+  }
+}

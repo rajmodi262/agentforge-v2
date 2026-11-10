@@ -28,8 +28,10 @@ from app.phantom.verify import norm, verify_mention
 
 logger = logging.getLogger(__name__)
 
-MAX_CHARS = 3200      # ~800 tokens of article — news puts the facts up front; prompt reading dominates on a laptop
-EXTRACT_CTX = 4096    # small context keeps a 7B model mostly on a 4 GB GPU
+MAX_CHARS = 60000     # the whole article: verifier, miner and evaluation all read the full text (cap only guards runaway pages)
+CHUNK_CHARS = 3200    # the LLM reads the article section by section (~800 tokens each), so every section is read
+CHUNK_OVERLAP = 300   # sections overlap so a sentence on a boundary is never cut in half
+EXTRACT_CTX = 4096    # small context per section keeps a 7B model fast on a laptop
 MAX_OUT = 1100        # output cap: enough for 4 projects with events, not enough to loop for minutes
 TIMEOUT_S = 150       # a single article may not hold the batch hostage
 
@@ -106,10 +108,60 @@ def _lenient_projects(raw: Dict[str, Any]) -> List[ProjectMention]:
     return out
 
 
+_MW = re.compile(r"\d+(?:\.\d+)?\s?(?:MW|GW|megawatt|gigawatt)", re.I)
+_DC_WORDS = re.compile(r"data[\s-]?cent(?:er|re)|datacent|hyperscale|colocation|campus|substation|power purchase|\bppa\b", re.I)
+_ALL_ALIASES = re.compile(r"\b(" + "|".join(sorted({re.escape(a) for al in KNOWN_DEVELOPERS.values() for a in al}, key=len, reverse=True)) + r")\b", re.I)
+
+
+def sections(text: str, size: int = CHUNK_CHARS, overlap: int = CHUNK_OVERLAP) -> List[str]:
+    """Split an article into overlapping sections, breaking at paragraph or sentence ends."""
+    text = text or ""
+    if len(text) <= size:
+        return [text]
+    out, start = [], 0
+    while start < len(text):
+        end = min(len(text), start + size)
+        if end < len(text):
+            window = text[start:end]
+            cut = max(window.rfind("\n\n"), window.rfind(". "), window.rfind("\n"))
+            if cut > size // 2:
+                end = start + cut + 1
+        out.append(text[start:end].strip())
+        if end >= len(text):
+            break
+        start = max(end - overlap, start + 1)
+    return [s for s in out if s]
+
+
+def section_has_content(section: str) -> bool:
+    """A section with no data-centre words, capacity figure or known developer has nothing to extract."""
+    return bool(_DC_WORDS.search(section) or _MW.search(section) or _ALL_ALIASES.search(section))
+
+
+def _merge_projects(found: List[ProjectMention]) -> List[ProjectMention]:
+    """The same project seen in several sections → one mention with all its events and fields."""
+    merged: Dict[str, Dict[str, Any]] = {}
+    for p in found:
+        d = p.model_dump()
+        key = norm(d.get("project_name") or "") or f"_{len(merged)}"
+        if key not in merged:
+            merged[key] = d
+            continue
+        m = merged[key]
+        for f, v in d.items():
+            if f == "events":
+                seen = {(e.get("layer"), norm(e.get("quote") or "")) for e in m["events"]}
+                m["events"] += [e for e in v if (e.get("layer"), norm(e.get("quote") or "")) not in seen]
+            elif m.get(f) in (None, "", False) and v not in (None, ""):
+                m[f] = v
+    return [ProjectMention(**d) for d in merged.values()]
+
+
 async def extract_article(title: str, text: str, published: Optional[str], region: Optional[str] = None) -> Dict[str, Any]:
-    """Returns {"mentions": [...], "is_project_news": bool, "meta": {...}, "dropped": [...]}."""
+    """Read the WHOLE article: the LLM extracts section by section, then every claim is
+    verified against the full text. Returns {"mentions", "is_project_news", "meta", "dropped"}."""
     body = text[:MAX_CHARS]
-    user = f"ARTICLE (published {published or 'unknown'}):\nTITLE: {title}\n\n{body}"
+
     async def call(prompt: str):
         return await asyncio.wait_for(
             structured(EXTRACTOR_SYSTEM, prompt, ArticleExtraction, max_tokens=MAX_OUT, tier="fast",
@@ -117,18 +169,40 @@ async def extract_article(title: str, text: str, published: Optional[str], regio
             timeout=TIMEOUT_S,
         )
 
-    raw, meta = await call(user)
-    projects = _lenient_projects(raw)
+    parts = sections(body)
+    head = f"ARTICLE (published {published or 'unknown'}):\nTITLE: {title}\n\n"
+    projects: List[ProjectMention] = []
+    raw: Dict[str, Any] = {}
+    meta: Dict[str, Any] = {"tokens": 0, "sections": len(parts), "sections_read": 0}
+    news_votes = []
+    for i, part in enumerate(parts):
+        if i > 0 and not section_has_content(part):
+            continue  # scanned: no data-centre content in this section, nothing for the LLM
+        label = f"[section {i + 1} of {len(parts)}]\n" if len(parts) > 1 else ""
+        try:
+            r, m = await call(head + label + part)
+        except asyncio.TimeoutError:
+            meta.setdefault("timeouts", 0)
+            meta["timeouts"] += 1
+            continue
+        raw = raw or r
+        meta = {**m, "tokens": meta["tokens"] + (m.get("tokens") or 0), "sections": len(parts),
+                "sections_read": meta["sections_read"] + 1, **({"timeouts": meta["timeouts"]} if "timeouts" in meta else {})}
+        news_votes.append(bool(r.get("is_project_news", True)))
+        projects += _lenient_projects(r)
+    projects = _merge_projects(projects)
     # Self-correction: the article clearly names a known developer AND a capacity, yet the
-    # model found nothing — retry once, telling it what to look for.
+    # model found nothing — retry once on the most data-rich section, telling it what to look for.
     hint_dev = gazetteer_developer(f"{title}. {body}", title)
-    if not projects and hint_dev and re.search(r"\d+(?:\.\d+)?\s?(?:MW|GW|megawatt|gigawatt)", body, re.I):
-        raw2, meta2 = await call(user + f"\n\nNOTE: this article appears to describe a specific data-centre project by {hint_dev}. "
-                                        "If it does, extract it (with its capacity and location); if it truly only gives market totals, return no projects.")
+    if not projects and hint_dev and _MW.search(body):
+        best = max(parts, key=lambda s: len(_MW.findall(s)))
+        raw2, meta2 = await call(head + best + f"\n\nNOTE: this article appears to describe a specific data-centre project by {hint_dev}. "
+                                               "If it does, extract it (with its capacity and location); if it truly only gives market totals, return no projects.")
         projects = _lenient_projects(raw2)
         if projects:
-            raw, meta = raw2, {**meta2, "retried": True, "tokens": meta["tokens"] + meta2["tokens"]}
-    is_news = bool(raw.get("is_project_news", True)) or bool(projects and any(p.developer for p in projects))
+            raw, meta = raw2, {**meta, "retried": True, "tokens": meta["tokens"] + (meta2.get("tokens") or 0)}
+            news_votes.append(bool(raw2.get("is_project_news", True)))
+    is_news = any(news_votes or [True]) or bool(projects and any(p.developer for p in projects))
     country = REGIONS.get(region or "", {}).get("country")
 
     mentions: List[Dict[str, Any]] = []

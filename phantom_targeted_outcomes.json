@@ -1,0 +1,58 @@
+{
+  "job": "outcomes",
+  "queries": 39,
+  "found": 257,
+  "relevant": 123,
+  "full_text": 74,
+  "new": 109,
+  "credits": 113,
+  "calls": {
+    "search": 39,
+    "scrape": 35
+  },
+  "queries_by_region": {
+    "india": [
+      "Reliance Jio 40-Acre Data Centre Kolkata",
+      "Yotta 20-acre data centre park Noida",
+      "Princeton Digital Group DC2 Mumbai data centre",
+      "Yotta campus data centre",
+      "Yotta Noida Data Centre Campus",
+      "Sify Data Centers centre",
+      "CtrlS Third hyperscale Data Centre Hyderabad",
+      "NTT DATA NAV2 Navi Mumbai centre",
+      "Web Werks 20MW capacity hyperscale data center Noida centre",
+      "L&T Vyoma 10.8 MW Data Centres Mumbai centre",
+      "AdaniConneX Chennai 1 data centre",
+      "Sipcot IT Park Chennai 1 data centre",
+      "EdgeConneX Chennai 1 hyperscale data center campus centre",
+      "Princeton Digital Group PDG data center campus Navi Mumbai centre",
+      "Iron Mountain 85MW Mumbai campus data centre",
+      "AdaniConneX Data Centre",
+      "NTT DATA centre campus Chennai",
+      "CapitaLand 40 MW Data Centre Hyderabad",
+      "L&T Vyoma Vyoma.AI Chennai data centre",
+      "NTT DATA Noida 2 centre",
+      "Digital Connexion MAA10 Chennai data centre",
+      "NTT DATA Second Campus Noida centre",
+      "NTT DATA new centre campus",
+      "CtrlS Chennai DC 1 data centre",
+      "CtrlS Chennai DC 2 data centre",
+      "Digital Connexion Meta's first data center in India Chennai centre",
+      "Meta data centre Chennai",
+      "Yotta data centre",
+      "CtrlS Datacenters Hyderabad data centre"
+    ],
+    "malaysia": [
+      "Bridge Data Centres MY07 facility Johor centre",
+      "YTL 12.5MW green hyperscale data centre",
+      "YTL Corp 500MW campus Johor data centre",
+      "Vantage Data Centers Center Campus centre",
+      "Princeton Digital Group Sedenak Tech Park Johor data centre",
+      "STT GDC 124 MW Data Centre Johor",
+      "Princeton Digital Group data centre campus",
+      "Princeton Digital Group Rm2 Bln Hyperscale Data Centre Campus Johor",
+      "Telekom Malaysia 64 MW Data Centre Selangor",
+      "Telekom Malaysia 200 MW Data Centre Selangor"
+    ]
+  }
+}

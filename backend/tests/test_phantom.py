@@ -126,6 +126,32 @@ def test_resolver_merges_same_project_different_names():
     assert len(ps) == 1 and len(ps[0]["mention_ids"]) == 3
 
 
+def test_resolver_tolerates_unexpected_capacity_basis():
+    a, b = _m(1, "JHB2 campus", "AirTrunk", 150), _m(2, "AirTrunk JHB2", "AirTrunk", 150)
+    a["data"]["capacity_basis"], b["data"]["capacity_basis"] = "hyperscale", "IT"   # LLM went off-vocabulary
+    assert len(resolve([a, b])) == 1
+
+
+def test_evidence_about_another_project_is_dropped():
+    from app.phantom.resolve import about_project
+    assert about_project("The MY03 data centre is under construction.", "MY03", "Johor")
+    assert not about_project("The MY07 data centre is currently under construction in Johor.", "MY03", "Johor")
+    assert not about_project("Digital Realty launches campus in Cyberjaya", None, "Navi Mumbai")
+    assert not about_project("Vantage opened a record 13 new data centers in 2022", "KUL2", "Cyberjaya")
+    assert not about_project("- Limitations: the largest projects are still under construction", None, None)
+    assert about_project("Construction has begun at the Kulai campus", None, "Sedenak")  # same state
+    assert not about_project("CtrlS opens 12 MW Patna data centre", None, "Bodh Gaya", "CtrlS", "LIVE")  # other city
+    assert not about_project("| AdaniConneX | Noida campus | 50 MW | Partly operational |", None, "Pune", None, "LIVE")
+    assert not about_project("The first building is due live later this year.", None, None, None, "LIVE")
+    assert not about_project("Signed a letter of intent for a 150 MW data centre", None, None, None, "LIVE")
+
+
+def test_resolver_merges_same_place_same_size_whatever_the_name():
+    ps = resolve([_m(1, "Reliance 1 GW AI-native data centre", "Reliance Jio", 1000, "Visakhapatnam"),
+                  _m(2, "Reliance Industries gigawatt hub in Vizag", "Reliance Jio", 1000, "Visakhapatnam")])
+    assert len(ps) == 1
+
+
 def test_resolver_keeps_different_facility_codes_apart():
     ps = resolve([_m(1, "AirTrunk JHB1", "AirTrunk", 100), _m(2, "AirTrunk JHB2", "AirTrunk", 150)])
     assert len(ps) == 2
@@ -219,3 +245,34 @@ def test_power_partner_named_from_verified_power_quote():
     ps = resolve([_m(1, "DayOne Selangor campus", "DayOne", 1500, "Selangor",
                      events=[{"layer": "POWER", "quote": "DayOne signs 1.5GW renewable supply deal with TNB in Malaysia"}])])
     assert ps[0]["power_partner"] == "TNB"
+
+
+# ── Full-article reading ──
+
+def test_sections_cover_the_whole_article_with_overlap():
+    from app.phantom.extract import CHUNK_CHARS, sections
+    text = " ".join(f"Sentence {i} about the AirTrunk JHB2 campus in Johor." for i in range(600))
+    parts = sections(text)
+    assert len(parts) > 3 and all(len(p) <= CHUNK_CHARS for p in parts)
+    assert "Sentence 0 " in parts[0] and "Sentence 599" in parts[-1]          # nothing at the end is dropped
+    for a, b in zip(parts, parts[1:]):                                       # consecutive sections overlap
+        assert a[-60:].split(". ")[-1][:20] in b or b[:40] in a
+    assert sections("short article") == ["short article"]
+
+
+def test_sections_without_data_centre_content_skip_the_llm():
+    from app.phantom.extract import section_has_content
+    assert section_has_content("YTL signed a 500MW deal")
+    assert section_has_content("AirTrunk said on Monday")
+    assert not section_has_content("Share on WhatsApp. Read by 551 professionals. Related stories.")
+
+
+def test_same_project_from_two_sections_merges():
+    from app.phantom.extract import _merge_projects
+    from app.phantom.schema import ProjectMention
+    a = ProjectMention(project_name="JHB2", developer="AirTrunk", events=[{"layer": "ANNOUNCED", "detail": "x", "quote": "AirTrunk announced JHB2."}])
+    b = ProjectMention(project_name="JHB2", capacity_mw=150, capacity_text="150MW",
+                       events=[{"layer": "POWER", "detail": "PPA", "quote": "AirTrunk signed a PPA with TNB."}])
+    m = _merge_projects([a, b])
+    assert len(m) == 1 and m[0].developer == "AirTrunk" and m[0].capacity_mw == 150
+    assert {getattr(e.layer, "value", e.layer) for e in m[0].events} == {"ANNOUNCED", "POWER"}

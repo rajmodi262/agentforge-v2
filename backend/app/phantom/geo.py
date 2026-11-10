@@ -40,6 +40,10 @@ PLACES = {
     "Jamnagar": ("Gujarat", "India", 22.4707, 70.0577, ["jamnagar"]),
     "Lucknow": ("Uttar Pradesh", "India", 26.8467, 80.9462, ["lucknow"]),
     "Kochi": ("Kerala", "India", 9.9312, 76.2673, ["kochi", "cochin"]),
+    "Patna": ("Bihar", "India", 25.5941, 85.1376, ["patna", "patliputra"]),
+    "Bodh Gaya": ("Bihar", "India", 24.6961, 84.9870, ["bodh gaya", "bodhgaya"]),
+    "Bhubaneswar": ("Odisha", "India", 20.2961, 85.8245, ["bhubaneswar"]),
+    "Jaipur": ("Rajasthan", "India", 26.9124, 75.7873, ["jaipur"]),
 }
 
 COUNTRY_CENTRE = {"Malaysia": (3.9, 102.0), "India": (21.0, 78.0)}
@@ -61,7 +65,7 @@ def resolve_place(*texts: Optional[str]) -> Optional[str]:
 
 _IN = re.compile(r"\bindia\b|\bindian\b|₹|\brs\.?\s?\d|\bcrore\b|\blakh\b|maharashtra|tamil nadu|telangana|uttar pradesh|karnataka", re.I)
 _MY = re.compile(r"\bmalaysia\b|\bmalaysian\b|\bringgit\b|\brm\s?\d|\bjohor\b|selangor|\btnb\b|tenaga nasional|bursa", re.I)
-_OTHER = re.compile(r"\b(indonesia|jakarta|batam|singapore|thailand|bangkok|vietnam|philippines|japan|australia|united states|u\.s\.|europe|finland|nurmij\w*|sweden|norway|denmark|ireland|germany|netherlands|spain|united kingdom|hong kong|china|taiwan|korea)\b", re.I)
+_OTHER = re.compile(r"\b(indonesia|jakarta|batam|singapore|thailand|bangkok|vietnam|philippines|japan|australia|united states|u\.s\.|europe|finland|nurmij\w*|sweden|norway|denmark|ireland|germany|netherlands|spain|united kingdom|hong kong|china|taiwan|korea|philippine|manila|tokyo|osaka|seoul|pohang|sydney|melbourne|texas|virginia|oregon|ohio|arizona|london|uk|france|paris|frankfurt|amsterdam|dublin|madrid|italy|milan|cordoba|argentina|brazil|chile|mexico|canada|saudi|uae|dubai|abu dhabi|qatar|africa|nigeria|kenya)\b", re.I)
 
 
 def infer_country(*texts: Optional[str]) -> Optional[str]:
